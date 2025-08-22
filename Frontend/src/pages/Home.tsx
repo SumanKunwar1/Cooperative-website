@@ -3,7 +3,7 @@
 import type React from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { ArrowRight, Shield, TrendingUp, Users, Globe, Bell, Star } from "lucide-react"
+import { ArrowRight, Bell, Star } from "lucide-react"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
@@ -17,28 +17,6 @@ import { mockNotices, mockBusinesses, leadershipMessages } from "../data/mockDat
 import { mockAdvertisements } from "../data/mockData"
 
 const Home: React.FC = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: "Reliability",
-      description: "Secure cooperative licensed under Nepal's Cooperative Act with proven track record since 2007.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Accessibility",
-      description: "Easy savings and credit services for all members with flexible deposit and withdrawal options.",
-    },
-    {
-      icon: Users,
-      title: "Modern Facilities",
-      description: "Digital banking, ATM, online transactions, and contemporary banking solutions.",
-    },
-    {
-      icon: Globe,
-      title: "Transparency",
-      description: "Regular audits, financial reporting, and transparent operations for member confidence.",
-    },
-  ]
 
   return (
     <div className="min-h-screen">

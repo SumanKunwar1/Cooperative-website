@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Building2 } from "lucide-react"
 import {
@@ -14,106 +14,114 @@ import {
   UsersIcon,
   BellIcon,
 } from "@heroicons/react/24/outline"
+import { shopCategories } from "../../data/shop"
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isShopOpen, setIsShopOpen] = useState(false)
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false)
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false)
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const closeMobileMenu = () => {
     setIsMenuOpen(false)
-    setIsMobileServicesOpen(false)
     setIsMobileShopOpen(false)
     setExpandedMobileCategory(null)
   }
 
-  const services = [
-    { name: "Savings Account", href: "/services/savings" },
-    { name: "Loans", href: "/services/loans" },
-    { name: "Fixed Deposits", href: "/services/deposits" },
-    { name: "Insurance", href: "/services/insurance" },
-    { name: "Money Transfer", href: "/services/transfer" },
-    { name: "Business Banking", href: "/services/business" },
-  ]
+  const isOnShopPage = location.pathname === "/shop"
 
-  const shopCategories = [
-    {
-      name: "Fashion",
-      href: "/shop/fashion",
-      subcategories: [
-        { name: "Men's Fashion", href: "/shop/fashion/mens" },
-        { name: "Women's Fashion", href: "/shop/fashion/womens" },
-        { name: "Kids Fashion", href: "/shop/fashion/kids" },
-        { name: "Activewear", href: "/shop/fashion/activewear" },
-        { name: "Accessories", href: "/shop/fashion/accessories" },
-        { name: "Footwear", href: "/shop/fashion/footwear" },
-      ],
-    },
-    {
-      name: "Electronics",
-      href: "/shop/electronics",
-      subcategories: [
-        { name: "Mobile Phones", href: "/shop/electronics/mobile-phones" },
-        { name: "Laptops & Computers", href: "/shop/electronics/laptops-computers" },
-        { name: "Audio & Video", href: "/shop/electronics/audio-video" },
-        { name: "Gaming", href: "/shop/electronics/gaming" },
-        { name: "Smart Home", href: "/shop/electronics/smart-home" },
-        { name: "Accessories", href: "/shop/electronics/accessories" },
-      ],
-    },
-    {
-      name: "Food & Beverage",
-      href: "/shop/food-beverage",
-      subcategories: [
-        { name: "Fresh Groceries", href: "/shop/food-beverage/fresh-groceries" },
-        { name: "Beverages", href: "/shop/food-beverage/beverages" },
-        { name: "Snacks & Sweets", href: "/shop/food-beverage/snacks-sweets" },
-        { name: "Organic Products", href: "/shop/food-beverage/organic-products" },
-        { name: "Dairy Products", href: "/shop/food-beverage/dairy-products" },
-        { name: "Frozen Foods", href: "/shop/food-beverage/frozen-foods" },
-      ],
-    },
-    {
-      name: "Home & Living",
-      href: "/shop/home-living",
-      subcategories: [
-        { name: "Furniture", href: "/shop/home-living/furniture" },
-        { name: "Home Decor", href: "/shop/home-living/home-decor" },
-        { name: "Kitchen & Dining", href: "/shop/home-living/kitchen-dining" },
-        { name: "Bedding & Bath", href: "/shop/home-living/bedding-bath" },
-        { name: "Storage Solutions", href: "/shop/home-living/storage-solutions" },
-        { name: "Garden & Outdoor", href: "/shop/home-living/garden-outdoor" },
-      ],
-    },
-    {
-      name: "Health & Beauty",
-      href: "/shop/health-beauty",
-      subcategories: [
-        { name: "Skincare", href: "/shop/health-beauty/skincare" },
-        { name: "Makeup", href: "/shop/health-beauty/makeup" },
-        { name: "Hair Care", href: "/shop/health-beauty/hair-care" },
-        { name: "Personal Care", href: "/shop/health-beauty/personal-care" },
-        { name: "Health Supplements", href: "/shop/health-beauty/health-supplements" },
-        { name: "Medical Supplies", href: "/shop/health-beauty/medical-supplies" },
-      ],
-    },
-    {
-      name: "Sports & Outdoors",
-      href: "/shop/sports-outdoors",
-      subcategories: [
-        { name: "Fitness Equipment", href: "/shop/sports-outdoors/fitness-equipment" },
-        { name: "Outdoor Gear", href: "/shop/sports-outdoors/outdoor-gear" },
-        { name: "Sports Apparel", href: "/shop/sports-outdoors/sports-apparel" },
-        { name: "Team Sports", href: "/shop/sports-outdoors/team-sports" },
-        { name: "Water Sports", href: "/shop/sports-outdoors/water-sports" },
-        { name: "Cycling", href: "/shop/sports-outdoors/cycling" },
-      ],
-    },
-  ]
+  const handleCategoryNavigation = (categorySlug: string, subcategorySlug?: string) => {
+    if (isOnShopPage) {
+      // If already on shop page, just trigger a custom event to update filters
+      // without changing the URL
+      const event = new CustomEvent('shopFilterChange', {
+        detail: {
+          category: categorySlug,
+          subcategory: subcategorySlug || ""
+        }
+      })
+      window.dispatchEvent(event)
+    } else {
+      // If not on shop page, navigate with URL params
+      const url = subcategorySlug
+        ? `/shop?category=${categorySlug}&subcategory=${subcategorySlug}`
+        : `/shop?category=${categorySlug}`
+      navigate(url, { replace: false })
+    }
+
+    // Close the dropdown
+    setIsShopOpen(false)
+    setHoveredCategory(null)
+  }
+
+  const handleMobileCategoryNavigation = (categorySlug: string, subcategorySlug?: string) => {
+    if (isOnShopPage) {
+      // If already on shop page, trigger filter change event
+      const event = new CustomEvent('shopFilterChange', {
+        detail: {
+          category: categorySlug,
+          subcategory: subcategorySlug || ""
+        }
+      })
+      window.dispatchEvent(event)
+    } else {
+      // If not on shop page, navigate with URL params
+      const url = subcategorySlug
+        ? `/shop?category=${categorySlug}&subcategory=${subcategorySlug}`
+        : `/shop?category=${categorySlug}`
+      navigate(url, { replace: false })
+    }
+
+    // Close all mobile menus
+    setIsMobileShopOpen(false)
+    setExpandedMobileCategory(null)
+    setIsMenuOpen(false)
+  }
+
+  // Handle "View All Products" navigation
+  const handleViewAllProducts = () => {
+    if (isOnShopPage) {
+      // If already on shop page, clear filters without changing URL
+      const event = new CustomEvent('shopFilterChange', {
+        detail: {
+          category: "",
+          subcategory: ""
+        }
+      })
+      window.dispatchEvent(event)
+    } else {
+      // If not on shop page, navigate to shop
+      navigate("/shop", { replace: false })
+    }
+
+    setIsShopOpen(false)
+    setHoveredCategory(null)
+  }
+
+  // Handle mobile "View All Products" navigation
+  const handleMobileViewAllProducts = () => {
+    if (isOnShopPage) {
+      // If already on shop page, clear filters without changing URL
+      const event = new CustomEvent('shopFilterChange', {
+        detail: {
+          category: "",
+          subcategory: ""
+        }
+      })
+      window.dispatchEvent(event)
+    } else {
+      // If not on shop page, navigate to shop
+      navigate("/shop", { replace: false })
+    }
+
+    setIsMobileShopOpen(false)
+    setExpandedMobileCategory(null)
+    setIsMenuOpen(false)
+  }
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -167,38 +175,12 @@ const Header: React.FC = () => {
               About Us
             </Link>
 
-            <div
-              className="relative"
-              onMouseEnter={() => setIsServicesOpen(true)}
-              onMouseLeave={() => setIsServicesOpen(false)}
+            <Link
+              to="/services"
+              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
-              <button className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50">
-                Services
-                <ChevronDownIcon className="ml-1 h-3 w-3" />
-              </button>
-
-              <AnimatePresence>
-                {isServicesOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2"
-                  >
-                    {services.map((service) => (
-                      <Link
-                        key={service.name}
-                        to={service.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-150"
-                      >
-                        {service.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+              Services
+            </Link>
 
             <div
               className="relative"
@@ -231,16 +213,19 @@ const Header: React.FC = () => {
                       <div className="w-1/3 border-r border-gray-100 p-4">
                         <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide mb-4 px-3">
                           Categories
+                          {isOnShopPage && (
+                            <span className="text-xs text-blue-600 font-normal ml-2">(Filters only)</span>
+                          )}
                         </h3>
                         <div className="space-y-1">
                           {shopCategories.map((category) => (
                             <div
-                              key={category.name}
+                              key={category.id}
                               onMouseEnter={() => setHoveredCategory(category.name)}
                               className="relative"
                             >
-                              <Link
-                                to={category.href}
+                              <button
+                                onClick={() => handleCategoryNavigation(category.slug)}
                                 className={`flex items-center justify-between w-full text-left px-3 py-3 rounded-lg text-sm font-medium transition-colors duration-150 ${
                                   hoveredCategory === category.name
                                     ? "bg-primary-50 text-primary-700"
@@ -249,18 +234,18 @@ const Header: React.FC = () => {
                               >
                                 {category.name}
                                 <ChevronDownIcon className="h-4 w-4 rotate-[-90deg]" />
-                              </Link>
+                              </button>
                             </div>
                           ))}
                         </div>
 
                         <div className="mt-6 pt-4 border-t border-gray-100">
-                          <Link
-                            to="/shop"
+                          <button
+                            onClick={handleViewAllProducts}
                             className="block w-full text-center bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 font-medium text-sm transition-colors duration-200"
                           >
-                            View All Products
-                          </Link>
+                            {isOnShopPage ? "Show All Products" : "View All Products"}
+                          </button>
                         </div>
                       </div>
 
@@ -277,13 +262,18 @@ const Header: React.FC = () => {
                               {shopCategories
                                 .find((cat) => cat.name === hoveredCategory)
                                 ?.subcategories.map((subcategory) => (
-                                  <Link
-                                    key={subcategory.name}
-                                    to={subcategory.href}
-                                    className="block text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-3 py-2 rounded-md transition-colors duration-150"
+                                  <button
+                                    key={subcategory.id}
+                                    onClick={() =>
+                                      handleCategoryNavigation(
+                                        shopCategories.find((cat) => cat.name === hoveredCategory)?.slug || "",
+                                        subcategory.slug,
+                                      )
+                                    }
+                                    className="block text-left text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-3 py-2 rounded-md transition-colors duration-150"
                                   >
                                     {subcategory.name}
-                                  </Link>
+                                  </button>
                                 ))}
                             </div>
                           </motion.div>
@@ -291,7 +281,12 @@ const Header: React.FC = () => {
                           <div className="flex items-center justify-center h-full text-gray-500">
                             <div className="text-center">
                               <ShoppingBagIcon className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                              <p className="text-sm">Hover over a category to see subcategories</p>
+                              <p className="text-sm">
+                                {isOnShopPage 
+                                  ? "Hover over a category to filter products" 
+                                  : "Hover over a category to see subcategories"
+                                }
+                              </p>
                             </div>
                           </div>
                         )}
@@ -318,8 +313,8 @@ const Header: React.FC = () => {
               Membership
             </Link>
             <Link
-              to="/business-directories"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
+              to="/business-directory"
+              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
             >
               <Building2 className="h-3 w-3 mr-1" />
               Businesses
@@ -384,40 +379,13 @@ const Header: React.FC = () => {
                   About
                 </Link>
 
-                <div className="space-y-2">
-                  <button
-                    onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                    className="flex items-center justify-between w-full text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                  >
-                    Services
-                    <ChevronDownIcon
-                      className={`h-4 w-4 transition-transform duration-200 ${isMobileServicesOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {isMobileServicesOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="ml-4 space-y-2 overflow-hidden"
-                      >
-                        {services.map((service) => (
-                          <Link
-                            key={service.name}
-                            to={service.href}
-                            onClick={closeMobileMenu}
-                            className="block text-gray-600 hover:text-primary-600 text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                          >
-                            {service.name}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <Link
+                  to="/services"
+                  onClick={closeMobileMenu}
+                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
+                >
+                  Services
+                </Link>
 
                 <div className="space-y-2">
                   <button
@@ -426,7 +394,7 @@ const Header: React.FC = () => {
                   >
                     <div className="flex items-center">
                       <ShoppingBagIcon className="h-4 w-4 mr-2" />
-                      Shop
+                      Shop {isOnShopPage && <span className="text-xs text-blue-600 ml-1">(Filter)</span>}
                     </div>
                     <ChevronDownIcon
                       className={`h-4 w-4 transition-transform duration-200 ${isMobileShopOpen ? "rotate-180" : ""}`}
@@ -442,16 +410,15 @@ const Header: React.FC = () => {
                         transition={{ duration: 0.2 }}
                         className="ml-4 space-y-2 overflow-hidden"
                       >
-                        <Link
-                          to="/shop"
-                          onClick={closeMobileMenu}
-                          className="block text-primary-600 hover:text-primary-700 font-medium text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200 border border-primary-200"
+                        <button
+                          onClick={handleMobileViewAllProducts}
+                          className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200 border border-primary-200"
                         >
-                          View All Products
-                        </Link>
+                          {isOnShopPage ? "Show All Products" : "View All Products"}
+                        </button>
 
                         {shopCategories.map((category) => (
-                          <div key={category.name} className="space-y-1">
+                          <div key={category.id} className="space-y-1">
                             <button
                               onClick={() =>
                                 setExpandedMobileCategory(
@@ -475,23 +442,21 @@ const Header: React.FC = () => {
                                   transition={{ duration: 0.2 }}
                                   className="ml-4 space-y-1 overflow-hidden"
                                 >
-                                  <Link
-                                    to={category.href}
-                                    onClick={closeMobileMenu}
-                                    className="block text-primary-600 hover:text-primary-700 font-medium text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
+                                  <button
+                                    onClick={() => handleMobileCategoryNavigation(category.slug)}
+                                    className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                                   >
-                                    View All {category.name}
-                                  </Link>
+                                    {isOnShopPage ? `Filter ${category.name}` : `View All ${category.name}`}
+                                  </button>
 
                                   {category.subcategories.map((subcategory) => (
-                                    <Link
-                                      key={subcategory.name}
-                                      to={subcategory.href}
-                                      onClick={closeMobileMenu}
-                                      className="block text-gray-500 hover:text-primary-600 text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
+                                    <button
+                                      key={subcategory.id}
+                                      onClick={() => handleMobileCategoryNavigation(category.slug, subcategory.slug)}
+                                      className="block w-full text-left text-gray-500 hover:text-primary-600 text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                                     >
                                       {subcategory.name}
-                                    </Link>
+                                    </button>
                                   ))}
                                 </motion.div>
                               )}

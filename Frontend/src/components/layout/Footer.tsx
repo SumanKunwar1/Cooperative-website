@@ -151,9 +151,9 @@ const Footer: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <MapPinIcon className="h-5 w-5 text-primary-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-400 text-sm">
-                  Kathmandu, Nepal
+                  Civil Trade Center, Sundhara, 
                   <br />
-                  Ward No. 15, Thamel
+                 Ward No. 11, Kathmandu
                 </p>
               </div>
               <div className="flex items-center space-x-3">

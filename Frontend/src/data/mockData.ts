@@ -18,7 +18,7 @@ export const leadershipMessages = [
   {
     id: 'president',
     title: 'Word from President',
-    name: 'Mr. Rajesh Kumar Sharma',
+    name: 'Mr. Prakash Shrestha',
     position: 'President',
     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400',
     message: 'Constellation Saving & Credit Co-operative Ltd. stands as a beacon of financial empowerment in our community. Since our establishment in 2007, we have been committed to uplifting the financial, social, cultural, and educational standards of our members through cooperative principles. Our vision of "Today\'s Saving for Tomorrow\'s Bright Future" drives us to provide innovative financial solutions that promote mutual cooperation, self-reliance, and collective prosperity.',
