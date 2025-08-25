@@ -2,12 +2,13 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight } from "lucide-react"
 import SEO from "../../components/common/SEO"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
+import { useAuth } from "../../contexts/AuthContext"
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,9 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -31,28 +35,65 @@ const Register: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+    // Clear error when user starts typing
+    if (error) setError("")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
+
+    // Validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
+      setError("Please fill in all fields")
+      return
+    }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match")
+      setError("Passwords do not match")
+      return
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long")
       return
     }
 
     if (!formData.agreeToTerms) {
-      alert("Please agree to the terms and conditions")
+      setError("Please agree to the terms and conditions")
       return
     }
 
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate registration process
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // Create new user object
+      const newUser = {
+        id: Date.now().toString(),
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        membershipType: formData.membershipType,
+        joinedDate: new Date().toISOString(),
+      }
+      
+      // Log the user in
+      login(newUser)
+      
+      // Redirect based on membership type
+      if (formData.membershipType === 'business') {
+        navigate(`/business-dashboard/${encodeURIComponent(newUser.email)}`)
+      } else {
+        navigate(`/dashboard/${encodeURIComponent(newUser.email)}`)
+      }
+    } catch (error) {
+      setError("Registration failed. Please try again.")
+    } finally {
       setIsLoading(false)
-      alert("Registration functionality will be implemented with backend integration")
-    }, 1500)
+    }
   }
 
   return (
@@ -76,6 +117,12 @@ const Register: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <Card>
             <form className="space-y-6" onSubmit={handleSubmit}>
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                  {error}
+                </div>
+              )}
+
               {/* Membership Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Membership Type</label>
@@ -217,6 +264,7 @@ const Register: React.FC = () => {
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Create a strong password"
+                    minLength={6}
                   />
                   <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                   <button
@@ -291,7 +339,7 @@ const Register: React.FC = () => {
               </Button>
             </form>
 
-            <div className="mt-6">
+                        <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />

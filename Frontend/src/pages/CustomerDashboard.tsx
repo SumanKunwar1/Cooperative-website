@@ -74,14 +74,14 @@ const CustomerDashboard: React.FC = () => {
       id: "1",
       name: "Premium Laptop Stand",
       price: 3500,
-      image: "/laptop-stand.png",
+      image: "/placeholder.svg?height=80&width=80",
       inStock: true,
     },
     {
       id: "2",
       name: "Wireless Mouse",
       price: 1200,
-      image: "/wireless-mouse.png",
+      image: "/placeholder.svg?height=80&width=80",
       inStock: false,
     },
   ]
@@ -116,38 +116,38 @@ const CustomerDashboard: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <SEO title={`Dashboard - ${user.name}`} description="Manage your account, orders, and preferences" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xl font-bold">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-foreground">Welcome back, {user.name}!</h1>
-                  <p className="text-muted-foreground mt-1 flex items-center">
+                  <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user.name}!</h1>
+                  <p className="text-gray-600 mt-1 flex items-center">
                     <Mail className="w-4 h-4 mr-2" />
                     {user.email}
                   </p>
-                  <p className="text-sm text-muted-foreground flex items-center mt-1">
+                  <p className="text-sm text-gray-500 flex items-center mt-1">
                     <Clock className="w-4 h-4 mr-2" />
                     Member since {new Date(user.joinedDate).toLocaleDateString()}
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted">
+                <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100">
                   <Bell className="w-5 h-5" />
                 </button>
                 <Button variant="outline" onClick={handleLogout} className="flex items-center bg-transparent">
@@ -170,8 +170,8 @@ const CustomerDashboard: React.FC = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 ${
                         activeTab === tab.id
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          ? "bg-blue-600 text-white shadow-sm"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                       }`}
                     >
                       <tab.icon className="w-5 h-5 mr-3" />
@@ -195,15 +195,15 @@ const CustomerDashboard: React.FC = () => {
               {activeTab === "overview" && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="p-6 border-l-4 border-l-primary">
+                    <Card className="p-6 border-l-4 border-l-blue-600">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-muted-foreground font-medium">Total Orders</p>
-                          <p className="text-3xl font-bold text-foreground mt-1">24</p>
+                          <p className="text-sm text-gray-600 font-medium">Total Orders</p>
+                          <p className="text-3xl font-bold text-gray-900 mt-1">24</p>
                           <p className="text-xs text-emerald-600 mt-1">+3 this month</p>
                         </div>
-                        <div className="p-3 bg-primary/10 rounded-lg">
-                          <ShoppingBag className="w-6 h-6 text-primary" />
+                        <div className="p-3 bg-blue-100 rounded-lg">
+                          <ShoppingBag className="w-6 h-6 text-blue-600" />
                         </div>
                       </div>
                     </Card>
@@ -211,8 +211,8 @@ const CustomerDashboard: React.FC = () => {
                     <Card className="p-6 border-l-4 border-l-emerald-500">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-muted-foreground font-medium">Total Spent</p>
-                          <p className="text-3xl font-bold text-foreground mt-1">NPR 45,600</p>
+                          <p className="text-sm text-gray-600 font-medium">Total Spent</p>
+                          <p className="text-3xl font-bold text-gray-900 mt-1">NPR 45,600</p>
                           <p className="text-xs text-emerald-600 mt-1">+12% from last month</p>
                         </div>
                         <div className="p-3 bg-emerald-100 rounded-lg">
@@ -224,8 +224,8 @@ const CustomerDashboard: React.FC = () => {
                     <Card className="p-6 border-l-4 border-l-amber-500">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-muted-foreground font-medium">Loyalty Points</p>
-                          <p className="text-3xl font-bold text-foreground mt-1">1,250</p>
+                          <p className="text-sm text-gray-600 font-medium">Loyalty Points</p>
+                          <p className="text-3xl font-bold text-gray-900 mt-1">1,250</p>
                           <p className="text-xs text-amber-600 mt-1">Expires in 6 months</p>
                         </div>
                         <div className="p-3 bg-amber-100 rounded-lg">
@@ -237,7 +237,7 @@ const CustomerDashboard: React.FC = () => {
 
                   <Card className="p-6">
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-semibold text-foreground">Recent Orders</h3>
+                      <h3 className="text-xl font-semibold text-gray-900">Recent Orders</h3>
                       <Button variant="outline" size="sm" onClick={() => setActiveTab("orders")}>
                         View All Orders
                       </Button>
@@ -246,22 +246,22 @@ const CustomerDashboard: React.FC = () => {
                       {recentOrders.slice(0, 3).map((order) => (
                         <div
                           key={order.id}
-                          className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border"
+                          className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
                         >
                           <div className="flex items-center space-x-4">
-                            <div className="p-2 bg-primary/10 rounded-lg">
-                              <Package className="w-5 h-5 text-primary" />
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                              <Package className="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
-                              <p className="font-semibold text-foreground">{order.id}</p>
-                              <p className="text-sm text-muted-foreground flex items-center">
+                              <p className="font-semibold text-gray-900">{order.id}</p>
+                              <p className="text-sm text-gray-600 flex items-center">
                                 <Calendar className="w-4 h-4 mr-1" />
                                 {order.date} • {order.items} items
                               </p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-semibold text-foreground">NPR {order.total.toLocaleString()}</p>
+                            <p className="font-semibold text-gray-900">NPR {order.total.toLocaleString()}</p>
                             <span
                               className={`inline-block px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(order.status)}`}
                             >
@@ -278,16 +278,16 @@ const CustomerDashboard: React.FC = () => {
               {/* Orders Tab */}
               {activeTab === "orders" && (
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-6">Order History</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-6">Order History</h3>
                   <div className="space-y-4">
                     {recentOrders.map((order) => (
                       <div
                         key={order.id}
-                        className="border border-border rounded-lg p-6 hover:shadow-sm transition-shadow"
+                        className="border border-gray-200 rounded-lg p-6 hover:shadow-sm transition-shadow"
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-4">
-                            <h4 className="font-semibold text-foreground text-lg">{order.id}</h4>
+                            <h4 className="font-semibold text-gray-900 text-lg">{order.id}</h4>
                             <span
                               className={`inline-block px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(order.status)}`}
                             >
@@ -299,7 +299,7 @@ const CustomerDashboard: React.FC = () => {
                             View Details
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <div className="flex items-center justify-between text-sm text-gray-600">
                           <div className="flex items-center space-x-6">
                             <span className="flex items-center">
                               <Calendar className="w-4 h-4 mr-2" />
@@ -310,7 +310,7 @@ const CustomerDashboard: React.FC = () => {
                               {order.items} items
                             </span>
                           </div>
-                          <span className="font-semibold text-foreground text-lg">
+                          <span className="font-semibold text-gray-900 text-lg">
                             NPR {order.total.toLocaleString()}
                           </span>
                         </div>
@@ -323,22 +323,22 @@ const CustomerDashboard: React.FC = () => {
               {/* Wishlist Tab */}
               {activeTab === "wishlist" && (
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-6">My Wishlist</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-6">My Wishlist</h3>
                   {wishlistItems.length > 0 ? (
                     <div className="space-y-4">
                       {wishlistItems.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center space-x-4 p-4 border border-border rounded-lg hover:shadow-sm transition-shadow"
+                          className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
                         >
                           <img
-                            src={item.image || "/placeholder.svg"}
+                            src={item.image || "/placeholder.svg?height=80&width=80"}
                             alt={item.name}
-                            className="w-20 h-20 object-cover rounded-lg border border-border"
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-200"
                           />
                           <div className="flex-1">
-                            <h4 className="font-semibold text-foreground text-lg">{item.name}</h4>
-                            <p className="text-xl font-bold text-primary">NPR {item.price.toLocaleString()}</p>
+                            <h4 className="font-semibold text-gray-900 text-lg">{item.name}</h4>
+                            <p className="text-xl font-bold text-blue-600">NPR {item.price.toLocaleString()}</p>
                             <p className={`text-sm font-medium ${item.inStock ? "text-emerald-600" : "text-red-600"}`}>
                               {item.inStock ? "In Stock" : "Out of Stock"}
                             </p>
@@ -356,8 +356,8 @@ const CustomerDashboard: React.FC = () => {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground text-lg">Your wishlist is empty</p>
+                      <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600 text-lg">Your wishlist is empty</p>
                       <Link to="/shop">
                         <Button className="mt-4">Browse Products</Button>
                       </Link>
@@ -369,40 +369,40 @@ const CustomerDashboard: React.FC = () => {
               {/* Profile Tab */}
               {activeTab === "profile" && (
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-6">Profile Information</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-6">Profile Information</h3>
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Full Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                         <input
                           type="text"
                           defaultValue={user.name}
-                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-input"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input
                           type="email"
                           defaultValue={user.email}
-                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-input"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                         <input
                           type="tel"
                           defaultValue={user.phone}
-                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-input"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Member Since</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
                         <input
                           type="text"
                           value={new Date(user.joinedDate).toLocaleDateString()}
                           disabled
-                          className="w-full px-4 py-3 border border-border rounded-lg bg-muted text-muted-foreground"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
                         />
                       </div>
                     </div>
@@ -417,45 +417,45 @@ const CustomerDashboard: React.FC = () => {
               {activeTab === "settings" && (
                 <div className="space-y-6">
                   <Card className="p-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-6">Account Settings</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Settings</h3>
                     <div className="space-y-6">
-                      <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                      <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                         <div>
-                          <h4 className="font-medium text-foreground">Email Notifications</h4>
-                          <p className="text-sm text-muted-foreground">Receive updates about your orders</p>
+                          <h4 className="font-medium text-gray-900">Email Notifications</h4>
+                          <p className="text-sm text-gray-600">Receive updates about your orders</p>
                         </div>
                         <input
                           type="checkbox"
                           defaultChecked
-                          className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                       </div>
-                      <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                      <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                         <div>
-                          <h4 className="font-medium text-foreground">SMS Notifications</h4>
-                          <p className="text-sm text-muted-foreground">Get text updates for important events</p>
+                          <h4 className="font-medium text-gray-900">SMS Notifications</h4>
+                          <p className="text-sm text-gray-600">Get text updates for important events</p>
                         </div>
                         <input
                           type="checkbox"
-                          className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                       </div>
-                      <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                      <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                         <div>
-                          <h4 className="font-medium text-foreground">Marketing Emails</h4>
-                          <p className="text-sm text-muted-foreground">Receive promotional offers and news</p>
+                          <h4 className="font-medium text-gray-900">Marketing Emails</h4>
+                          <p className="text-sm text-gray-600">Receive promotional offers and news</p>
                         </div>
                         <input
                           type="checkbox"
                           defaultChecked
-                          className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                       </div>
                     </div>
                   </Card>
 
                   <Card className="p-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-6">Security</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-6">Security</h3>
                     <div className="space-y-4">
                       <Button variant="outline" fullWidth className="justify-start bg-transparent">
                         Change Password
@@ -466,7 +466,7 @@ const CustomerDashboard: React.FC = () => {
                       <Button
                         variant="outline"
                         fullWidth
-                        className="justify-start text-destructive border-destructive hover:bg-destructive/10 bg-transparent"
+                        className="justify-start text-red-600 border-red-300 hover:bg-red-50 bg-transparent"
                       >
                         Delete Account
                       </Button>

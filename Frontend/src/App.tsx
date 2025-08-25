@@ -1,9 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { HelmetProvider } from "react-helmet-async"
 import { CartProvider } from "./contexts/CartContext"
+import { AuthProvider } from "./contexts/AuthContext"
+import { AdminProvider } from "./contexts/AdminContext"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
 import CustomerDashboard from "./pages/CustomerDashboard"
+import BusinessDashboard from "./pages/BusinessDashboard"
 import OrderConfirmation from "./pages/OrderConfirmation"
 import Home from "./pages/Home"
 import About from "./pages/About"
@@ -16,80 +19,233 @@ import BusinessDirectory from "./pages/BusinessDirectory"
 import BusinessDetails from "./pages/BusinessDetails"
 import Shareholders from "./pages/Shareholders"
 import Notice from "./pages/Notice"
+
+//footer 
+import Team from "./pages/footer/Team"
+
 import Header from "./components/layout/Header"
 import Footer from "./components/layout/Footer"
+import AdminLogin from "./pages/admin/AdminLogin"
+import AdminDashboard from "./pages/admin/AdminDashboard"
+import AdminUsers from "./pages/admin/AdminUsers"
+import AdminBusinesses from "./pages/admin/AdminBusinesses"
+import AdminProducts from "./pages/admin/AdminProducts"
+import AdminNotices from "./pages/admin/AdminNotices"
+import AdminServices from "./pages/admin/AdminServices"
+import AdminShareholders from "./pages/admin/AdminShareholders"
+import AdminAbout from "./pages/admin/AdminAbout"
+import AdminTeam from "./pages/admin/AdminTeam"
+import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute"
 
 function App() {
   return (
     <HelmetProvider>
-      <CartProvider>
-        <Router>
-          <div className="min-h-screen bg-white">
-            <Header />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/shop/category/:category" element={<Shop />} />
-                <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
-                <Route path="/shop/product/:id" element={<ShopDetails />} />
+      <AuthProvider>
+        <AdminProvider>
+          <CartProvider>
+            <Router>
+              <div className="min-h-screen bg-white">
+                <Routes>
+                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route
+                    path="/admin/dashboard"
+                    element={
+                      <ProtectedAdminRoute>
+                        <AdminDashboard />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/users"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="users">
+                        <AdminUsers />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/businesses"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="businesses">
+                        <AdminBusinesses />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/products"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="products">
+                        <AdminProducts />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/services"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="services">
+                        <AdminServices />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/notices"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="notices">
+                        <AdminNotices />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/teams"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="team">
+                        <AdminTeam />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/about"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="content">
+                        <AdminAbout />
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/analytics"
+                    element={
+                      <ProtectedAdminRoute>
+                        <AdminDashboard currentSection="analytics">
+                          <div className="text-center py-12">
+                            <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
+                            <p className="text-gray-600 mt-2">Coming Soon</p>
+                          </div>
+                        </AdminDashboard>
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/content"
+                    element={
+                      <ProtectedAdminRoute>
+                        <AdminDashboard currentSection="content">
+                          <div className="text-center py-12">
+                            <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
+                            <p className="text-gray-600 mt-2">Coming Soon</p>
+                          </div>
+                        </AdminDashboard>
+                      </ProtectedAdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/shareholders"
+                    element={
+                      <ProtectedAdminRoute requiredPermission="shareholders">
+                        <AdminShareholders />
+                      </ProtectedAdminRoute>
+                    }
+                  />
 
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-                <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                  <Route
+                    path="/*"
+                    element={
+                      <>
+                        <Header />
+                        <main>
+                          <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/services" element={<Services />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/shop" element={<Shop />} />
+                            <Route path="/shop/category/:category" element={<Shop />} />
+                            <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
+                            <Route path="/shop/product/:id" element={<ShopDetails />} />
 
-                <Route path="/business-directory" element={<BusinessDirectory />} />
-                <Route path="/business-directory/:id" element={<BusinessDetails />} />
+                            <Route path="/cart" element={<Cart />} />
+                            <Route path="/checkout" element={<Checkout />} />
+                            <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                            <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
-                <Route path="/shareholders" element={<Shareholders />} />
+                            <Route path="/business-directory" element={<BusinessDirectory />} />
+                            <Route path="/business-directory/:name" element={<BusinessDetails />} />
 
-                {/* Notice page route */}
-                <Route path="/notice" element={<Notice />} />
+                            <Route path="/shareholders" element={<Shareholders />} />
+                            <Route path="/notice" element={<Notice />} />
 
-                {/* Placeholder routes - to be implemented */}
-                <Route
-                  path="/membership"
-                  element={
-                    <div className="min-h-screen flex items-center justify-center">
-                      <h1 className="text-2xl">Membership Page - Coming Soon</h1>
-                    </div>
-                  }
-                />
-                <Route
-                  path="/events"
-                  element={
-                    <div className="min-h-screen flex items-center justify-center">
-                      <h1 className="text-2xl">Events - Coming Soon</h1>
-                    </div>
-                  }
-                />
-                <Route
-                  path="/contact"
-                  element={
-                    <div className="min-h-screen flex items-center justify-center">
-                      <h1 className="text-2xl">Contact - Coming Soon</h1>
-                    </div>
-                  }
-                />
-                <Route
-                  path="/business-registration"
-                  element={
-                    <div className="min-h-screen flex items-center justify-center">
-                      <h1 className="text-2xl">Business Registration - Coming Soon</h1>
-                    </div>
-                  }
-                />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </Router>
-      </CartProvider>
+                            <Route path="/dashboard/:name" element={<CustomerDashboard />} />
+                            <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
+                            <Route path="/teams" element={<Team />} />
+                            {/* Placeholder routes - to be implemented */}
+                            <Route
+                              path="/membership"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Membership Page - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/events"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Events - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/contact"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Contact - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/business-registration"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Business Registration - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/forgot-password"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Forgot Password - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/terms"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Terms of Service - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                            <Route
+                              path="/privacy"
+                              element={
+                                <div className="min-h-screen flex items-center justify-center">
+                                  <h1 className="text-2xl">Privacy Policy - Coming Soon</h1>
+                                </div>
+                              }
+                            />
+                          </Routes>
+                        </main>
+                        <Footer />
+                      </>
+                    }
+                  />
+                </Routes>
+              </div>
+            </Router>
+          </CartProvider>
+        </AdminProvider>
+      </AuthProvider>
     </HelmetProvider>
   )
 }

@@ -14,18 +14,18 @@ const Card: React.FC<CardProps> = ({
   className = '',
   hover = true,
   padding = 'md',
-  background = 'white'
+  background = 'white',
 }) => {
   const paddingClasses = {
     sm: 'p-4',
     md: 'p-6',
-    lg: 'p-8'
+    lg: 'p-8',
   };
 
   const backgroundClasses = {
     white: 'bg-white',
     gray: 'bg-gray-50',
-    gradient: 'bg-gradient-to-r from-blue-50 to-white'
+    gradient: 'bg-gradient-to-r from-blue-50 to-white',
   };
 
   const baseClasses = `rounded-xl shadow-md border border-gray-100 ${backgroundClasses[background]} ${paddingClasses[padding]} ${className}`;
@@ -33,7 +33,14 @@ const Card: React.FC<CardProps> = ({
   return (
     <motion.div
       className={baseClasses}
-      whileHover={hover ? { y: -4, shadow: '0 10px 25px -3px rgba(0, 0, 0, 0.1)' } : {}}
+      whileHover={
+        hover
+          ? {
+              y: -4,
+              boxShadow: '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
+            }
+          : {}
+      }
       transition={{ duration: 0.2 }}
     >
       {children}

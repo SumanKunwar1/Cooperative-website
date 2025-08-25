@@ -3,20 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import {
-  Target,
-  Eye,
-  Award,
-  Users,
-  TrendingUp,
-  Building,
-  Calendar,
-  Globe,
-  MapPin,
-  Phone,
-  Mail,
-  Star,
-} from "lucide-react"
+import { Target, Eye, Award, Users, TrendingUp, Building, Calendar, Globe, MapPin, Star } from "lucide-react"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 
@@ -27,82 +14,72 @@ const About: React.FC = () => {
   const values = [
     {
       icon: Target,
-      title: "Financial Empowerment",
+      title: "Mutual Trust",
       description:
-        "We empower members through accessible financial services and promote regular savings habits for long-term security.",
+        "We work with the true spirit of cooperative values - mutual trust, shared success, and community support.",
     },
     {
       icon: Users,
-      title: "Equal Partnership",
-      description: "Equal shares, equal rights, equal duties - creating an environment of equality among all members.",
+      title: "Community Support",
+      description: "Together, everyone can achieve more. We believe in the power of community and collective growth.",
     },
     {
       icon: TrendingUp,
-      title: "Entrepreneurship",
+      title: "Financial Empowerment",
       description:
-        "We encourage self-employment, entrepreneurship, and business growth through our comprehensive loan schemes.",
+        "We provide professional, transparent, and member-friendly services for shared growth and financial empowerment.",
     },
     {
       icon: Award,
-      title: "Member Recognition",
-      description: "We provide awards and recognition to active members based on multiple performance indicators.",
+      title: "Strong Relationships",
+      description: "Building a trusted platform where people support each other and grow together for generations.",
     },
   ]
 
   const milestones = [
-    { year: "2007", event: "Constellation Saving and Credit Cooperative Ltd. established (2064 B.S.)", icon: Building },
-    { year: "2010", event: "Introduced specialized saving schemes for different member groups", icon: Users },
-    { year: "2015", event: "Launched comprehensive loan facilities with competitive rates", icon: TrendingUp },
-    { year: "2018", event: "ATM services introduced for member convenience", icon: Globe },
-    { year: "2020", event: "Digital banking platform development initiated", icon: Calendar },
-    { year: "2024", event: "Expanded to serve 1000+ active members with Rs. 50M+ loans disbursed", icon: Award },
-  ]
-
-  const leadership = [
     {
-      name: "Board of Directors",
-      position: "Governing Body",
-      image: "/placeholder.svg?height=300&width=300",
-      bio: "Experienced professionals guiding strategic decisions and ensuring cooperative principles are maintained.",
+      year: "2010",
+      event: "Constellation Saving and Credit Cooperative Limited established on 12th May 2010",
+      icon: Building,
     },
+    { year: "2010", event: "Registered under Department of Cooperatives (Registration No. 3163/066/067)", icon: Users },
     {
-      name: "Management Team",
-      position: "Executive Leadership",
-      image: "/placeholder.svg?height=300&width=300",
-      bio: "Dedicated team managing daily operations, member services, and business development initiatives.",
+      year: "2015",
+      event: "Established head office at 6th Floor, Civil Trade Centre (CTC Mall), Sundhara",
+      icon: TrendingUp,
     },
+    { year: "2020", event: "Expanded services with experienced management team (20+ years experience)", icon: Globe },
     {
-      name: "Member Representatives",
-      position: "Community Voice",
-      image: "/placeholder.svg?height=300&width=300",
-      bio: "Elected representatives ensuring member interests are prioritized in all cooperative decisions.",
+      year: "2024",
+      event: "Operating under Ministry of Land Management, Cooperatives and Poverty Alleviation",
+      icon: Calendar,
     },
+    { year: "2025", event: "Continuing to serve members with modern facilities and homely atmosphere", icon: Award },
   ]
 
   const stats = [
-    { label: "Years of Service", value: "17+", description: "Serving since 2007" },
-    { label: "Active Members", value: "1000+", description: "Growing community" },
-    { label: "Loans Disbursed", value: "NPR 50M+", description: "Supporting dreams" },
-    { label: "Saving Schemes", value: "6+", description: "Diverse options" },
+    { label: "Years of Service", value: "15+", description: "Serving since 2010" },
+    { label: "Registration No.", value: "3163", description: "Officially registered" },
+    { label: "Experience", value: "20+", description: "Years of staff experience" },
+    { label: "Committee Term", value: "2081-2086", description: "Current working period" },
   ]
 
   const purposes = [
-    "Increase financial and social awareness of members",
-    "Promote regular and disciplined savings among members",
-    "Provide financial services through mobilization of members' savings",
-    "Offer loans for income-generating and productive purposes",
-    "Strengthen members' business, income sources, and livelihood",
-    "Encourage self-employment, entrepreneurship, and financial stability",
-    "Create a reliable financial network reducing financial risks",
-    "Motivate collective participation in social and cultural programs",
+    "Create a vibrant business community where people support each other",
+    "Promote shared growth and financial empowerment among members",
+    "Build strong relationships that last for generations to come",
+    "Provide professional, transparent, and member-friendly services",
+    "Ensure every member enjoys comfort, efficiency, and homely atmosphere",
+    "Foster mutual trust and shared success in our community",
+    "Support members as partners in progress, not just shareholders",
+    "Create opportunities where dreams meet opportunity and community becomes family",
   ]
-
 
   return (
     <div className="min-h-screen">
       <SEO
-        title="About Us - Constellation Saving and Credit Cooperative Ltd."
-        description="Learn about our 17+ years of serving the Kathmandu community through cooperative banking services since 2007. Discover our mission, vision, and commitment to financial empowerment."
+        title="About Us - Constellation Saving and Credit Cooperative Limited"
+        description="Learn about our journey since 2010, serving the community through cooperative banking services. Discover our mission of shared growth and financial empowerment."
       />
 
       {/* Hero Section with Company Image */}
@@ -113,20 +90,21 @@ const About: React.FC = () => {
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">About Constellation</h1>
               <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-                Today's Saving for Tomorrow's Security, a Bright Future for Generations Ahead
+                Together, everyone can achieve more - A trusted platform for shared growth, financial empowerment, and
+                strong relationships
               </p>
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Established 2007
+                  Established 12th May 2010
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <MapPin className="w-4 h-4 mr-2" />
-                  Tripureshwor, Kathmandu
+                  CTC Mall, Sundhara, Kathmandu
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Users className="w-4 h-4 mr-2" />
-                  1000+ Members
+                  Reg. No. 3163/066/067
                 </div>
               </div>
             </motion.div>
@@ -139,14 +117,14 @@ const About: React.FC = () => {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/modern-cooperative-office-building-ctc-mall-kathma.png"
                   alt="Constellation Cooperative Building"
                   className="w-full h-80 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <p className="text-sm font-medium">Our Office Location</p>
-                  <p className="text-xs opacity-90">Near CTC Mall, Opposite Bir Hospital</p>
+                  <p className="text-xs opacity-90">6th Floor, Civil Trade Centre (CTC Mall), Sundhara</p>
                 </div>
               </div>
             </motion.div>
@@ -184,41 +162,43 @@ const About: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story Since 2007</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story Since 2010</h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Constellation Saving and Credit Cooperative Ltd. was established in 2064 B.S. (2007 A.D.) with
-                Registration No. 3463/064/65 under the Division Cooperative Office, Kathmandu. Located in the heart of
-                Tripureshwor, near CTC Mall and opposite Bir Hospital, we have been serving our community for over 17
-                years.
+                On 12th May 2010, a group of passionate young entrepreneurs came together with a bold vision to create a
+                vibrant business community where people support each other, grow together, and succeed for generations
+                to come.
               </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our cooperative was founded on the principle of financial empowerment through collective effort. We
-                believe in creating equal opportunities for all members through equal shares, equal rights, and equal
-                responsibilities.
+                That vision became Constellation Saving and Credit Cooperative Limited - a trusted platform for shared
+                growth, financial empowerment, and strong relationships. We are proudly registered under the Department
+                of Cooperatives and now operate under the Ministry of Land Management, Cooperatives and Poverty
+                Alleviation.
+              </p>
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                For over a decade, our Board of Directors and management team, backed by staff with 20+ years of
+                experience, have been delivering professional, transparent, and member-friendly services. Our office is
+                fully equipped with modern facilities, ensuring every member enjoys comfort, efficiency, and a homely
+                atmosphere.
               </p>
 
               {/* Contact Information */}
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <h3 className="text-xl font-semibold mb-4 text-gray-900">Contact Information</h3>
                 <div className="space-y-3">
-                  <div className="flex items-center">
-                    <Phone className="w-5 h-5 text-blue-600 mr-3" />
-                    <span className="text-gray-700">01-4254939</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Mail className="w-5 h-5 text-blue-600 mr-3" />
-                    <span className="text-gray-700">constellationscc@gmail.com</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Globe className="w-5 h-5 text-blue-600 mr-3" />
-                    <span className="text-gray-700">www.constellationcooperative.com</span>
-                  </div>
                   <div className="flex items-start">
                     <MapPin className="w-5 h-5 text-blue-600 mr-3 mt-0.5" />
                     <span className="text-gray-700">
-                      Tripureshwor, Kathmandu, Nepal
+                      6th Floor, Civil Trade Centre (CTC Mall)
                       <br />
-                      PAN No.: 308300684
+                      Sundhara, Kathmandu Metropolitan City Ward No. 22
+                      <br />
+                      Registration No.: 3163/066/067
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Globe className="w-5 h-5 text-blue-600 mr-3" />
+                    <span className="text-gray-700">
+                      Ministry of Land Management, Cooperatives and Poverty Alleviation
                     </span>
                   </div>
                 </div>
@@ -304,10 +284,9 @@ const About: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  To provide accessible, innovative, and member-focused financial services that promote economic growth,
-                  support local businesses, and strengthen our community through cooperative principles. We aim to
-                  increase financial and social awareness while encouraging regular savings and providing easy access to
-                  credit facilities.
+                  To create a vibrant business community where people support each other, grow together, and succeed for
+                  generations to come. We work with the true spirit of cooperative values - mutual trust, shared
+                  success, and community support, delivering professional, transparent, and member-friendly services.
                 </p>
               </Card>
             )}
@@ -319,9 +298,9 @@ const About: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  To be Nepal's leading cooperative financial institution, recognized for innovation, community impact,
-                  and sustainable growth. We envision a future where every member achieves financial stability through
-                  our comprehensive services, creating a bright future for generations ahead.
+                  At Constellation, you are not just a shareholder - you are a partner in progress. We invite you to
+                  engage with us, benefit from our services, and be part of a cooperative family where dreams meet
+                  opportunity, and community becomes family. Together, everyone can achieve more.
                 </p>
               </Card>
             )}
@@ -390,49 +369,8 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Leadership Team with Images */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Leadership Structure</h3>
-            <p className="text-xl text-gray-600">Dedicated professionals serving our cooperative community</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {leadership.map((leader, index) => (
-              <motion.div
-                key={leader.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card className="text-center hover:shadow-xl transition-all duration-300">
-                  <div className="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden">
-                    <img
-                      src={leader.image || "/placeholder.svg"}
-                      alt={leader.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <h4 className="text-xl font-semibold mb-2">{leader.name}</h4>
-                  <p className="text-blue-600 font-medium mb-4">{leader.position}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">{leader.bio}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interactive History Timeline */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

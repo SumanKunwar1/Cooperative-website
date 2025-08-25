@@ -2,21 +2,26 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Eye, EyeOff, Lock, Mail, ArrowRight } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail, ArrowRight, User, Building } from "lucide-react"
 import SEO from "../../components/common/SEO"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
+import { useAuth } from "../../contexts/AuthContext"
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
+    userType: "individual" as "individual" | "business",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -24,17 +29,55 @@ const Login: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+    // Clear error when user starts typing
+    if (error) setError("")
+  }
+
+  const handleUserTypeChange = (type: "individual" | "business") => {
+    setFormData((prev) => ({
+      ...prev,
+      userType: type,
+    }))
+    if (error) setError("")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simple validation
+      if (!formData.email || !formData.password) {
+        setError("Please fill in all fields")
+        return
+      }
+
+      // Simulate login process
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      const mockUser = {
+        id: Date.now().toString(),
+        name: formData.email.split("@")[0],
+        email: formData.email,
+        phone: "+977-9800000000",
+        membershipType: formData.userType,
+        joinedDate: new Date().toISOString(),
+      }
+
+      // Login successful
+      login(mockUser)
+
+      if (formData.userType === "business") {
+        navigate(`/business-dashboard/${encodeURIComponent(mockUser.email)}`)
+      } else {
+        navigate(`/dashboard/${encodeURIComponent(mockUser.email)}`)
+      }
+    } catch (error) {
+      setError("Login failed. Please try again.")
+    } finally {
       setIsLoading(false)
-      alert("Login functionality will be implemented with backend integration")
-    }, 1500)
+    }
   }
 
   return (
@@ -58,6 +101,40 @@ const Login: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <Card>
             <form className="space-y-6" onSubmit={handleSubmit}>
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">{error}</div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Login as</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleUserTypeChange("individual")}
+                    className={`flex items-center justify-center px-4 py-3 border rounded-lg transition-all ${
+                      formData.userType === "individual"
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <User className="w-5 h-5 mr-2" />
+                    Individual
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUserTypeChange("business")}
+                    className={`flex items-center justify-center px-4 py-3 border rounded-lg transition-all ${
+                      formData.userType === "business"
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Building className="w-5 h-5 mr-2" />
+                    Business
+                  </button>
+                </div>
+              </div>
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email Address
@@ -76,6 +153,7 @@ const Login: React.FC = () => {
                   />
                   <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
+                <p className="mt-1 text-xs text-gray-500">Use any email address (demo mode)</p>
               </div>
 
               <div>
@@ -107,6 +185,7 @@ const Login: React.FC = () => {
                     )}
                   </button>
                 </div>
+                <p className="mt-1 text-xs text-gray-500">Use any password (demo mode)</p>
               </div>
 
               <div className="flex items-center justify-between">
@@ -156,7 +235,6 @@ const Login: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Features */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
