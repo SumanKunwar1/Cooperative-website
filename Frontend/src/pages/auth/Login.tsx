@@ -1,52 +1,51 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, Mail, ArrowRight } from 'lucide-react';
-import SEO from '../../components/common/SEO';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
+import { Eye, EyeOff, Lock, Mail, ArrowRight } from "lucide-react"
+import SEO from "../../components/common/SEO"
+import Card from "../../components/ui/Card"
+import Button from "../../components/ui/Button"
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+    email: "",
+    password: "",
+    rememberMe: false,
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
+    e.preventDefault()
+    setIsLoading(true)
+
     // Simulate API call
     setTimeout(() => {
-      setIsLoading(false);
-      alert('Login functionality will be implemented with backend integration');
-    }, 1500);
-  };
+      setIsLoading(false)
+      alert("Login functionality will be implemented with backend integration")
+    }, 1500)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <SEO 
+      <SEO
         title="Member Login - Constellation Saving and Credit Cooperative Ltd."
         description="Access your Constellation account securely. Login to manage your savings, loans, and digital banking services."
       />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
           <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-4">
             <span className="text-white font-bold text-2xl">C</span>
           </div>
@@ -56,11 +55,7 @@ const Login: React.FC = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <Card>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
@@ -91,7 +86,7 @@ const Login: React.FC = () => {
                   <input
                     id="password"
                     name="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     required
                     value={formData.password}
@@ -129,23 +124,13 @@ const Login: React.FC = () => {
                   </label>
                 </div>
 
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-500"
-                >
+                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
                   Forgot your password?
                 </Link>
               </div>
 
-              <Button
-                type="submit"
-                fullWidth
-                size="lg"
-                disabled={isLoading}
-                icon={ArrowRight}
-                iconPosition="right"
-              >
-                {isLoading ? 'Signing in...' : 'Sign In'}
+              <Button type="submit" fullWidth size="lg" disabled={isLoading} icon={ArrowRight} iconPosition="right">
+                {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
@@ -179,15 +164,13 @@ const Login: React.FC = () => {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
         <div className="bg-blue-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-4 text-center">
-            Access Your Financial Dashboard
-          </h3>
+          <h3 className="text-lg font-semibold text-blue-900 mb-4 text-center">Access Your Financial Dashboard</h3>
           <div className="space-y-3">
             {[
-              'Check account balances and transactions',
-              'Apply for loans and track applications',
-              'Manage investments and insurance',
-              'Access business directory and e-commerce'
+              "Check account balances and transactions",
+              "Apply for loans and track applications",
+              "Manage investments and insurance",
+              "Access business directory and e-commerce",
             ].map((feature, index) => (
               <div key={index} className="flex items-center text-sm text-blue-800">
                 <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
@@ -198,7 +181,7 @@ const Login: React.FC = () => {
         </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

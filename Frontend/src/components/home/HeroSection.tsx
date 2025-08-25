@@ -81,7 +81,7 @@ const HeroSection: React.FC = () => {
               className="text-4xl tracking-tight font-bold text-white sm:text-5xl md:text-6xl"
             >
               <span className="block">Your journey to</span>
-              <span className="block text-blue-400">financial prosperity</span>
+              <span className="block text-blue-500">financial prosperity</span>
               <span className="block">starts here</span>
             </motion.h1>
 
@@ -106,7 +106,7 @@ const HeroSection: React.FC = () => {
               <div className="relative max-w-xl mx-auto lg:mx-0">
                 <input
                   type="text"
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-700"
                   placeholder="Search businesses, services, opportunities..."
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
@@ -165,28 +165,28 @@ const HeroSection: React.FC = () => {
             >
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <Building className="h-6 w-6 text-blue-400" />
+                  <Building className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="text-2xl font-semibold text-white">500+</div>
                 <div className="text-sm text-gray-300">Businesses</div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <Users className="h-6 w-6 text-blue-400" />
+                  <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="text-2xl font-semibold text-white">10K+</div>
                 <div className="text-sm text-gray-300">Members</div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <Award className="h-6 w-6 text-blue-400" />
+                  <Award className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="text-2xl font-semibold text-white">50+</div>
                 <div className="text-sm text-gray-300">Services</div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <TrendingUp className="h-6 w-6 text-blue-400" />
+                  <TrendingUp className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="text-2xl font-semibold text-white">$2M+</div>
                 <div className="text-sm text-gray-300">Loans Funded</div>

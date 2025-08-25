@@ -5,6 +5,7 @@ import { useState, useMemo, useEffect, useRef } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Search, Filter, ShoppingCart } from "lucide-react"
+import { useCart } from "../contexts/CartContext"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
@@ -15,57 +16,49 @@ import { shopCategories, getCategoryBySlug, getSubcategoryBySlug } from "../data
 const Shop: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { addToCart } = useCart()
 
   const searchParams = new URLSearchParams(location.search)
   const categoryParam = searchParams.get("category")
   const subcategoryParam = searchParams.get("subcategory")
 
-  // Track if this is the first load of the shop page
   const isFirstLoad = useRef(true)
   const [frozenUrl, setFrozenUrl] = useState({ category: "", subcategory: "" })
-  
-  // State for actual filtering (can be different from URL after first load)
+
   const [searchTerm, setSearchTerm] = useState("")
   const [activeCategory, setActiveCategory] = useState(categoryParam || "")
   const [activeSubcategory, setActiveSubcategory] = useState(subcategoryParam || "")
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 })
   const [sortBy, setSortBy] = useState("featured")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [cart, setCart] = useState<string[]>([])
   const [wishlist, setWishlist] = useState<string[]>([])
 
-  // Effect to handle first load and URL freezing
   useEffect(() => {
     if (isFirstLoad.current) {
-      // On first load, set the frozen URL from the current URL params
       setFrozenUrl({
         category: categoryParam || "",
-        subcategory: subcategoryParam || ""
+        subcategory: subcategoryParam || "",
       })
-      
-      // Set active filters to match URL params
+
       setActiveCategory(categoryParam || "")
       setActiveSubcategory(subcategoryParam || "")
-      
+
       isFirstLoad.current = false
     }
   }, [categoryParam, subcategoryParam])
 
-  // Reset first load flag when component unmounts or location pathname changes
   useEffect(() => {
     return () => {
       isFirstLoad.current = true
     }
   }, [])
 
-  // Reset when pathname changes (user navigates to different page)
   useEffect(() => {
     if (location.pathname !== "/shop") {
       isFirstLoad.current = true
     }
   }, [location.pathname])
 
-  // Listen for filter change events from header (when on shop page)
   useEffect(() => {
     const handleFilterChange = (event: CustomEvent) => {
       const { category, subcategory } = event.detail
@@ -73,24 +66,20 @@ const Shop: React.FC = () => {
       setActiveSubcategory(subcategory)
     }
 
-    window.addEventListener('shopFilterChange', handleFilterChange as EventListener)
-    
+    window.addEventListener("shopFilterChange", handleFilterChange as EventListener)
+
     return () => {
-      window.removeEventListener('shopFilterChange', handleFilterChange as EventListener)
+      window.removeEventListener("shopFilterChange", handleFilterChange as EventListener)
     }
   }, [])
 
-  // Get display information based on frozen URL (for breadcrumbs, titles, etc.)
   const frozenCategory = frozenUrl.category ? getCategoryBySlug(frozenUrl.category) : null
-  const frozenSubcategory = frozenUrl.subcategory && frozenUrl.category 
-    ? getSubcategoryBySlug(frozenUrl.category, frozenUrl.subcategory) 
-    : null
+  const frozenSubcategory =
+    frozenUrl.subcategory && frozenUrl.category ? getSubcategoryBySlug(frozenUrl.category, frozenUrl.subcategory) : null
 
-  // Get current active category/subcategory for filtering
   const currentActiveCategory = activeCategory ? getCategoryBySlug(activeCategory) : null
-  const currentActiveSubcategory = activeSubcategory && activeCategory 
-    ? getSubcategoryBySlug(activeCategory, activeSubcategory) 
-    : null
+  const currentActiveSubcategory =
+    activeSubcategory && activeCategory ? getSubcategoryBySlug(activeCategory, activeSubcategory) : null
 
   const filteredProducts = useMemo(() => {
     const filtered = mockProducts.filter((product) => {
@@ -139,31 +128,31 @@ const Shop: React.FC = () => {
   }, [searchTerm, activeCategory, activeSubcategory, priceRange, sortBy])
 
   const handleAddToCart = (productId: string) => {
-    setCart((prev) => [...prev, productId])
+    const product = mockProducts.find((p) => p.id === productId)
+    if (product) {
+      addToCart(product)
+      alert(`${product.name} added to cart!`)
+    }
   }
 
   const handleToggleWishlist = (productId: string) => {
     setWishlist((prev) => (prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]))
   }
 
-  // Handle category changes - only update active filters, not URL
   const handleCategoryChange = (categorySlug: string) => {
     setActiveCategory(categorySlug)
-    setActiveSubcategory("") // Reset subcategory when category changes
+    setActiveSubcategory("")
   }
 
-  // Handle subcategory changes - only update active filters, not URL
   const handleSubcategoryChange = (subcategorySlug: string) => {
     setActiveSubcategory(subcategorySlug)
   }
 
-  // Handle clearing all filters
   const handleClearFilters = () => {
     setSearchTerm("")
     setActiveCategory("")
     setActiveSubcategory("")
     setPriceRange({ min: 0, max: 50000 })
-    // Don't navigate or change URL, just reset filters
   }
 
   return (
@@ -173,7 +162,6 @@ const Shop: React.FC = () => {
         description="Shop from our member businesses. Discover quality products from local entrepreneurs in fashion, electronics, lifestyle, and more."
       />
 
-      {/* Hero Section - Shows frozen URL context */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
@@ -185,16 +173,14 @@ const Shop: React.FC = () => {
                   ? `Explore ${frozenCategory.name} Products`
                   : "Support local businesses and discover quality products from our cooperative members"}
             </p>
-            {/* Show current active filter if different from frozen URL */}
             {(activeCategory !== frozenUrl.category || activeSubcategory !== frozenUrl.subcategory) && (
               <div className="mt-2 text-blue-200 text-sm">
-                Currently viewing: {
-                  currentActiveCategory && currentActiveSubcategory
-                    ? `${currentActiveSubcategory.name} in ${currentActiveCategory.name}`
-                    : currentActiveCategory
-                      ? currentActiveCategory.name
-                      : "All Products"
-                }
+                Currently viewing:{" "}
+                {currentActiveCategory && currentActiveSubcategory
+                  ? `${currentActiveSubcategory.name} in ${currentActiveCategory.name}`
+                  : currentActiveCategory
+                    ? currentActiveCategory.name
+                    : "All Products"}
               </div>
             )}
           </motion.div>
@@ -203,7 +189,6 @@ const Shop: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
           <div className="lg:w-1/4">
             <Card className="sticky top-4">
               <div className="flex items-center mb-6">
@@ -211,7 +196,6 @@ const Shop: React.FC = () => {
                 <h3 className="text-lg font-semibold">Filters</h3>
               </div>
 
-              {/* Search */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
                 <div className="relative">
@@ -226,7 +210,6 @@ const Shop: React.FC = () => {
                 </div>
               </div>
 
-              {/* Category Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <select
@@ -243,7 +226,6 @@ const Shop: React.FC = () => {
                 </select>
               </div>
 
-              {/* Subcategory Filter */}
               {activeCategory && (
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory</label>
@@ -262,7 +244,6 @@ const Shop: React.FC = () => {
                 </div>
               )}
 
-              {/* Price Range */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
                 <div className="space-y-2">
@@ -281,20 +262,13 @@ const Shop: React.FC = () => {
                 </div>
               </div>
 
-              {/* Clear Filters */}
-              <Button
-                fullWidth
-                variant="outline"
-                onClick={handleClearFilters}
-              >
+              <Button fullWidth variant="outline" onClick={handleClearFilters}>
                 Clear All Filters
               </Button>
             </Card>
           </div>
 
-          {/* Products Section */}
           <div className="lg:w-3/4">
-            {/* Toolbar */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
               <div className="flex items-center space-x-4">
                 <span className="text-gray-600">
@@ -331,7 +305,6 @@ const Shop: React.FC = () => {
               </div>
             </div>
 
-            {/* Products Grid */}
             {filteredProducts.length > 0 ? (
               <div
                 className={`grid gap-6 ${
