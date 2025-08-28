@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import { HelmetProvider } from "react-helmet-async"
 import { CartProvider } from "./contexts/CartContext"
 import { AuthProvider } from "./contexts/AuthContext"
 import { AdminProvider } from "./contexts/AdminContext"
+import { ApplicationProvider } from "./contexts/ApplicationContext"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
 import CustomerDashboard from "./pages/CustomerDashboard"
@@ -20,7 +21,7 @@ import BusinessDetails from "./pages/BusinessDetails"
 import Shareholders from "./pages/Shareholders"
 import Notice from "./pages/Notice"
 
-//footer 
+//footer
 import Team from "./pages/footer/Team"
 
 import Header from "./components/layout/Header"
@@ -35,215 +36,280 @@ import AdminServices from "./pages/admin/AdminServices"
 import AdminShareholders from "./pages/admin/AdminShareholders"
 import AdminAbout from "./pages/admin/AdminAbout"
 import AdminTeam from "./pages/admin/AdminTeam"
+import AdminAccountApplications from "./pages/admin/AdminAccountApplication"
+import AdminLoanApplications from "./pages/admin/AdminLoanApplication"
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute"
+
+import AccountOpeningForm from "./components/form/AccountOpeningForm"
+import LoanApplicationForm from "./components/form/LoanApplicationForm"
+
+function AccountOpeningWrapper() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const selectedScheme = location.state?.selectedScheme
+
+  const handleBack = () => {
+    navigate("/services")
+  }
+
+  return <AccountOpeningForm onBack={handleBack} selectedScheme={selectedScheme} />
+}
+
+function LoanApplicationWrapper() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const selectedLoanType = location.state?.selectedLoanType
+
+  const handleBack = () => {
+    navigate("/services")
+  }
+
+  return <LoanApplicationForm onBack={handleBack} selectedLoanType={selectedLoanType} />
+}
+
+function ServicesWrapper() {
+  const navigate = useNavigate()
+
+  const handleOpenAccount = (scheme?: string) => {
+    navigate("/open-account", { state: { selectedScheme: scheme } })
+  }
+
+  const handleApplyLoan = (loanType?: string) => {
+    navigate("/apply-loan", { state: { selectedLoanType: loanType } })
+  }
+
+  return <Services onOpenAccount={handleOpenAccount} onApplyLoan={handleApplyLoan} />
+}
 
 function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
         <AdminProvider>
-          <CartProvider>
-            <Router>
-              <div className="min-h-screen bg-white">
-                <Routes>
-                  <Route path="/admin/login" element={<AdminLogin />} />
-                  <Route
-                    path="/admin/dashboard"
-                    element={
-                      <ProtectedAdminRoute>
-                        <AdminDashboard />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/users"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="users">
-                        <AdminUsers />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/businesses"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="businesses">
-                        <AdminBusinesses />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/products"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="products">
-                        <AdminProducts />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/services"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="services">
-                        <AdminServices />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/notices"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="notices">
-                        <AdminNotices />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/teams"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="team">
-                        <AdminTeam />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/about"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="content">
-                        <AdminAbout />
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/analytics"
-                    element={
-                      <ProtectedAdminRoute>
-                        <AdminDashboard currentSection="analytics">
-                          <div className="text-center py-12">
-                            <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
-                            <p className="text-gray-600 mt-2">Coming Soon</p>
-                          </div>
-                        </AdminDashboard>
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/content"
-                    element={
-                      <ProtectedAdminRoute>
-                        <AdminDashboard currentSection="content">
-                          <div className="text-center py-12">
-                            <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
-                            <p className="text-gray-600 mt-2">Coming Soon</p>
-                          </div>
-                        </AdminDashboard>
-                      </ProtectedAdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/shareholders"
-                    element={
-                      <ProtectedAdminRoute requiredPermission="shareholders">
-                        <AdminShareholders />
-                      </ProtectedAdminRoute>
-                    }
-                  />
+          <ApplicationProvider>
+            <CartProvider>
+              <Router>
+                <div className="min-h-screen bg-white">
+                  <Routes>
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route
+                      path="/admin/dashboard"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminDashboard />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/users"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="users">
+                          <AdminUsers />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/businesses"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="businesses">
+                          <AdminBusinesses />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/products"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="products">
+                          <AdminProducts />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/services"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="services">
+                          <AdminServices />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/notices"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="notices">
+                          <AdminNotices />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/teams"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="team">
+                          <AdminTeam />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/about"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="content">
+                          <AdminAbout />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/analytics"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminDashboard currentSection="analytics">
+                            <div className="text-center py-12">
+                              <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
+                              <p className="text-gray-600 mt-2">Coming Soon</p>
+                            </div>
+                          </AdminDashboard>
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/content"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminDashboard currentSection="content">
+                            <div className="text-center py-12">
+                              <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
+                              <p className="text-gray-600 mt-2">Coming Soon</p>
+                            </div>
+                          </AdminDashboard>
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/shareholders"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="shareholders">
+                          <AdminShareholders />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/account-applications"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminAccountApplications />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/loan-applications"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminLoanApplications />
+                        </ProtectedAdminRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/*"
-                    element={
-                      <>
-                        <Header />
-                        <main>
-                          <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/about" element={<About />} />
-                            <Route path="/services" element={<Services />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/shop" element={<Shop />} />
-                            <Route path="/shop/category/:category" element={<Shop />} />
-                            <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
-                            <Route path="/shop/product/:id" element={<ShopDetails />} />
+                    <Route
+                      path="/*"
+                      element={
+                        <>
+                          <Header />
+                          <main>
+                            <Routes>
+                              <Route path="/" element={<Home />} />
+                              <Route path="/about" element={<About />} />
+                              <Route path="/services" element={<ServicesWrapper />} />
+                              <Route path="/open-account" element={<AccountOpeningWrapper />} />
+                              <Route path="/apply-loan" element={<LoanApplicationWrapper />} />
+                              <Route path="/login" element={<Login />} />
+                              <Route path="/register" element={<Register />} />
+                              <Route path="/shop" element={<Shop />} />
+                              <Route path="/shop/category/:category" element={<Shop />} />
+                              <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
+                              <Route path="/shop/product/:id" element={<ShopDetails />} />
 
-                            <Route path="/cart" element={<Cart />} />
-                            <Route path="/checkout" element={<Checkout />} />
-                            <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-                            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                              <Route path="/cart" element={<Cart />} />
+                              <Route path="/checkout" element={<Checkout />} />
+                              <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                              <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
-                            <Route path="/business-directory" element={<BusinessDirectory />} />
-                            <Route path="/business-directory/:name" element={<BusinessDetails />} />
+                              {/* Business Directory Routes */}
+                              <Route path="/business-directory" element={<BusinessDirectory />} />
+                              <Route path="/business-directory/:businessName" element={<BusinessDetails />} />
 
-                            <Route path="/shareholders" element={<Shareholders />} />
-                            <Route path="/notice" element={<Notice />} />
+                              <Route path="/shareholders" element={<Shareholders />} />
+                              <Route path="/notice" element={<Notice />} />
 
-                            <Route path="/dashboard/:name" element={<CustomerDashboard />} />
-                            <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
-                            <Route path="/teams" element={<Team />} />
-                            {/* Placeholder routes - to be implemented */}
-                            <Route
-                              path="/membership"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Membership Page - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/events"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Events - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/contact"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Contact - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/business-registration"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Business Registration - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/forgot-password"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Forgot Password - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/terms"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Terms of Service - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                            <Route
-                              path="/privacy"
-                              element={
-                                <div className="min-h-screen flex items-center justify-center">
-                                  <h1 className="text-2xl">Privacy Policy - Coming Soon</h1>
-                                </div>
-                              }
-                            />
-                          </Routes>
-                        </main>
-                        <Footer />
-                      </>
-                    }
-                  />
-                </Routes>
-              </div>
-            </Router>
-          </CartProvider>
+                              <Route path="/dashboard/:name" element={<CustomerDashboard />} />
+                              <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
+                              <Route path="/teams" element={<Team />} />
+
+                              {/* Placeholder routes - to be implemented */}
+                              <Route
+                                path="/membership"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Membership Page - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/events"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Events - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/contact"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Contact - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/business-registration"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Business Registration - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/forgot-password"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Forgot Password - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/terms"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Terms of Service - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                              <Route
+                                path="/privacy"
+                                element={
+                                  <div className="min-h-screen flex items-center justify-center">
+                                    <h1 className="text-2xl">Privacy Policy - Coming Soon</h1>
+                                  </div>
+                                }
+                              />
+                            </Routes>
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                  </Routes>
+                </div>
+              </Router>
+            </CartProvider>
+          </ApplicationProvider>
         </AdminProvider>
       </AuthProvider>
     </HelmetProvider>

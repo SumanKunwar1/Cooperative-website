@@ -31,7 +31,12 @@ import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
 
-const Services: React.FC = () => {
+interface ServicesProps {
+  onOpenAccount?: (scheme?: string) => void
+  onApplyLoan?: (loanType?: string) => void
+}
+
+const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
   const [activeCategory, setActiveCategory] = useState("savings")
   const [expandedScheme, setExpandedScheme] = useState<string | null>(null)
   const [selectedLoanTerm, setSelectedLoanTerm] = useState("1 Year")
@@ -241,6 +246,18 @@ const Services: React.FC = () => {
     return colors[color as keyof typeof colors] || colors.blue
   }
 
+  const handleOpenAccountClick = (scheme?: string) => {
+    if (onOpenAccount) {
+      onOpenAccount(scheme)
+    }
+  }
+
+  const handleApplyLoanClick = (loanType?: string) => {
+    if (onApplyLoan) {
+      onApplyLoan(loanType)
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <SEO
@@ -417,7 +434,13 @@ const Services: React.FC = () => {
                             </AnimatePresence>
                           </div>
 
-                          <Button fullWidth className="mt-4" icon={ArrowRight} iconPosition="right">
+                          <Button
+                            fullWidth
+                            className="mt-4"
+                            icon={ArrowRight}
+                            iconPosition="right"
+                            onClick={() => handleOpenAccountClick(scheme.title)}
+                          >
                             Open Account
                           </Button>
                         </Card>
@@ -504,7 +527,12 @@ const Services: React.FC = () => {
                           </ul>
                         </div>
 
-                        <Button fullWidth icon={ArrowRight} iconPosition="right">
+                        <Button
+                          fullWidth
+                          icon={ArrowRight}
+                          iconPosition="right"
+                          onClick={() => handleApplyLoanClick(loan.type)}
+                        >
                           Apply Now
                         </Button>
                       </Card>

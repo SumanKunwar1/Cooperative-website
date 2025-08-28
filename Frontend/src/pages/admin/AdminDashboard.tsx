@@ -40,8 +40,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ children, currentSectio
     { id: "users", name: "Users", icon: UsersIcon, path: "/admin/users" },
     { id: "businesses", name: "Businesses", icon: BuildingOfficeIcon, path: "/admin/businesses" },
     { id: "products", name: "Products", icon: ShoppingBagIcon, path: "/admin/products" },
+    { id: "orders", name: "Orders", icon: ShoppingBagIcon, path: "/admin/orders" },
     { id: "services", name: "Services", icon: CogIcon, path: "/admin/services" },
     { id: "shareholders", name: "Shareholders", icon: UserGroupIcon, path: "/admin/shareholders" },
+    { id: "application", name: "Account Application", icon: ShoppingBagIcon, path: "/admin/account-applications" },
+    { id: "loan-application", name: "Loan Application", icon: ShoppingBagIcon, path: "/admin/loan-applications" },
     { id: "about", name: "About Us", icon: DocumentTextIcon, path: "/admin/about" },
     { id: "notices", name: "Notices", icon: BellIcon, path: "/admin/notices" },
     { id: "analytics", name: "Analytics", icon: ChartBarIcon, path: "/admin/analytics" },
@@ -69,9 +72,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ children, currentSectio
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}
       >
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
+        {/* Header */}
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
             <img
               src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1755759270/299574930_451468846995643_7716478953910668088_n_vndizu.jpg"
@@ -88,48 +92,52 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ children, currentSectio
           </button>
         </div>
 
-        <nav className="mt-6 px-3">
-          <div className="space-y-1">
-            {sidebarItems.map((item) => {
-              const Icon = item.icon
-              const isActive = currentSection === item.id
-              return (
-                <motion.button
-                  key={item.id}
-                  onClick={() => navigate(item.path)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                    isActive
-                      ? "bg-purple-100 text-purple-700 border-r-2 border-purple-700"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }`}
-                >
-                  <Icon className="mr-3 h-5 w-5" />
-                  {item.name}
-                </motion.button>
-              )
-            })}
-          </div>
-        </nav>
+        {/* Scrollable Navigation */}
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <nav className="flex-1 overflow-y-auto px-3 py-6">
+            <div className="space-y-1">
+              {sidebarItems.map((item) => {
+                const Icon = item.icon
+                const isActive = currentSection === item.id
+                return (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => navigate(item.path)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                      isActive
+                        ? "bg-purple-100 text-purple-700 border-r-2 border-purple-700"
+                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }`}
+                  >
+                    <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
+                    {item.name}
+                  </motion.button>
+                )
+              })}
+            </div>
+          </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="h-8 w-8 bg-purple-100 rounded-full flex items-center justify-center">
-              <span className="text-sm font-medium text-purple-700">{admin?.name.charAt(0).toUpperCase()}</span>
+          {/* Bottom Admin Section - Fixed at bottom */}
+          <div className="flex-shrink-0 p-4 border-t border-gray-200 bg-white">
+            <div className="flex items-center space-x-3 mb-3">
+              <div className="h-8 w-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-sm font-medium text-purple-700">{admin?.name.charAt(0).toUpperCase()}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{admin?.name}</p>
+                <p className="text-xs text-gray-500 truncate">{admin?.email}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{admin?.name}</p>
-              <p className="text-xs text-gray-500 truncate">{admin?.email}</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+            >
+              <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 flex-shrink-0" />
+              Sign Out
+            </button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-          >
-            <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
-            Sign Out
-          </button>
         </div>
       </div>
 

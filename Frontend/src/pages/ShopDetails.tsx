@@ -17,8 +17,11 @@ import {
   Minus,
   Share2,
   MessageCircle,
+  Store,
+  MapPin,
 } from "lucide-react"
 import { useCart } from "../contexts/CartContext"
+import { useAuth } from "../contexts/AuthContext"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
@@ -49,6 +52,20 @@ interface ShippingInfo {
   returnPolicy: string
 }
 
+interface SellerInfo {
+  id: string
+  name: string
+  rating: number
+  totalReviews: number
+  memberSince: string
+  location: string
+  phone?: string
+  email?: string
+  description: string
+  responseRate: number
+  responseTime: string
+}
+
 interface DetailedProduct {
   id: string
   name: string
@@ -63,6 +80,7 @@ interface DetailedProduct {
   inStock: boolean
   stockCount: number
   shippingInfo: ShippingInfo
+  seller: SellerInfo
 }
 
 type TabType = "description" | "reviews" | "shipping"
@@ -71,6 +89,7 @@ const ShopDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addToCart } = useCart()
+  const { user } = useAuth()
 
   const [product, setProduct] = useState<DetailedProduct | null>(null)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -142,6 +161,20 @@ Whether you're looking for functionality, style, or both, this product delivers 
             estimatedDelivery: "3-5 business days",
             returnPolicy: "30-day return policy",
           },
+          seller: {
+            id: "seller_1",
+            name: "Premium Seller",
+            rating: 4.8,
+            totalReviews: 247,
+            memberSince: "2022-03-15",
+            location: "Kathmandu, Nepal",
+            phone: "+977-9841234567",
+            email: "contact@premiumseller.com",
+            description:
+              "We are a trusted member of the Constellation Cooperative, specializing in high-quality products with excellent customer service. Our commitment to quality and customer satisfaction has made us one of the top-rated sellers in our category.",
+            responseRate: 98,
+            responseTime: "within 2 hours",
+          },
         }
         setProduct(detailedProduct)
       }
@@ -163,12 +196,21 @@ Whether you're looking for functionality, style, or both, this product delivers 
   const handleAddToCart = (): void => {
     if (product) {
       addToCart(product, quantity)
-      alert(`Added ${quantity} ${product.name}(s) to cart!`)
     }
   }
 
   const handleBuyNow = (): void => {
     if (product) {
+      if (!user) {
+        const shouldLogin = window.confirm("You need to login to make a purchase. Would you like to login now?")
+        if (shouldLogin) {
+          localStorage.setItem("redirectAfterLogin", "/checkout")
+          localStorage.setItem("pendingCartItem", JSON.stringify({ product, quantity }))
+          navigate("/login")
+          return
+        }
+        return
+      }
       addToCart(product, quantity)
       navigate("/checkout")
     }
@@ -258,6 +300,32 @@ Whether you're looking for functionality, style, or both, this product delivers 
                   <span className="text-gray-600">({reviews.length} reviews)</span>
                 </div>
               </div>
+
+              {/* Seller Info Card */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Store className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className="font-semibold text-gray-900">{product.seller.name}</span>
+                      <div className="flex items-center space-x-1">
+                        {renderStars(product.seller.rating, "sm")}
+                        <span className="text-sm text-gray-600">({product.seller.totalReviews})</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <div className="flex items-center space-x-1">
+                        <MapPin className="w-3 h-3" />
+                        <span>{product.seller.location}</span>
+                      </div>
+                      <span>Member since {new Date(product.seller.memberSince).getFullYear()}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="flex items-center space-x-4 mb-4">
                 <span className="text-3xl font-bold text-blue-600">NPR {product.price.toLocaleString()}</span>
                 {product.originalPrice && (

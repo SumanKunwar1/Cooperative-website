@@ -63,7 +63,7 @@ const BusinessDashboard: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState("all")
 
   const [businessForm, setBusinessForm] = useState<Partial<Business>>({
-    name: "",
+    businessName: "",
     category: "",
     subcategory: "",
     description: "",
@@ -120,7 +120,7 @@ const BusinessDashboard: React.FC = () => {
     // Mock data - in real app, fetch from API based on user
     const mockBusiness: Business = {
       id: "1",
-      name: "TechSolutions Nepal",
+      businessName: "TechSolutions Nepal",
       category: "Technology",
       subcategory: "IT Services",
       description: "Professional IT consulting and software development services for businesses.",
@@ -224,7 +224,7 @@ const BusinessDashboard: React.FC = () => {
 
   const handleCreateBusiness = () => {
     setBusinessForm({
-      name: "",
+      businessName: "",
       category: "",
       subcategory: "",
       description: "",
@@ -378,9 +378,15 @@ const BusinessDashboard: React.FC = () => {
     setBusinessForm((prev) => ({
       ...prev,
       openingHours: {
-        ...prev.openingHours,
+        Monday: prev.openingHours?.Monday || "",
+        Tuesday: prev.openingHours?.Tuesday || "",
+        Wednesday: prev.openingHours?.Wednesday || "",
+        Thursday: prev.openingHours?.Thursday || "",
+        Friday: prev.openingHours?.Friday || "",
+        Saturday: prev.openingHours?.Saturday || "",
+        Sunday: prev.openingHours?.Sunday || "",
         [day]: hours,
-      },
+      } as Business["openingHours"],
     }))
   }
 
@@ -410,7 +416,10 @@ const BusinessDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SEO title={`Business Dashboard - ${user.name}`} description="Manage your business listing and bookings" />
+      <SEO
+        title={`Business Dashboard - ${user.businessName}`}
+        description="Manage your business listing and bookings"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -419,7 +428,7 @@ const BusinessDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                  {user.name.charAt(0).toUpperCase()}
+                  {user.businessName.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">Business Dashboard</h1>
@@ -429,7 +438,7 @@ const BusinessDashboard: React.FC = () => {
                   </p>
                   <p className="text-sm text-gray-500 flex items-center mt-1">
                     <Clock className="w-4 h-4 mr-2" />
-                    Member since {new Date(user.joinedDate).toLocaleDateString()}
+                    Member since {user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : "N/A"}
                   </p>
                 </div>
               </div>
@@ -616,13 +625,13 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                       <img
                         src={business.image || "/placeholder.svg?height=200&width=400"}
-                        alt={business.name}
+                        alt={business.businessName}
                         className="w-full h-48 object-cover"
                       />
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-1">{business.name}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-1">{business.businessName}</h3>
                             <p className="text-blue-600 font-medium">{business.subcategory}</p>
                           </div>
                           {business.isVerified && (
@@ -859,7 +868,7 @@ const BusinessDashboard: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Business Owner Name</label>
                         <input
                           type="text"
-                          defaultValue={user.name}
+                          defaultValue={user.businessName}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                       </div>
@@ -883,7 +892,7 @@ const BusinessDashboard: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
                         <input
                           type="text"
-                          value={new Date(user.joinedDate).toLocaleDateString()}
+                          value={user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : ""}
                           disabled
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
                         />
@@ -931,7 +940,7 @@ const BusinessDashboard: React.FC = () => {
                       <input
                         type="text"
                         required
-                        value={businessForm.name || ""}
+                        value={businessForm.businessName || ""}
                         onChange={(e) => handleFormChange("name", e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />

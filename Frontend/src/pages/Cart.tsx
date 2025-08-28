@@ -21,6 +21,7 @@ interface CartItem {
 
 const Cart: React.FC = () => {
   const navigate = useNavigate()
+  const user = null // Mock user data - in real app this would come from context/state management
 
   // Mock cart data - in real app this would come from context/state management
   const [cartItems, setCartItems] = useState<CartItem[]>([
@@ -69,6 +70,15 @@ const Cart: React.FC = () => {
   const total = subtotal + shipping + tax
 
   const handleCheckout = () => {
+    if (!user) {
+      const shouldLogin = window.confirm("You need to login to proceed to checkout. Would you like to login now?")
+      if (shouldLogin) {
+        localStorage.setItem("redirectAfterLogin", "/checkout")
+        navigate("/login")
+        return
+      }
+      return
+    }
     navigate("/checkout")
   }
 

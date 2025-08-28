@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight } from "lucide-react"
@@ -12,8 +12,7 @@ import { useAuth } from "../../contexts/AuthContext"
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    businessName: "",
     email: "",
     phone: "",
     password: "",
@@ -27,6 +26,18 @@ const Register: React.FC = () => {
   const [error, setError] = useState("")
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Check for pending cart item and redirect URL
+    const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
+    const pendingCartItem = localStorage.getItem("pendingCartItem")
+
+    if (redirectAfterLogin || pendingCartItem) {
+      // Store these for after successful registration
+      console.log("Pending redirect:", redirectAfterLogin)
+      console.log("Pending cart item:", pendingCartItem)
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -44,7 +55,13 @@ const Register: React.FC = () => {
     setError("")
 
     // Validation
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.businessName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("Please fill in all fields")
       return
     }
@@ -68,26 +85,47 @@ const Register: React.FC = () => {
 
     try {
       // Simulate registration process
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
       // Create new user object
       const newUser = {
         id: Date.now().toString(),
-        name: `${formData.firstName} ${formData.lastName}`,
+        businessName: formData.businessName,
         email: formData.email,
         phone: formData.phone,
         membershipType: formData.membershipType,
         joinedDate: new Date().toISOString(),
       }
-      
+
       // Log the user in
       login(newUser)
-      
-      // Redirect based on membership type
-      if (formData.membershipType === 'business') {
-        navigate(`/business-dashboard/${encodeURIComponent(newUser.email)}`)
+
+      const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
+      const pendingCartItem = localStorage.getItem("pendingCartItem")
+
+      if (pendingCartItem) {
+        try {
+          const cartItemData = JSON.parse(pendingCartItem)
+          // Dispatch event to add the pending cart item
+          window.dispatchEvent(new CustomEvent("cartItemAdded", { detail: cartItemData }))
+          localStorage.removeItem("pendingCartItem")
+        } catch (error) {
+          console.error("Error processing pending cart item:", error)
+        }
+      }
+
+      if (redirectAfterLogin) {
+        localStorage.removeItem("redirectAfterLogin")
+        navigate(redirectAfterLogin)
+        return
+      }
+
+      // Default redirect based on membership type
+      const encodedName = encodeURIComponent(newUser.businessName.replace(/\s+/g, "-").toLowerCase())
+      if (formData.membershipType === "business") {
+        navigate(`/business-dashboard/${encodedName}`)
       } else {
-        navigate(`/dashboard/${encodeURIComponent(newUser.email)}`)
+        navigate(`/dashboard/${encodedName}`)
       }
     } catch (error) {
       setError("Registration failed. Please try again.")
@@ -118,9 +156,7 @@ const Register: React.FC = () => {
           <Card>
             <form className="space-y-6" onSubmit={handleSubmit}>
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
-                  {error}
-                </div>
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">{error}</div>
               )}
 
               {/* Membership Type */}
@@ -170,41 +206,22 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    First Name
-                  </label>
-                  <div className="mt-1 relative">
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      required
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="First name"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                    Last Name
-                  </label>
-                  <div className="mt-1 relative">
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      required
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Last name"
-                    />
-                  </div>
+              {/* Name Field */}
+              <div>
+                <label htmlFor="businessName" className="block text-sm font-medium text-gray-700">
+                  Full Name
+                </label>
+                <div className="mt-1 relative">
+                  <input
+                    id="businessName"
+                    name="businessName"
+                    type="text"
+                    required
+                    value={formData.businessName}
+                    onChange={handleInputChange}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter your full name"
+                  />
                 </div>
               </div>
 
@@ -339,7 +356,7 @@ const Register: React.FC = () => {
               </Button>
             </form>
 
-                        <div className="mt-6">
+            <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />

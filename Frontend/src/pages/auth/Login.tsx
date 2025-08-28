@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, Lock, Mail, ArrowRight, User, Building } from "lucide-react"
@@ -22,6 +22,18 @@ const Login: React.FC = () => {
   const [error, setError] = useState("")
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Check for pending cart item and redirect URL
+    const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
+    const pendingCartItem = localStorage.getItem("pendingCartItem")
+
+    if (redirectAfterLogin || pendingCartItem) {
+      // Store these for after successful login
+      console.log("Pending redirect:", redirectAfterLogin)
+      console.log("Pending cart item:", pendingCartItem)
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -58,7 +70,7 @@ const Login: React.FC = () => {
 
       const mockUser = {
         id: Date.now().toString(),
-        name: formData.email.split("@")[0],
+        businessName: formData.email.split("@")[0],
         email: formData.email,
         phone: "+977-9800000000",
         membershipType: formData.userType,
@@ -68,10 +80,32 @@ const Login: React.FC = () => {
       // Login successful
       login(mockUser)
 
+      const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
+      const pendingCartItem = localStorage.getItem("pendingCartItem")
+
+      if (pendingCartItem) {
+        try {
+          const cartItemData = JSON.parse(pendingCartItem)
+          // Dispatch event to add the pending cart item
+          window.dispatchEvent(new CustomEvent("cartItemAdded", { detail: cartItemData }))
+          localStorage.removeItem("pendingCartItem")
+        } catch (error) {
+          console.error("Error processing pending cart item:", error)
+        }
+      }
+
+      if (redirectAfterLogin) {
+        localStorage.removeItem("redirectAfterLogin")
+        navigate(redirectAfterLogin)
+        return
+      }
+
+      // Default redirect based on user type
+      const encodedName = encodeURIComponent(mockUser.businessName.replace(/\s+/g, "-").toLowerCase())
       if (formData.userType === "business") {
-        navigate(`/business-dashboard/${encodeURIComponent(mockUser.email)}`)
+        navigate(`/business-dashboard/${encodedName}`)
       } else {
-        navigate(`/dashboard/${encodeURIComponent(mockUser.email)}`)
+        navigate(`/dashboard/${encodedName}`)
       }
     } catch (error) {
       setError("Login failed. Please try again.")

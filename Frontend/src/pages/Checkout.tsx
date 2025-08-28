@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import {
@@ -18,6 +18,7 @@ import {
   Banknote,
   Smartphone,
 } from "lucide-react"
+import { useAuth } from "../contexts/AuthContext"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
@@ -47,14 +48,29 @@ interface CheckoutFormData {
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate()
+  const { user, isAuthenticated } = useAuth()
   const [currentStep, setCurrentStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      const shouldLogin = window.confirm("You need to login to proceed with checkout. Would you like to login now?")
+      if (shouldLogin) {
+        localStorage.setItem("redirectAfterLogin", "/checkout")
+        navigate("/login")
+        return
+      } else {
+        navigate("/cart")
+        return
+      }
+    }
+  }, [isAuthenticated, user, navigate])
 
   const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: "",
     lastName: "",
-    email: "",
-    phone: "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     address: "",
     city: "",
     postalCode: "",
@@ -89,9 +105,19 @@ const Checkout: React.FC = () => {
     // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false)
+
+      const orderData = {
+        orderNumber: "ORD-" + Date.now(),
+        total: orderSummary.total,
+        items: orderSummary.items,
+        status: "processing",
+      }
+
+      window.dispatchEvent(new CustomEvent("orderCompleted", { detail: orderData }))
+
       navigate("/order-confirmation", {
         state: {
-          orderNumber: "ORD-" + Date.now(),
+          orderNumber: orderData.orderNumber,
           orderData: orderSummary,
         },
       })
@@ -121,6 +147,17 @@ const Checkout: React.FC = () => {
     shipping: 0,
     tax: 1495,
     total: 12995,
+  }
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirecting to login...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

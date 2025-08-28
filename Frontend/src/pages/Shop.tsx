@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useMemo, useEffect, useRef } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Search, Filter, ShoppingCart } from "lucide-react"
 import { useCart } from "../contexts/CartContext"
@@ -15,7 +15,6 @@ import { shopCategories, getCategoryBySlug, getSubcategoryBySlug } from "../data
 
 const Shop: React.FC = () => {
   const location = useLocation()
-  const navigate = useNavigate()
   const { addToCart } = useCart()
 
   const searchParams = new URLSearchParams(location.search)
@@ -30,8 +29,8 @@ const Shop: React.FC = () => {
   const [activeSubcategory, setActiveSubcategory] = useState(subcategoryParam || "")
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 })
   const [sortBy, setSortBy] = useState("featured")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [wishlist, setWishlist] = useState<string[]>([])
+  const [viewMode] = useState<"grid" | "list">("grid")
+  const [, setWishlist] = useState<string[]>([])
 
   useEffect(() => {
     if (isFirstLoad.current) {
@@ -131,7 +130,6 @@ const Shop: React.FC = () => {
     const product = mockProducts.find((p) => p.id === productId)
     if (product) {
       addToCart(product)
-      alert(`${product.name} added to cart!`)
     }
   }
 

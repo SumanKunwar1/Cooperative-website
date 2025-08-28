@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 
@@ -28,76 +28,197 @@ interface Business {
   pricing: { service: string; price: string; description: string }[]
 }
 
-const mockBusiness: Business = {
-  id: "1",
-  name: "TechSolutions Nepal",
-  category: "Technology",
-  subcategory: "IT Services",
-  description: "Professional IT consulting and software development services for businesses.",
-  fullDescription:
-    "TechSolutions Nepal is a leading IT consulting firm established in 2015, specializing in custom software development, web applications, mobile apps, and digital transformation solutions. We serve businesses of all sizes, from startups to large enterprises, helping them leverage technology to achieve their goals. Our team of experienced developers and consultants are committed to delivering high-quality solutions that drive business growth.",
-  image: "/placeholder.svg?height=400&width=600",
-  gallery: [
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-  ],
-  rating: 4.8,
-  reviews: 45,
-  location: "Kathmandu, Nepal",
-  address: "Putalisadak, Kathmandu 44600, Nepal",
-  phone: "01-4567890",
-  email: "info@techsolutions.com.np",
-  website: "www.techsolutions.com.np",
-  services: [
-    "Web Development",
-    "Mobile Apps",
-    "IT Consulting",
-    "Cloud Services",
-    "E-commerce Solutions",
-    "Digital Marketing",
-  ],
-  isVerified: true,
-  openingHours: {
-    Monday: "9:00 AM - 6:00 PM",
-    Tuesday: "9:00 AM - 6:00 PM",
-    Wednesday: "9:00 AM - 6:00 PM",
-    Thursday: "9:00 AM - 6:00 PM",
-    Friday: "9:00 AM - 6:00 PM",
-    Saturday: "10:00 AM - 4:00 PM",
-    Sunday: "Closed",
+// Mock data for different businesses - in real app, this would come from an API
+const mockBusinesses: { [key: string]: Business } = {
+  "techsolutions-nepal": {
+    id: "1",
+    name: "TechSolutions Nepal",
+    category: "Technology",
+    subcategory: "IT Services",
+    description: "Professional IT consulting and software development services for businesses.",
+    fullDescription:
+      "TechSolutions Nepal is a leading IT consulting firm established in 2015, specializing in custom software development, web applications, mobile apps, and digital transformation solutions. We serve businesses of all sizes, from startups to large enterprises, helping them leverage technology to achieve their goals. Our team of experienced developers and consultants are committed to delivering high-quality solutions that drive business growth.",
+    image: "/placeholder.svg?height=400&width=600",
+    gallery: [
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+    ],
+    rating: 4.8,
+    reviews: 45,
+    location: "Kathmandu, Nepal",
+    address: "Putalisadak, Kathmandu 44600, Nepal",
+    phone: "01-4567890",
+    email: "info@techsolutions.com.np",
+    website: "www.techsolutions.com.np",
+    services: [
+      "Web Development",
+      "Mobile Apps",
+      "IT Consulting",
+      "Cloud Services",
+      "E-commerce Solutions",
+      "Digital Marketing",
+    ],
+    isVerified: true,
+    openingHours: {
+      Monday: "9:00 AM - 6:00 PM",
+      Tuesday: "9:00 AM - 6:00 PM",
+      Wednesday: "9:00 AM - 6:00 PM",
+      Thursday: "9:00 AM - 6:00 PM",
+      Friday: "9:00 AM - 6:00 PM",
+      Saturday: "10:00 AM - 4:00 PM",
+      Sunday: "Closed",
+    },
+    features: ["Free Consultation", "24/7 Support", "Agile Development", "Quality Assurance", "Post-Launch Support"],
+    pricing: [
+      {
+        service: "Website Development",
+        price: "Starting from NPR 50,000",
+        description: "Custom responsive websites with modern design",
+      },
+      {
+        service: "Mobile App Development",
+        price: "Starting from NPR 150,000",
+        description: "Native and cross-platform mobile applications",
+      },
+      {
+        service: "IT Consulting",
+        price: "NPR 2,000/hour",
+        description: "Expert advice on technology strategy and implementation",
+      },
+      {
+        service: "Cloud Migration",
+        price: "Custom Quote",
+        description: "Seamless migration to cloud platforms with ongoing support",
+      },
+    ],
   },
-  features: ["Free Consultation", "24/7 Support", "Agile Development", "Quality Assurance", "Post-Launch Support"],
-  pricing: [
-    {
-      service: "Website Development",
-      price: "Starting from NPR 50,000",
-      description: "Custom responsive websites with modern design",
+  "himalayan-delights-restaurant": {
+    id: "2",
+    name: "Himalayan Delights Restaurant",
+    category: "Food & Beverage",
+    subcategory: "Restaurant",
+    description: "Authentic Nepali and Indian cuisine with modern dining experience.",
+    fullDescription:
+      "Himalayan Delights Restaurant has been serving authentic Nepali and Indian cuisine since 2010. Located in the heart of Thamel, we offer a unique dining experience with traditional flavors and modern presentation. Our chefs use fresh, locally sourced ingredients to create dishes that celebrate the rich culinary heritage of the Himalayas. From traditional dal bhat to exotic momos, every dish tells a story of our cultural diversity.",
+    image: "/placeholder.svg?height=400&width=600",
+    gallery: [
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+    ],
+    rating: 4.6,
+    reviews: 128,
+    location: "Thamel, Kathmandu",
+    address: "Thamel Marg, Kathmandu 44600, Nepal",
+    phone: "01-4123456",
+    email: "orders@himalayandelights.com",
+    services: ["Dine-in", "Takeaway", "Home Delivery", "Catering", "Private Events"],
+    isVerified: true,
+    openingHours: {
+      Monday: "11:00 AM - 10:00 PM",
+      Tuesday: "11:00 AM - 10:00 PM",
+      Wednesday: "11:00 AM - 10:00 PM",
+      Thursday: "11:00 AM - 10:00 PM",
+      Friday: "11:00 AM - 10:00 PM",
+      Saturday: "11:00 AM - 10:00 PM",
+      Sunday: "11:00 AM - 10:00 PM",
     },
-    {
-      service: "Mobile App Development",
-      price: "Starting from NPR 150,000",
-      description: "Native and cross-platform mobile applications",
+    features: ["Authentic Cuisine", "Live Music", "Outdoor Seating", "Vegetarian Options", "Local Ingredients"],
+    pricing: [
+      {
+        service: "Dal Bhat Set",
+        price: "NPR 350",
+        description: "Traditional Nepali meal with rice, lentils, and vegetables",
+      },
+      {
+        service: "Momo (10 pieces)",
+        price: "NPR 280",
+        description: "Steamed dumplings with choice of chicken, buff, or vegetables",
+      },
+      {
+        service: "Catering Service",
+        price: "Starting from NPR 500/person",
+        description: "Complete meal service for events and gatherings",
+      },
+      {
+        service: "Private Dining",
+        price: "NPR 2,000 minimum",
+        description: "Exclusive dining experience for special occasions",
+      },
+    ],
+  },
+  "mountain-view-hotel": {
+    id: "3",
+    name: "Mountain View Hotel",
+    category: "Hospitality",
+    subcategory: "Hotel",
+    description: "Comfortable accommodation with stunning mountain views and modern amenities.",
+    fullDescription:
+      "Mountain View Hotel in Pokhara offers breathtaking views of the Annapurna range and Phewa Lake. Established in 2012, our hotel combines traditional Nepali hospitality with modern comfort. Each room is designed to maximize the spectacular mountain views while providing all the amenities needed for a comfortable stay. Whether you're here for trekking, sightseeing, or business, we ensure an unforgettable experience.",
+    image: "/placeholder.svg?height=400&width=600",
+    gallery: [
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+      "/placeholder.svg?height=300&width=400",
+    ],
+    rating: 4.7,
+    reviews: 89,
+    location: "Pokhara, Nepal",
+    address: "Lakeside, Pokhara 33700, Nepal",
+    phone: "061-567890",
+    email: "reservations@mountainviewhotel.com",
+    website: "www.mountainviewhotel.com",
+    services: ["Room Booking", "Event Hosting", "Restaurant", "Tour Packages", "Airport Transfer"],
+    isVerified: true,
+    openingHours: {
+      Monday: "24/7",
+      Tuesday: "24/7",
+      Wednesday: "24/7",
+      Thursday: "24/7",
+      Friday: "24/7",
+      Saturday: "24/7",
+      Sunday: "24/7",
     },
-    {
-      service: "IT Consulting",
-      price: "NPR 2,000/hour",
-      description: "Expert advice on technology strategy and implementation",
-    },
-    {
-      service: "Cloud Migration",
-      price: "Custom Quote",
-      description: "Seamless migration to cloud platforms with ongoing support",
-    },
-  ],
+    features: ["Mountain Views", "Lake Access", "Restaurant", "Tour Desk", "Free WiFi"],
+    pricing: [
+      {
+        service: "Standard Room",
+        price: "NPR 3,500/night",
+        description: "Comfortable room with mountain view and modern amenities",
+      },
+      {
+        service: "Deluxe Room",
+        price: "NPR 4,500/night",
+        description: "Spacious room with premium furnishing and balcony",
+      },
+      {
+        service: "Event Hall",
+        price: "NPR 15,000/day",
+        description: "Fully equipped hall for conferences and celebrations",
+      },
+      {
+        service: "Annapurna Trek Package",
+        price: "NPR 25,000/person",
+        description: "Complete 7-day trekking package with guide and accommodation",
+      },
+    ],
+  },
 }
 
+// Helper function to create URL slug from business name
+
 const BusinessDetails: React.FC = () => {
-  const { } = useParams<{ id: string }>()
+  const { businessName } = useParams<{ businessName: string }>()
   const [activeTab, setActiveTab] = useState("overview")
   const [, setSelectedImage] = useState(0)
   const [showBookingModal, setShowBookingModal] = useState(false)
+  const [business, setBusiness] = useState<Business | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [bookingForm, setBookingForm] = useState({
     name: "",
     email: "",
@@ -108,14 +229,40 @@ const BusinessDetails: React.FC = () => {
     preferredTime: "",
   })
 
-  const business = mockBusiness // In real app, fetch by id
+  useEffect(() => {
+    const fetchBusiness = async () => {
+      try {
+        setLoading(true)
+        
+        if (!businessName) {
+          throw new Error("Business name not provided")
+        }
+
+        // In real app, you would fetch from API using businessName
+        const foundBusiness = mockBusinesses[businessName]
+        
+        if (!foundBusiness) {
+          throw new Error("Business not found")
+        }
+
+        setBusiness(foundBusiness)
+        setError(null)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load business details")
+        setBusiness(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBusiness()
+  }, [businessName])
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle booking submission
     console.log("Booking submitted:", bookingForm)
     setShowBookingModal(false)
-    // Show success message
+    // Show success message or redirect
   }
 
   const tabs = [
@@ -124,6 +271,37 @@ const BusinessDetails: React.FC = () => {
     { id: "gallery", label: "Gallery" },
     { id: "contact", label: "Contact & Hours" },
   ]
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading business details...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error || !business) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl text-gray-400 mb-4">404</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Business Not Found</h1>
+          <p className="text-gray-600 mb-6">{error || "The business you're looking for doesn't exist."}</p>
+          <Link
+            to="/business-directory"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          >
+            Back to Directory
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -365,7 +543,7 @@ const BusinessDetails: React.FC = () => {
                       onClick={() => setShowBookingModal(true)}
                       className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
                     >
-                      Book This Service
+                      Book Now
                     </button>
                   </div>
                 ))}

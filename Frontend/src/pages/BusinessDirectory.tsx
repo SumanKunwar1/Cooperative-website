@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 
@@ -128,10 +128,21 @@ const categories = [
   "Healthcare",
 ]
 
+const createBusinessSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .trim()
+}
+
 const BusinessDirectory: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All Categories")
   const [sortBy, setSortBy] = useState("name")
+  const [currentPage, setCurrentPage] = useState(1)
+  const businessesPerPage = 15
 
   const filteredBusinesses = useMemo(() => {
     const filtered = mockBusinesses.filter((business) => {
@@ -159,6 +170,15 @@ const BusinessDirectory: React.FC = () => {
     })
 
     return filtered
+  }, [searchTerm, selectedCategory, sortBy])
+
+  const totalPages = Math.ceil(filteredBusinesses.length / businessesPerPage)
+  const startIndex = (currentPage - 1) * businessesPerPage
+  const endIndex = startIndex + businessesPerPage
+  const currentBusinesses = filteredBusinesses.slice(startIndex, endIndex)
+
+  useEffect(() => {
+    setCurrentPage(1)
   }, [searchTerm, selectedCategory, sortBy])
 
   return (
@@ -205,6 +225,24 @@ const BusinessDirectory: React.FC = () => {
           </div>
         </div>
 
+        {/* Register Your Business Section */}
+        <div className="bg-white border-b-2 border-blue-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 text-center">
+              <h2 className="text-2xl font-bold text-blue-900 mb-3">Register Your Business</h2>
+              <p className="text-blue-700 mb-4">
+                Join our cooperative network and connect with thousands of potential customers
+              </p>
+              <Link
+                to="/register"
+                className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+              >
+                Register Now
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Filters Section */}
         <div className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -238,7 +276,8 @@ const BusinessDirectory: React.FC = () => {
                 </div>
               </div>
               <div className="text-sm text-gray-600">
-                Showing {filteredBusinesses.length} of {mockBusinesses.length} businesses
+                Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length}{" "}
+                businesses
               </div>
             </div>
           </div>
@@ -262,90 +301,127 @@ const BusinessDirectory: React.FC = () => {
               <p className="text-gray-600">Try adjusting your search or filter criteria</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredBusinesses.map((business) => (
-                <div
-                  key={business.id}
-                  className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
-                >
-                  <div className="relative">
-                    <img
-                      src={business.image || "/placeholder.svg"}
-                      alt={business.name}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {business.isVerified && (
-                      <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Verified
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-1">{business.name}</h3>
-                        <p className="text-sm text-blue-600 font-medium">{business.subcategory}</p>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        <span className="text-sm font-medium text-gray-700">{business.rating}</span>
-                        <span className="text-sm text-gray-500">({business.reviews})</span>
-                      </div>
-                    </div>
-
-                    <p className="text-gray-600 mb-4 line-clamp-2">{business.description}</p>
-
-                    <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      {business.location}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {business.services.slice(0, 3).map((service, index) => (
-                        <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
-                          {service}
-                        </span>
-                      ))}
-                      {business.services.length > 3 && (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                          +{business.services.length - 3} more
-                        </span>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {currentBusinesses.map((business) => (
+                  <div
+                    key={business.id}
+                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                  >
+                    <div className="relative">
+                      <img
+                        src={business.image || "/placeholder.svg"}
+                        alt={business.name}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      {business.isVerified && (
+                        <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Verified
+                        </div>
                       )}
                     </div>
 
-                    <Link
-                      to={`/business-directory/${business.id}`}
-                      className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-center block"
-                    >
-                      View Details & Book
-                    </Link>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-1">{business.name}</h3>
+                          <p className="text-sm text-blue-600 font-medium">{business.subcategory}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          <span className="text-sm font-medium text-gray-700">{business.rating}</span>
+                          <span className="text-sm text-gray-500">({business.reviews})</span>
+                        </div>
+                      </div>
+
+                      <p className="text-gray-600 mb-4 line-clamp-2">{business.description}</p>
+
+                      <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        {business.location}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {business.services.slice(0, 3).map((service, index) => (
+                          <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                            {service}
+                          </span>
+                        ))}
+                        {business.services.length > 3 && (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                            +{business.services.length - 3} more
+                          </span>
+                        )}
+                      </div>
+
+                      <Link
+                        to={`/business-directory/${createBusinessSlug(business.name)}`}
+                        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-center block"
+                      >
+                        View Details & Book
+                      </Link>
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center mt-12 gap-2">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-4 py-2 rounded-lg ${
+                        currentPage === page
+                          ? "bg-blue-600 text-white"
+                          : "border border-gray-300 text-gray-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
 
