@@ -48,7 +48,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ children, currentSectio
     { id: "about", name: "About Us", icon: DocumentTextIcon, path: "/admin/about" },
     { id: "notices", name: "Notices", icon: BellIcon, path: "/admin/notices" },
     { id: "analytics", name: "Analytics", icon: ChartBarIcon, path: "/admin/analytics" },
-    { id: "content", name: "Content", icon: DocumentTextIcon, path: "/admin/content" },
+    { id: "Gallery", name: "Gallery", icon: DocumentTextIcon, path: "/admin/gallery" },
     { id: "team", name: "Team", icon: UsersIcon, path: "/admin/teams" },
   ]
 

@@ -39,6 +39,8 @@ import AdminTeam from "./pages/admin/AdminTeam"
 import AdminAccountApplications from "./pages/admin/AdminAccountApplication"
 import AdminLoanApplications from "./pages/admin/AdminLoanApplication"
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute"
+import AdminOrders from "./pages/admin/AdminOrders"
+import AdminGallery from "./pages/admin/AdminGallery"
 
 import AccountOpeningForm from "./components/form/AccountOpeningForm"
 import LoanApplicationForm from "./components/form/LoanApplicationForm"
@@ -140,6 +142,23 @@ function App() {
                         </ProtectedAdminRoute>
                       }
                     />
+                    <Route
+                      path="/admin/orders"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="orders">
+                          <AdminOrders />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/gallery"
+                      element={
+                        <ProtectedAdminRoute requiredPermission="orders">
+                          <AdminGallery />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    
                     <Route
                       path="/admin/teams"
                       element={
