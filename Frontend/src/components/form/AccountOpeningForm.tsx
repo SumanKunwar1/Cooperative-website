@@ -7,6 +7,7 @@ import { User, MapPin, Upload, CreditCard, Building2, Users, CheckCircle, AlertC
 import Button from "../ui/Button"
 import Card from "../ui/Card"
 import { useApplications } from "../../contexts/ApplicationContext"
+import { accountApplicationService, type AccountApplicationData } from "../../services/accountApplicationService"
 
 interface AccountOpeningFormProps {
   onBack: () => void
@@ -161,19 +162,43 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
     setCurrentStep((prev) => Math.max(prev - 1, 1))
   }
 
-  const handleSubmit = async () => {
-    if (!validateStep(currentStep)) return
-
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault()
+    }
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      // Prepare the data for submission
+      const applicationData: AccountApplicationData = {
+        ...formData,
+        profilePhoto: uploadedFiles.profilePhoto || undefined,
+        citizenshipFront: uploadedFiles.citizenshipFront || undefined,
+        citizenshipBack: uploadedFiles.citizenshipBack || undefined,
+        passport: uploadedFiles.passport || undefined,
+        panCard: uploadedFiles.panCard || undefined,
+        incomeProof: uploadedFiles.incomeProof || undefined,
+        bankStatement: uploadedFiles.bankStatement || undefined,
+        nomineePhoto: uploadedFiles.nomineePhoto || undefined,
+      }
 
-    addAccountApplication(formData)
+      const response = await accountApplicationService.submitApplication(applicationData)
 
-    alert("Account opening application submitted successfully! We will contact you within 2-3 business days.")
-    setIsSubmitting(false)
-    onBack()
+      alert("Account opening application submitted successfully! We will contact you within 2-3 business days.")
+
+      // Add to context for local state management
+      addAccountApplication({
+        ...response.application,
+        id: response.application._id,
+      })
+
+      onBack()
+    } catch (error) {
+      console.error("Error submitting application:", error)
+      alert(`Error submitting application: ${error instanceof Error ? error.message : "Unknown error"}`)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const FileUploadField = ({
@@ -504,11 +529,11 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadField label="Profile Photo" field="profilePhoto" required />
-              <FileUploadField label="Citizenship Front" field="citizenshipFront" required />
-              <FileUploadField label="Citizenship Back" field="citizenshipBack" required />
-              <FileUploadField label="Passport Photo" field="passport" />
-              <FileUploadField label="PAN Card" field="panCard" />
+              <FileUploadField label="Picture" field="profilePhoto" required accept="image/*" />
+              <FileUploadField label="Citizenship Front" field="citizenshipFront" required accept="image/*,.pdf" />
+              <FileUploadField label="Citizenship Back" field="citizenshipBack" required accept="image/*,.pdf" />
+              <FileUploadField label="Passport" field="passport" accept="image/*,.pdf" />
+              <FileUploadField label="PAN Card" field="panCard" accept="image/*,.pdf" />
             </div>
           </div>
         )
@@ -589,8 +614,12 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadField label="Income Proof" field="incomeProof" />
-              <FileUploadField label="Bank Statement (Last 3 months)" field="bankStatement" />
+              <FileUploadField label="Income Proof (Optional)" field="incomeProof" accept="image/*,.pdf" />
+              <FileUploadField
+                label="Bank Statement - Last 3 months (Optional)"
+                field="bankStatement"
+                accept="image/*,.pdf"
+              />
             </div>
           </div>
         )
@@ -806,7 +835,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               />
             </div>
 
-            <FileUploadField label="Nominee Photo" field="nomineePhoto" />
+            <FileUploadField label="Nominee Picture" field="nomineePhoto" accept="image/*" />
 
             <div className="border-t pt-6">
               <h4 className="text-lg font-medium text-gray-900 mb-4">References</h4>

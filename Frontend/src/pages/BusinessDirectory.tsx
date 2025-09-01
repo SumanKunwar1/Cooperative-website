@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 
 interface Business {
-  id: string
+  _id: string
   name: string
   category: string
   subcategory: string
@@ -20,103 +20,11 @@ interface Business {
   website?: string
   services: string[]
   isVerified: boolean
+  owner: string
+  address: string
+  status: string
+  createdAt: string
 }
-
-const mockBusinesses: Business[] = [
-  {
-    id: "1",
-    name: "TechSolutions Nepal",
-    category: "Technology",
-    subcategory: "IT Services",
-    description: "Professional IT consulting and software development services for businesses.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.8,
-    reviews: 45,
-    location: "Kathmandu, Nepal",
-    phone: "01-4567890",
-    email: "info@techsolutions.com.np",
-    website: "www.techsolutions.com.np",
-    services: ["Web Development", "Mobile Apps", "IT Consulting", "Cloud Services"],
-    isVerified: true,
-  },
-  {
-    id: "2",
-    name: "Himalayan Delights Restaurant",
-    category: "Food & Beverage",
-    subcategory: "Restaurant",
-    description: "Authentic Nepali and Indian cuisine with modern dining experience.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.6,
-    reviews: 128,
-    location: "Thamel, Kathmandu",
-    phone: "01-4123456",
-    email: "orders@himalayandelights.com",
-    services: ["Dine-in", "Takeaway", "Home Delivery", "Catering"],
-    isVerified: true,
-  },
-  {
-    id: "3",
-    name: "Mountain View Hotel",
-    category: "Hospitality",
-    subcategory: "Hotel",
-    description: "Comfortable accommodation with stunning mountain views and modern amenities.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.7,
-    reviews: 89,
-    location: "Pokhara, Nepal",
-    phone: "061-567890",
-    email: "reservations@mountainviewhotel.com",
-    website: "www.mountainviewhotel.com",
-    services: ["Room Booking", "Event Hosting", "Restaurant", "Tour Packages"],
-    isVerified: true,
-  },
-  {
-    id: "4",
-    name: "ElectroFix Services",
-    category: "Home Services",
-    subcategory: "Electrical",
-    description: "Professional electrical repair and installation services for homes and offices.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.5,
-    reviews: 67,
-    location: "Lalitpur, Nepal",
-    phone: "01-5678901",
-    email: "service@electrofix.com.np",
-    services: ["Electrical Repair", "Wiring Installation", "Appliance Repair", "Emergency Service"],
-    isVerified: true,
-  },
-  {
-    id: "5",
-    name: "Fresh Mart Wholesale",
-    category: "Retail",
-    subcategory: "Wholesale",
-    description: "Quality groceries and daily essentials at wholesale prices for businesses.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.4,
-    reviews: 156,
-    location: "Bhaktapur, Nepal",
-    phone: "01-6789012",
-    email: "orders@freshmart.com.np",
-    services: ["Bulk Orders", "Home Delivery", "Business Supply", "Fresh Produce"],
-    isVerified: true,
-  },
-  {
-    id: "6",
-    name: "HealthCare Plus Clinic",
-    category: "Healthcare",
-    subcategory: "Medical",
-    description: "Comprehensive healthcare services with experienced doctors and modern facilities.",
-    image: "/placeholder.svg?height=200&width=300",
-    rating: 4.9,
-    reviews: 203,
-    location: "New Baneshwor, Kathmandu",
-    phone: "01-7890123",
-    email: "appointments@healthcareplus.com.np",
-    website: "www.healthcareplus.com.np",
-    services: ["General Consultation", "Specialist Care", "Diagnostic Tests", "Health Checkups"],
-    isVerified: true,
-  },
-]
 
 const categories = [
   "All Categories",
@@ -126,6 +34,8 @@ const categories = [
   "Home Services",
   "Retail",
   "Healthcare",
+  "Education",
+  "Others",
 ]
 
 const createBusinessSlug = (name: string): string => {
@@ -142,10 +52,41 @@ const BusinessDirectory: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Categories")
   const [sortBy, setSortBy] = useState("name")
   const [currentPage, setCurrentPage] = useState(1)
+  const [businesses, setBusinesses] = useState<Business[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const businessesPerPage = 15
 
+  // Fetch businesses from API
+  useEffect(() => {
+    const fetchBusinesses = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/businesses/directory`)
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch businesses")
+        }
+
+        const data = await response.json()
+        if (data.success) {
+          setBusinesses(data.data)
+        } else {
+          throw new Error(data.message || "Failed to fetch businesses")
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred")
+        console.error("Error fetching businesses:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBusinesses()
+  }, [])
+
   const filteredBusinesses = useMemo(() => {
-    const filtered = mockBusinesses.filter((business) => {
+    const filtered = businesses.filter((business) => {
       const matchesSearch =
         business.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         business.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -170,7 +111,7 @@ const BusinessDirectory: React.FC = () => {
     })
 
     return filtered
-  }, [searchTerm, selectedCategory, sortBy])
+  }, [searchTerm, selectedCategory, sortBy, businesses])
 
   const totalPages = Math.ceil(filteredBusinesses.length / businessesPerPage)
   const startIndex = (currentPage - 1) * businessesPerPage
@@ -180,6 +121,34 @@ const BusinessDirectory: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm, selectedCategory, sortBy])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading businesses...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">Error</div>
+          <p className="text-gray-600">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -305,7 +274,7 @@ const BusinessDirectory: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {currentBusinesses.map((business) => (
                   <div
-                    key={business.id}
+                    key={business._id}
                     className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
                   >
                     <div className="relative">
@@ -378,6 +347,7 @@ const BusinessDirectory: React.FC = () => {
 
                       <Link
                         to={`/business-directory/${createBusinessSlug(business.name)}`}
+                        state={{ business }}
                         className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-center block"
                       >
                         View Details & Book

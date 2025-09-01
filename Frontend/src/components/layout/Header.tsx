@@ -302,7 +302,7 @@ const Header: React.FC = () => {
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
               <UsersIcon className="h-3 w-3 mr-1" />
-              Shareholders
+              Member Details
             </Link>
 
             <Link

@@ -84,21 +84,39 @@ const Register: React.FC = () => {
     setIsLoading(true)
 
     try {
-      // Simulate registration process
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // API call to register endpoint
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          businessName: formData.businessName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          membershipType: formData.membershipType,
+        }),
+      })
 
-      // Create new user object
-      const newUser = {
-        id: Date.now().toString(),
-        businessName: formData.businessName,
-        email: formData.email,
-        phone: formData.phone,
-        membershipType: formData.membershipType,
-        joinedDate: new Date().toISOString(),
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed")
       }
 
-      // Log the user in
-      login(newUser)
+      // Log the user in with the response data
+      login({
+        id: data.user.id,
+        businessName: data.user.businessName,
+        email: data.user.email,
+        phone: data.user.phone,
+        membershipType: data.user.membershipType,
+        joinedDate: data.user.joinedDate,
+      })
+
+      // Store the token in localStorage
+      localStorage.setItem("token", data.token)
 
       const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
       const pendingCartItem = localStorage.getItem("pendingCartItem")
@@ -121,14 +139,14 @@ const Register: React.FC = () => {
       }
 
       // Default redirect based on membership type
-      const encodedName = encodeURIComponent(newUser.businessName.replace(/\s+/g, "-").toLowerCase())
+      const encodedName = encodeURIComponent(data.user.businessName.replace(/\s+/g, "-").toLowerCase())
       if (formData.membershipType === "business") {
         navigate(`/business-dashboard/${encodedName}`)
       } else {
         navigate(`/dashboard/${encodedName}`)
       }
-    } catch (error) {
-      setError("Registration failed. Please try again.")
+    } catch (error: any) {
+      setError(error.message || "Registration failed. Please try again.")
     } finally {
       setIsLoading(false)
     }

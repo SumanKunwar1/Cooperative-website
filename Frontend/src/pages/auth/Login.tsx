@@ -65,20 +65,38 @@ const Login: React.FC = () => {
         return
       }
 
-      // Simulate login process
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          userType: formData.userType,
+        }),
+      });
 
-      const mockUser = {
-        id: Date.now().toString(),
-        businessName: formData.email.split("@")[0],
-        email: formData.email,
-        phone: "+977-9800000000",
-        membershipType: formData.userType,
-        joinedDate: new Date().toISOString(),
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
       }
 
+      // Store token
+      localStorage.setItem('token', data.token);
+      
+      const user = data.user;
+
       // Login successful
-      login(mockUser)
+      login({
+        id: user.id,
+        businessName: user.businessName,
+        email: user.email,
+        phone: user.phone,
+        membershipType: user.membershipType,
+        joinedDate: user.joinedDate,
+      });
 
       const redirectAfterLogin = localStorage.getItem("redirectAfterLogin")
       const pendingCartItem = localStorage.getItem("pendingCartItem")
@@ -101,14 +119,14 @@ const Login: React.FC = () => {
       }
 
       // Default redirect based on user type
-      const encodedName = encodeURIComponent(mockUser.businessName.replace(/\s+/g, "-").toLowerCase())
+      const encodedName = encodeURIComponent(user.businessName.replace(/\s+/g, "-").toLowerCase())
       if (formData.userType === "business") {
         navigate(`/business-dashboard/${encodedName}`)
       } else {
         navigate(`/dashboard/${encodedName}`)
       }
-    } catch (error) {
-      setError("Login failed. Please try again.")
+    } catch (error: any) {
+      setError(error.message || "Login failed. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -151,7 +169,7 @@ const Login: React.FC = () => {
                         : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                   >
-                    <User className="w-5 h-5 mr-2" />
+                    <User className="w-5 w-5 mr-2" />
                     Individual
                   </button>
                   <button
@@ -163,7 +181,7 @@ const Login: React.FC = () => {
                         : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                   >
-                    <Building className="w-5 h-5 mr-2" />
+                    <Building className="w-5 w-5 mr-2" />
                     Business
                   </button>
                 </div>
@@ -187,7 +205,6 @@ const Login: React.FC = () => {
                   />
                   <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">Use any email address (demo mode)</p>
               </div>
 
               <div>
@@ -219,7 +236,6 @@ const Login: React.FC = () => {
                     )}
                   </button>
                 </div>
-                <p className="mt-1 text-xs text-gray-500">Use any password (demo mode)</p>
               </div>
 
               <div className="flex items-center justify-between">

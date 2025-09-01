@@ -4,212 +4,9 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
+import type { Business } from "../types/business"
 
-interface Business {
-  id: string
-  name: string
-  category: string
-  subcategory: string
-  description: string
-  fullDescription: string
-  image: string
-  gallery: string[]
-  rating: number
-  reviews: number
-  location: string
-  address: string
-  phone: string
-  email: string
-  website?: string
-  services: string[]
-  isVerified: boolean
-  openingHours: { [key: string]: string }
-  features: string[]
-  pricing: { service: string; price: string; description: string }[]
-}
-
-// Mock data for different businesses - in real app, this would come from an API
-const mockBusinesses: { [key: string]: Business } = {
-  "techsolutions-nepal": {
-    id: "1",
-    name: "TechSolutions Nepal",
-    category: "Technology",
-    subcategory: "IT Services",
-    description: "Professional IT consulting and software development services for businesses.",
-    fullDescription:
-      "TechSolutions Nepal is a leading IT consulting firm established in 2015, specializing in custom software development, web applications, mobile apps, and digital transformation solutions. We serve businesses of all sizes, from startups to large enterprises, helping them leverage technology to achieve their goals. Our team of experienced developers and consultants are committed to delivering high-quality solutions that drive business growth.",
-    image: "/placeholder.svg?height=400&width=600",
-    gallery: [
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-    ],
-    rating: 4.8,
-    reviews: 45,
-    location: "Kathmandu, Nepal",
-    address: "Putalisadak, Kathmandu 44600, Nepal",
-    phone: "01-4567890",
-    email: "info@techsolutions.com.np",
-    website: "www.techsolutions.com.np",
-    services: [
-      "Web Development",
-      "Mobile Apps",
-      "IT Consulting",
-      "Cloud Services",
-      "E-commerce Solutions",
-      "Digital Marketing",
-    ],
-    isVerified: true,
-    openingHours: {
-      Monday: "9:00 AM - 6:00 PM",
-      Tuesday: "9:00 AM - 6:00 PM",
-      Wednesday: "9:00 AM - 6:00 PM",
-      Thursday: "9:00 AM - 6:00 PM",
-      Friday: "9:00 AM - 6:00 PM",
-      Saturday: "10:00 AM - 4:00 PM",
-      Sunday: "Closed",
-    },
-    features: ["Free Consultation", "24/7 Support", "Agile Development", "Quality Assurance", "Post-Launch Support"],
-    pricing: [
-      {
-        service: "Website Development",
-        price: "Starting from NPR 50,000",
-        description: "Custom responsive websites with modern design",
-      },
-      {
-        service: "Mobile App Development",
-        price: "Starting from NPR 150,000",
-        description: "Native and cross-platform mobile applications",
-      },
-      {
-        service: "IT Consulting",
-        price: "NPR 2,000/hour",
-        description: "Expert advice on technology strategy and implementation",
-      },
-      {
-        service: "Cloud Migration",
-        price: "Custom Quote",
-        description: "Seamless migration to cloud platforms with ongoing support",
-      },
-    ],
-  },
-  "himalayan-delights-restaurant": {
-    id: "2",
-    name: "Himalayan Delights Restaurant",
-    category: "Food & Beverage",
-    subcategory: "Restaurant",
-    description: "Authentic Nepali and Indian cuisine with modern dining experience.",
-    fullDescription:
-      "Himalayan Delights Restaurant has been serving authentic Nepali and Indian cuisine since 2010. Located in the heart of Thamel, we offer a unique dining experience with traditional flavors and modern presentation. Our chefs use fresh, locally sourced ingredients to create dishes that celebrate the rich culinary heritage of the Himalayas. From traditional dal bhat to exotic momos, every dish tells a story of our cultural diversity.",
-    image: "/placeholder.svg?height=400&width=600",
-    gallery: [
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-    ],
-    rating: 4.6,
-    reviews: 128,
-    location: "Thamel, Kathmandu",
-    address: "Thamel Marg, Kathmandu 44600, Nepal",
-    phone: "01-4123456",
-    email: "orders@himalayandelights.com",
-    services: ["Dine-in", "Takeaway", "Home Delivery", "Catering", "Private Events"],
-    isVerified: true,
-    openingHours: {
-      Monday: "11:00 AM - 10:00 PM",
-      Tuesday: "11:00 AM - 10:00 PM",
-      Wednesday: "11:00 AM - 10:00 PM",
-      Thursday: "11:00 AM - 10:00 PM",
-      Friday: "11:00 AM - 10:00 PM",
-      Saturday: "11:00 AM - 10:00 PM",
-      Sunday: "11:00 AM - 10:00 PM",
-    },
-    features: ["Authentic Cuisine", "Live Music", "Outdoor Seating", "Vegetarian Options", "Local Ingredients"],
-    pricing: [
-      {
-        service: "Dal Bhat Set",
-        price: "NPR 350",
-        description: "Traditional Nepali meal with rice, lentils, and vegetables",
-      },
-      {
-        service: "Momo (10 pieces)",
-        price: "NPR 280",
-        description: "Steamed dumplings with choice of chicken, buff, or vegetables",
-      },
-      {
-        service: "Catering Service",
-        price: "Starting from NPR 500/person",
-        description: "Complete meal service for events and gatherings",
-      },
-      {
-        service: "Private Dining",
-        price: "NPR 2,000 minimum",
-        description: "Exclusive dining experience for special occasions",
-      },
-    ],
-  },
-  "mountain-view-hotel": {
-    id: "3",
-    name: "Mountain View Hotel",
-    category: "Hospitality",
-    subcategory: "Hotel",
-    description: "Comfortable accommodation with stunning mountain views and modern amenities.",
-    fullDescription:
-      "Mountain View Hotel in Pokhara offers breathtaking views of the Annapurna range and Phewa Lake. Established in 2012, our hotel combines traditional Nepali hospitality with modern comfort. Each room is designed to maximize the spectacular mountain views while providing all the amenities needed for a comfortable stay. Whether you're here for trekking, sightseeing, or business, we ensure an unforgettable experience.",
-    image: "/placeholder.svg?height=400&width=600",
-    gallery: [
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-      "/placeholder.svg?height=300&width=400",
-    ],
-    rating: 4.7,
-    reviews: 89,
-    location: "Pokhara, Nepal",
-    address: "Lakeside, Pokhara 33700, Nepal",
-    phone: "061-567890",
-    email: "reservations@mountainviewhotel.com",
-    website: "www.mountainviewhotel.com",
-    services: ["Room Booking", "Event Hosting", "Restaurant", "Tour Packages", "Airport Transfer"],
-    isVerified: true,
-    openingHours: {
-      Monday: "24/7",
-      Tuesday: "24/7",
-      Wednesday: "24/7",
-      Thursday: "24/7",
-      Friday: "24/7",
-      Saturday: "24/7",
-      Sunday: "24/7",
-    },
-    features: ["Mountain Views", "Lake Access", "Restaurant", "Tour Desk", "Free WiFi"],
-    pricing: [
-      {
-        service: "Standard Room",
-        price: "NPR 3,500/night",
-        description: "Comfortable room with mountain view and modern amenities",
-      },
-      {
-        service: "Deluxe Room",
-        price: "NPR 4,500/night",
-        description: "Spacious room with premium furnishing and balcony",
-      },
-      {
-        service: "Event Hall",
-        price: "NPR 15,000/day",
-        description: "Fully equipped hall for conferences and celebrations",
-      },
-      {
-        service: "Annapurna Trek Package",
-        price: "NPR 25,000/person",
-        description: "Complete 7-day trekking package with guide and accommodation",
-      },
-    ],
-  },
-}
-
-// Helper function to create URL slug from business name
+const API_BASE_URL = "http://localhost:5000/api"
 
 const BusinessDetails: React.FC = () => {
   const { businessName } = useParams<{ businessName: string }>()
@@ -233,21 +30,30 @@ const BusinessDetails: React.FC = () => {
     const fetchBusiness = async () => {
       try {
         setLoading(true)
-        
+
         if (!businessName) {
           throw new Error("Business name not provided")
         }
 
-        // In real app, you would fetch from API using businessName
-        const foundBusiness = mockBusinesses[businessName]
-        
-        if (!foundBusiness) {
-          throw new Error("Business not found")
+        const response = await fetch(`${API_BASE_URL}/business-details/${businessName}`)
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Business not found")
+          }
+          throw new Error(`Failed to fetch business: ${response.status}`)
         }
 
-        setBusiness(foundBusiness)
+        const result = await response.json()
+
+        if (!result.success || !result.data) {
+          throw new Error("Invalid response format")
+        }
+
+        setBusiness(result.data)
         setError(null)
       } catch (err) {
+        console.error("Error fetching business:", err)
         setError(err instanceof Error ? err.message : "Failed to load business details")
         setBusiness(null)
       } finally {
@@ -258,11 +64,30 @@ const BusinessDetails: React.FC = () => {
     fetchBusiness()
   }, [businessName])
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Booking submitted:", bookingForm)
-    setShowBookingModal(false)
-    // Show success message or redirect
+
+    try {
+      console.log("Booking submitted:", bookingForm)
+
+      // For now, just show success message
+      alert("Booking request submitted successfully! We will contact you soon.")
+      setShowBookingModal(false)
+
+      // Reset form
+      setBookingForm({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+        preferredDate: "",
+        preferredTime: "",
+      })
+    } catch (err) {
+      console.error("Error submitting booking:", err)
+      alert("Failed to submit booking. Please try again.")
+    }
   }
 
   const tabs = [
@@ -306,7 +131,7 @@ const BusinessDetails: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{business.name} - Business Directory</title>
+        <title>{business.name || business.businessName} - Business Directory</title>
         <meta name="description" content={business.description} />
       </Helmet>
 
@@ -323,7 +148,7 @@ const BusinessDetails: React.FC = () => {
                 Business Directory
               </Link>
               <span className="text-gray-400">/</span>
-              <span className="text-gray-600">{business.name}</span>
+              <span className="text-gray-600">{business.name || business.businessName}</span>
             </nav>
           </div>
         </div>
@@ -334,14 +159,16 @@ const BusinessDetails: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
                 <img
-                  src={business.image || "/placeholder.svg"}
-                  alt={business.name}
+                  src={business.image || "/placeholder.svg?height=400&width=600"}
+                  alt={business.name || business.businessName}
                   className="w-full h-96 object-cover rounded-xl shadow-lg"
                 />
               </div>
               <div className="flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-4">
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{business.name}</h1>
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                    {business.name || business.businessName}
+                  </h1>
                   {business.isVerified && (
                     <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -363,14 +190,14 @@ const BusinessDetails: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
-                        className={`w-5 h-5 ${i < Math.floor(business.rating) ? "text-yellow-400" : "text-gray-300"} fill-current`}
+                        className={`w-5 h-5 ${i < Math.floor(business.rating || 0) ? "text-yellow-400" : "text-gray-300"} fill-current`}
                         viewBox="0 0 20 20"
                       >
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
-                    <span className="text-lg font-medium text-gray-700 ml-2">{business.rating}</span>
-                    <span className="text-gray-500">({business.reviews} reviews)</span>
+                    <span className="text-lg font-medium text-gray-700 ml-2">{business.rating || 0}</span>
+                    <span className="text-gray-500">({business.reviews || 0} reviews)</span>
                   </div>
                 </div>
 
@@ -455,12 +282,14 @@ const BusinessDetails: React.FC = () => {
           {activeTab === "overview" && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">About {business.name}</h2>
-                <p className="text-gray-600 leading-relaxed mb-8">{business.fullDescription}</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  About {business.name || business.businessName}
+                </h2>
+                <p className="text-gray-600 leading-relaxed mb-8">{business.fullDescription || business.description}</p>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Key Features</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Services Offered</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                  {business.features.map((feature, index) => (
+                  {(business.services || []).slice(0, 6).map((service, index) => (
                     <div key={index} className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
                       <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -469,7 +298,7 @@ const BusinessDetails: React.FC = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-gray-700 font-medium">{feature}</span>
+                      <span className="text-gray-700 font-medium">{service}</span>
                     </div>
                   ))}
                 </div>
@@ -508,7 +337,7 @@ const BusinessDetails: React.FC = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9"
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9 9s4-9 9-9"
                           />
                         </svg>
                         <a
@@ -530,23 +359,76 @@ const BusinessDetails: React.FC = () => {
           {activeTab === "services" && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">Services & Pricing</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {business.pricing.map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.service}</h3>
-                    <p className="text-2xl font-bold text-blue-600 mb-3">{item.price}</p>
-                    <p className="text-gray-600 mb-4">{item.description}</p>
+
+              <div className="space-y-8">
+                {/* Services Section */}
+                {business.services && business.services.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Our Services</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                      {business.services.map((service, index) => (
+                        <div key={index} className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
+                          <h4 className="font-medium text-gray-900 mb-2">{service}</h4>
+                          <button
+                            onClick={() => setShowBookingModal(true)}
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                          >
+                            Book Now
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Pricing Section */}
+                {business.pricing && (
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Pricing Plans</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {(() => {
+                        // Handle pricing object (basic, standard, premium)
+                        if (typeof business.pricing === "object" && !Array.isArray(business.pricing)) {
+                          return Object.entries(business.pricing).map(([tier, price]) => (
+                            <div
+                              key={tier}
+                              className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200"
+                            >
+                              <div className="text-center">
+                                <h4 className="text-xl font-bold text-gray-900 mb-2 capitalize">{tier} Plan</h4>
+                                <div className="text-3xl font-bold text-blue-600 mb-4">
+                                  {typeof price === "string" || typeof price === "number"
+                                    ? price
+                                    : "Contact for pricing"}
+                                </div>
+                                <button
+                                  onClick={() => setShowBookingModal(true)}
+                                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                                >
+                                  Choose {tier}
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        }
+                        return null
+                      })()}
+                    </div>
+                  </div>
+                )}
+
+                {/* Fallback if no pricing or services */}
+                {(!business.services || business.services.length === 0) && !business.pricing && (
+                  <div className="text-center py-12">
+                    <p className="text-gray-600 mb-4">Service and pricing information will be available soon.</p>
                     <button
                       onClick={() => setShowBookingModal(true)}
-                      className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                      className="bg-blue-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
                     >
-                      Book Now
+                      Contact for Details
                     </button>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
@@ -555,11 +437,11 @@ const BusinessDetails: React.FC = () => {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {business.gallery.map((image, index) => (
+                {(business.gallery || [business.image] || []).filter(Boolean).map((image, index) => (
                   <div key={index} className="relative group cursor-pointer" onClick={() => setSelectedImage(index)}>
                     <img
-                      src={image || "/placeholder.svg"}
-                      alt={`${business.name} gallery ${index + 1}`}
+                      src={image || "/placeholder.svg?height=300&width=400"}
+                      alt={`${business.name || business.businessName} gallery ${index + 1}`}
                       className="w-full h-64 object-cover rounded-lg shadow-lg group-hover:shadow-xl transition-shadow duration-300"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300 rounded-lg flex items-center justify-center">
@@ -605,7 +487,7 @@ const BusinessDetails: React.FC = () => {
                     </svg>
                     <div>
                       <h3 className="font-semibold text-gray-900">Address</h3>
-                      <p className="text-gray-600">{business.address}</p>
+                      <p className="text-gray-600">{business.address || business.location}</p>
                     </div>
                   </div>
 
@@ -644,15 +526,19 @@ const BusinessDetails: React.FC = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Opening Hours</h2>
                 <div className="bg-white rounded-xl shadow-lg p-6">
-                  {Object.entries(business.openingHours).map(([day, hours]) => (
-                    <div
-                      key={day}
-                      className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0"
-                    >
-                      <span className="font-medium text-gray-900">{day}</span>
-                      <span className={`${hours === "Closed" ? "text-red-600" : "text-gray-600"}`}>{hours}</span>
-                    </div>
-                  ))}
+                  {business.openingHours ? (
+                    Object.entries(business.openingHours).map(([day, hours]) => (
+                      <div
+                        key={day}
+                        className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0"
+                      >
+                        <span className="font-medium text-gray-900">{day}</span>
+                        <span className={`${hours === "Closed" ? "text-red-600" : "text-gray-600"}`}>{hours}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-600">Opening hours not available</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -716,9 +602,9 @@ const BusinessDetails: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Select a service</option>
-                      {business.services.map((service) => (
-                        <option key={service} value={service}>
-                          {service}
+                      {(business.services || []).map((service, index) => (
+                        <option key={index} value={typeof service === "string" ? service : `Service ${index + 1}`}>
+                          {typeof service === "string" ? service : `Service ${index + 1}`}
                         </option>
                       ))}
                     </select>
@@ -769,7 +655,7 @@ const BusinessDetails: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
                     >
                       Submit Booking
                     </button>
