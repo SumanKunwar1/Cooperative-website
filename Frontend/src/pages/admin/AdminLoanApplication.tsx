@@ -1,17 +1,43 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { EyeIcon, CheckCircleIcon, XCircleIcon, ClockIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
-import { useApplications, type LoanApplication } from "../../contexts/ApplicationContext"
+import {
+  EyeIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+  MagnifyingGlassIcon,
+  DocumentArrowDownIcon,
+} from "@heroicons/react/24/outline"
+import { loanApplicationService, type LoanApplication } from "../../services/loanApplicationService"
 import AdminDashboard from "./AdminDashboard"
+import JSZip from "jszip"
 
 const AdminLoanApplications: React.FC = () => {
-  const { loanApplications, updateLoanApplicationStatus } = useApplications()
+  const [loanApplications, setLoanApplications] = useState<LoanApplication[]>([])
   const [selectedApplication, setSelectedApplication] = useState<LoanApplication | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [loading, setLoading] = useState(true)
+  const [showTextView, setShowTextView] = useState(false)
+
+  useEffect(() => {
+    fetchApplications()
+  }, [])
+
+  const fetchApplications = async () => {
+    setLoading(true)
+    try {
+      const applications = await loanApplicationService.getApplications()
+      setLoanApplications(applications)
+    } catch (error) {
+      console.error("Error fetching applications:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const filteredApplications = loanApplications.filter((app) => {
     const matchesSearch =
@@ -35,11 +61,126 @@ const AdminLoanApplications: React.FC = () => {
     }
   }
 
-  const handleStatusUpdate = (id: string, status: LoanApplication["status"]) => {
-    updateLoanApplicationStatus(id, status)
-    if (selectedApplication && selectedApplication.id === id) {
-      setSelectedApplication({ ...selectedApplication, status })
+  const handleStatusUpdate = async (id: string, status: LoanApplication["status"]) => {
+    const success = await loanApplicationService.updateApplicationStatus(id, status)
+    if (success) {
+      await fetchApplications()
+      if (selectedApplication && selectedApplication._id === id) {
+        setSelectedApplication({ ...selectedApplication, status })
+      }
     }
+  }
+
+  const generateTextView = (application: LoanApplication): string => {
+    return `LOAN APPLICATION DETAILS
+========================
+
+Application ID: ${application._id}
+Status: ${application.status.toUpperCase()}
+Submitted: ${new Date(application.submittedAt).toLocaleString()}
+Last Updated: ${new Date(application.updatedAt).toLocaleString()}
+
+PERSONAL INFORMATION
+-------------------
+Name: ${application.firstName} ${application.lastName}
+Date of Birth: ${application.dateOfBirth}
+Gender: ${application.gender}
+Marital Status: ${application.maritalStatus || "N/A"}
+Nationality: ${application.nationality || "N/A"}
+
+CONTACT INFORMATION
+------------------
+Email: ${application.email}
+Primary Phone: ${application.primaryPhone}
+Alternate Phone: ${application.alternatePhone || "N/A"}
+Permanent Address: ${application.permanentAddress}
+District: ${application.district || "N/A"}
+
+IDENTIFICATION
+-------------
+Citizenship Number: ${application.citizenshipNo}
+
+EMPLOYMENT INFORMATION
+---------------------
+Occupation: ${application.occupation}
+Monthly Income: NPR ${application.monthlyIncome}
+Employer Name: ${application.employerName || "N/A"}
+Total Income: NPR ${application.totalIncome || "N/A"}
+
+LOAN INFORMATION
+---------------
+Loan Type: ${application.loanType}
+Loan Amount: NPR ${application.loanAmount}
+Loan Purpose: ${application.loanPurpose}
+Loan Term: ${application.loanTerm}
+Preferred EMI: NPR ${application.preferredEMI || "N/A"}
+
+UPLOADED DOCUMENTS
+-----------------
+Profile Photo: ${application.profilePhoto ? "Uploaded" : "Not Uploaded"}
+Citizenship Front: ${application.citizenshipFront ? "Uploaded" : "Not Uploaded"}
+Citizenship Back: ${application.citizenshipBack ? "Uploaded" : "Not Uploaded"}
+Income Proof: ${application.incomeProof ? "Uploaded" : "Not Uploaded"}
+
+Generated on: ${new Date().toLocaleString()}
+`
+  }
+
+  const exportApplicationAsZip = async (application: LoanApplication) => {
+    try {
+      const zip = new JSZip()
+
+      // Add text file with application data
+      const textContent = generateTextView(application)
+      zip.file(`${application.firstName}_${application.lastName}_Application.txt`, textContent)
+
+      // Add documents if they exist
+      const documents = [
+        { key: "profilePhoto", name: "Profile_Photo" },
+        { key: "citizenshipFront", name: "Citizenship_Front" },
+        { key: "citizenshipBack", name: "Citizenship_Back" },
+        { key: "incomeProof", name: "Income_Proof" },
+      ]
+
+      for (const doc of documents) {
+        const url = application[doc.key as keyof LoanApplication] as string
+        if (url) {
+          try {
+            const response = await fetch(url)
+            if (response.ok) {
+              const blob = await response.blob()
+              const extension = url.split(".").pop() || "jpg"
+              zip.file(`${doc.name}.${extension}`, blob)
+            }
+          } catch (error) {
+            console.error(`Error downloading ${doc.name}:`, error)
+          }
+        }
+      }
+
+      // Generate and download zip
+      const content = await zip.generateAsync({ type: "blob" })
+      const link = document.createElement("a")
+      link.href = URL.createObjectURL(content)
+      link.download = `${application.firstName}_${application.lastName}_LoanApplication.zip`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
+    } catch (error) {
+      console.error("Error creating zip file:", error)
+      alert("Error creating download file. Please try again.")
+    }
+  }
+
+  if (loading) {
+    return (
+      <AdminDashboard currentSection="loan-application">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg text-gray-600">Loading applications...</div>
+        </div>
+      </AdminDashboard>
+    )
   }
 
   return (
@@ -115,7 +256,7 @@ const AdminLoanApplications: React.FC = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredApplications.map((application) => (
                     <motion.tr
-                      key={application.id}
+                      key={application._id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="hover:bg-gray-50"
@@ -131,7 +272,7 @@ const AdminLoanApplications: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{application.loanType}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Rs. {application.loanAmount}
+                        NPR {application.loanAmount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -147,20 +288,30 @@ const AdminLoanApplications: React.FC = () => {
                         <button
                           onClick={() => setSelectedApplication(application)}
                           className="text-purple-600 hover:text-purple-900"
+                          title="View Details"
                         >
                           <EyeIcon className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() => exportApplicationAsZip(application)}
+                          className="text-blue-600 hover:text-blue-900"
+                          title="Download as ZIP"
+                        >
+                          <DocumentArrowDownIcon className="h-5 w-5" />
                         </button>
                         {application.status === "pending" && (
                           <>
                             <button
-                              onClick={() => handleStatusUpdate(application.id, "approved")}
+                              onClick={() => handleStatusUpdate(application._id, "approved")}
                               className="text-green-600 hover:text-green-900"
+                              title="Approve"
                             >
                               <CheckCircleIcon className="h-5 w-5" />
                             </button>
                             <button
-                              onClick={() => handleStatusUpdate(application.id, "rejected")}
+                              onClick={() => handleStatusUpdate(application._id, "rejected")}
                               className="text-red-600 hover:text-red-900"
+                              title="Reject"
                             >
                               <XCircleIcon className="h-5 w-5" />
                             </button>
@@ -178,116 +329,179 @@ const AdminLoanApplications: React.FC = () => {
         {/* Application Detail Modal */}
         {selectedApplication && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-xl font-bold text-gray-900">Loan Application Details</h3>
-                  <button onClick={() => setSelectedApplication(null)} className="text-gray-400 hover:text-gray-600">
-                    <XCircleIcon className="h-6 w-6" />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium">Name:</span> {selectedApplication.firstName}{" "}
-                        {selectedApplication.middleName} {selectedApplication.lastName}
-                      </p>
-                      <p>
-                        <span className="font-medium">Date of Birth:</span> {selectedApplication.dateOfBirth}
-                      </p>
-                      <p>
-                        <span className="font-medium">Gender:</span> {selectedApplication.gender}
-                      </p>
-                      <p>
-                        <span className="font-medium">Marital Status:</span> {selectedApplication.maritalStatus}
-                      </p>
-                      <p>
-                        <span className="font-medium">Nationality:</span> {selectedApplication.nationality}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium">Email:</span> {selectedApplication.email}
-                      </p>
-                      <p>
-                        <span className="font-medium">Primary Phone:</span> {selectedApplication.primaryPhone}
-                      </p>
-                      <p>
-                        <span className="font-medium">Alternate Phone:</span> {selectedApplication.alternatePhone}
-                      </p>
-                      <p>
-                        <span className="font-medium">Permanent Address:</span> {selectedApplication.permanentAddress}
-                      </p>
-                      <p>
-                        <span className="font-medium">District:</span> {selectedApplication.district}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Loan Details</h4>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium">Loan Type:</span> {selectedApplication.loanType}
-                      </p>
-                      <p>
-                        <span className="font-medium">Loan Amount:</span> Rs. {selectedApplication.loanAmount}
-                      </p>
-                      <p>
-                        <span className="font-medium">Loan Purpose:</span> {selectedApplication.loanPurpose}
-                      </p>
-                      <p>
-                        <span className="font-medium">Loan Term:</span> {selectedApplication.loanTerm}
-                      </p>
-                      <p>
-                        <span className="font-medium">Preferred EMI:</span> Rs. {selectedApplication.preferredEMI}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Employment Information</h4>
-                    <div className="space-y-2 text-sm">
-                      <p>
-                        <span className="font-medium">Occupation:</span> {selectedApplication.occupation}
-                      </p>
-                      <p>
-                        <span className="font-medium">Employer:</span> {selectedApplication.employerName}
-                      </p>
-                      <p>
-                        <span className="font-medium">Monthly Income:</span> Rs. {selectedApplication.monthlyIncome}
-                      </p>
-                      <p>
-                        <span className="font-medium">Total Income:</span> Rs. {selectedApplication.totalIncome}
-                      </p>
-                    </div>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => setShowTextView(!showTextView)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      {showTextView ? "Card View" : "Text View"}
+                    </button>
+                    <button
+                      onClick={() => exportApplicationAsZip(selectedApplication)}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center"
+                    >
+                      <DocumentArrowDownIcon className="h-4 w-4 mr-2" />
+                      Export ZIP
+                    </button>
+                    <button onClick={() => setSelectedApplication(null)} className="text-gray-400 hover:text-gray-600">
+                      <XCircleIcon className="h-6 w-6" />
+                    </button>
                   </div>
                 </div>
+
+                {showTextView ? (
+                  <div className="bg-gray-50 p-6 rounded-lg">
+                    <pre className="whitespace-pre-wrap text-sm font-mono text-gray-800">
+                      {generateTextView(selectedApplication)}
+                    </pre>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
+                      <div className="space-y-2 text-sm">
+                        <p>
+                          <span className="font-medium">Name:</span> {selectedApplication.firstName}{" "}
+                          {selectedApplication.lastName}
+                        </p>
+                        <p>
+                          <span className="font-medium">Date of Birth:</span> {selectedApplication.dateOfBirth}
+                        </p>
+                        <p>
+                          <span className="font-medium">Gender:</span> {selectedApplication.gender}
+                        </p>
+                        <p>
+                          <span className="font-medium">Marital Status:</span>{" "}
+                          {selectedApplication.maritalStatus || "N/A"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Nationality:</span> {selectedApplication.nationality || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+                      <div className="space-y-2 text-sm">
+                        <p>
+                          <span className="font-medium">Email:</span> {selectedApplication.email}
+                        </p>
+                        <p>
+                          <span className="font-medium">Primary Phone:</span> {selectedApplication.primaryPhone}
+                        </p>
+                        <p>
+                          <span className="font-medium">Alternate Phone:</span>{" "}
+                          {selectedApplication.alternatePhone || "N/A"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Permanent Address:</span> {selectedApplication.permanentAddress}
+                        </p>
+                        <p>
+                          <span className="font-medium">District:</span> {selectedApplication.district || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Loan Details</h4>
+                      <div className="space-y-2 text-sm">
+                        <p>
+                          <span className="font-medium">Loan Type:</span> {selectedApplication.loanType}
+                        </p>
+                        <p>
+                          <span className="font-medium">Loan Amount:</span> NPR {selectedApplication.loanAmount}
+                        </p>
+                        <p>
+                          <span className="font-medium">Loan Purpose:</span> {selectedApplication.loanPurpose}
+                        </p>
+                        <p>
+                          <span className="font-medium">Loan Term:</span> {selectedApplication.loanTerm}
+                        </p>
+                        <p>
+                          <span className="font-medium">Preferred EMI:</span> NPR{" "}
+                          {selectedApplication.preferredEMI || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Employment Information</h4>
+                      <div className="space-y-2 text-sm">
+                        <p>
+                          <span className="font-medium">Occupation:</span> {selectedApplication.occupation}
+                        </p>
+                        <p>
+                          <span className="font-medium">Employer:</span> {selectedApplication.employerName || "N/A"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Monthly Income:</span> NPR {selectedApplication.monthlyIncome}
+                        </p>
+                        <p>
+                          <span className="font-medium">Total Income:</span> NPR{" "}
+                          {selectedApplication.totalIncome || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <h4 className="font-semibold text-gray-900 mb-3">Uploaded Documents</h4>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {[
+                          { key: "profilePhoto", label: "Profile Photo" },
+                          { key: "citizenshipFront", label: "Citizenship Front" },
+                          { key: "citizenshipBack", label: "Citizenship Back" },
+                          { key: "incomeProof", label: "Income Proof" },
+                        ].map((doc) => (
+                          <div key={doc.key} className="text-center">
+                            <div
+                              className={`w-full h-24 rounded-lg border-2 border-dashed flex items-center justify-center ${
+                                selectedApplication[doc.key as keyof LoanApplication]
+                                  ? "border-green-300 bg-green-50"
+                                  : "border-gray-300 bg-gray-50"
+                              }`}
+                            >
+                              {selectedApplication[doc.key as keyof LoanApplication] ? (
+                                <a
+                                  href={selectedApplication[doc.key as keyof LoanApplication] as string}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-green-600 hover:text-green-800"
+                                >
+                                  <CheckCircleIcon className="h-8 w-8" />
+                                </a>
+                              ) : (
+                                <XCircleIcon className="h-8 w-8 text-gray-400" />
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">{doc.label}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="mt-6 flex justify-end space-x-3">
                   {selectedApplication.status === "pending" && (
                     <>
                       <button
-                        onClick={() => handleStatusUpdate(selectedApplication.id, "under-review")}
+                        onClick={() => handleStatusUpdate(selectedApplication._id, "under-review")}
                         className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
                       >
                         Mark Under Review
                       </button>
                       <button
-                        onClick={() => handleStatusUpdate(selectedApplication.id, "approved")}
+                        onClick={() => handleStatusUpdate(selectedApplication._id, "approved")}
                         className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                       >
                         Approve
                       </button>
                       <button
-                        onClick={() => handleStatusUpdate(selectedApplication.id, "rejected")}
+                        onClick={() => handleStatusUpdate(selectedApplication._id, "rejected")}
                         className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                       >
                         Reject

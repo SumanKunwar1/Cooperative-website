@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { User, MapPin, Upload, CreditCard, Building2, CheckCircle, ArrowLeft, DollarSign } from "lucide-react"
 import Button from "../ui/Button"
 import Card from "../ui/Card"
+import { loanApplicationService, type LoanApplicationData } from "../../services/loanApplicationService"
 
 interface LoanApplicationFormProps {
   onBack: () => void
@@ -121,12 +122,26 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      // Prepare the data for submission
+      const applicationData: LoanApplicationData = {
+        ...formData,
+        profilePhoto: uploadedFiles.profilePhoto || undefined,
+        citizenshipFront: uploadedFiles.citizenshipFront || undefined,
+        citizenshipBack: uploadedFiles.citizenshipBack || undefined,
+        incomeProof: uploadedFiles.incomeProof || undefined,
+      }
 
-    alert("Loan application submitted successfully! We will contact you within 2-3 business days for verification.")
-    setIsSubmitting(false)
-    onBack()
+      const response = await loanApplicationService.submitApplication(applicationData)
+
+      alert("Loan application submitted successfully! We will contact you within 2-3 business days for verification.")
+      onBack()
+    } catch (error) {
+      console.error("Error submitting loan application:", error)
+      alert(`Error submitting application: ${error instanceof Error ? error.message : "Unknown error"}`)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const FileUploadField = ({

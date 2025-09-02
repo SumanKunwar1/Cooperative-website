@@ -116,7 +116,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/our-team" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
+                <Link to="/teams" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
                   Our Team
                 </Link>
               </li>
@@ -162,7 +162,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <EnvelopeIcon className="h-5 w-5 text-primary-400 flex-shrink-0" />
-                <p className="text-gray-400 text-sm">info@constellation.coop</p>
+                <p className="text-gray-400 text-sm">constellationscc@gmail.com</p>
               </div>
               <div className="flex items-start space-x-3">
                 <ClockIcon className="h-5 w-5 text-primary-400 mt-0.5 flex-shrink-0" />

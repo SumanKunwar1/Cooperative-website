@@ -1,7 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
-export interface LoanApplication {
-  _id: string
+export interface LoanApplicationData {
   // Personal Information
   firstName: string
   lastName: string
@@ -33,7 +32,17 @@ export interface LoanApplication {
   loanTerm: string
   preferredEMI?: string
 
-  // Uploaded Files
+  // File uploads
+  profilePhoto?: File
+  citizenshipFront?: File
+  citizenshipBack?: File
+  incomeProof?: File
+}
+
+export interface LoanApplication
+  extends Omit<LoanApplicationData, "profilePhoto" | "citizenshipFront" | "citizenshipBack" | "incomeProof"> {
+  _id: string
+  // Uploaded Files (as URLs)
   profilePhoto?: string
   citizenshipFront?: string
   citizenshipBack?: string
@@ -45,106 +54,83 @@ export interface LoanApplication {
   updatedAt: string
 }
 
-export class LoanApplicationService {
-  static async submitApplication(
-    formData: any,
-    files: any,
-  ): Promise<{ success: boolean; message: string; application?: LoanApplication }> {
-    try {
-      const submitData = new FormData()
+class LoanApplicationService {
+  private async makeRequest(url: string, options: RequestInit = {}) {
+    const token = localStorage.getItem("token")
 
-      // Add form data
-      Object.keys(formData).forEach((key) => {
-        if (formData[key]) {
-          submitData.append(key, formData[key])
-        }
-      })
+    const response = await fetch(`${API_URL}${url}`, {
+      ...options,
+      headers: {
+        ...options.headers,
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    })
 
-      // Add files
-      Object.keys(files).forEach((key) => {
-        if (files[key]) {
-          submitData.append(key, files[key])
-        }
-      })
-
-      const response = await fetch(`${API_BASE_URL}/loan-applications`, {
-        method: "POST",
-        body: submitData,
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to submit application")
-      }
-
-      return {
-        success: true,
-        message: result.message,
-        application: result.application,
-      }
-    } catch (error) {
-      console.error("Error submitting loan application:", error)
-      return {
-        success: false,
-        message: error instanceof Error ? error.message : "Failed to submit application",
-      }
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: "Network error" }))
+      throw new Error(error.message || "Request failed")
     }
+
+    return response.json()
   }
 
-  static async getAllApplications(): Promise<LoanApplication[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/loan-applications`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+  async submitApplication(data: LoanApplicationData): Promise<{ message: string; application: LoanApplication }> {
+    const formData = new FormData()
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch applications")
+    // Add all text fields to FormData
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && !(value instanceof File)) {
+        formData.append(key, String(value))
       }
+    })
 
-      return await response.json()
-    } catch (error) {
-      console.error("Error fetching loan applications:", error)
-      return []
-    }
+    // Add file fields to FormData
+    const fileFields = ["profilePhoto", "citizenshipFront", "citizenshipBack", "incomeProof"]
+
+    fileFields.forEach((field) => {
+      const file = data[field as keyof LoanApplicationData] as File
+      if (file instanceof File) {
+        formData.append(field, file)
+      }
+    })
+
+    return this.makeRequest("/api/loan-applications", {
+      method: "POST",
+      body: formData,
+    })
   }
 
-  static async getApplication(id: string): Promise<LoanApplication | null> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/loan-applications/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+  async getApplications(status?: string, search?: string): Promise<LoanApplication[]> {
+    const params = new URLSearchParams()
+    if (status && status !== "all") params.append("status", status)
+    if (search) params.append("search", search)
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch application")
-      }
-
-      return await response.json()
-    } catch (error) {
-      console.error("Error fetching loan application:", error)
-      return null
-    }
+    const queryString = params.toString()
+    return this.makeRequest(`/api/loan-applications${queryString ? `?${queryString}` : ""}`)
   }
 
-  static async updateApplicationStatus(id: string, status: LoanApplication["status"]): Promise<boolean> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/loan-applications/${id}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ status }),
-      })
+  async getApplication(id: string): Promise<LoanApplication> {
+    return this.makeRequest(`/api/loan-applications/${id}`)
+  }
 
-      return response.ok
-    } catch (error) {
-      console.error("Error updating loan application status:", error)
-      return false
-    }
+  async updateApplicationStatus(
+    id: string,
+    status: LoanApplication["status"],
+  ): Promise<{ message: string; application: LoanApplication }> {
+    return this.makeRequest(`/api/loan-applications/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    })
+  }
+
+  async deleteApplication(id: string): Promise<{ message: string }> {
+    return this.makeRequest(`/api/loan-applications/${id}`, {
+      method: "DELETE",
+    })
   }
 }
+
+export const loanApplicationService = new LoanApplicationService()
