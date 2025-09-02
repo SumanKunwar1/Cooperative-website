@@ -26,3 +26,16 @@ export const uploadToCloudinary = (file: Express.Multer.File): Promise<any> => {
     streamifier.createReadStream(file.buffer).pipe(uploadStream);
   });
 };
+
+// Add the missing deleteFromCloudinary function
+export const deleteFromCloudinary = (publicId: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (result) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};

@@ -1,5 +1,6 @@
 // Business type definition that matches the backend IBusiness interface
 export interface Business {
+  name?: string
   _id: string // Added _id property for MongoDB documents
   id?:string
   businessName: string

@@ -23,6 +23,7 @@ import Notice from "./pages/Notice"
 
 //footer
 import Team from "./pages/footer/Team"
+import Gallery from "./pages/footer/Gallery"
 
 import Header from "./components/layout/Header"
 import Footer from "./components/layout/Footer"
@@ -41,6 +42,7 @@ import AdminLoanApplications from "./pages/admin/AdminLoanApplication"
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute"
 import AdminOrders from "./pages/admin/AdminOrders"
 import AdminGallery from "./pages/admin/AdminGallery"
+import AdminHeroSection from "./pages/admin/AdminHero"
 
 import AccountOpeningForm from "./components/form/AccountOpeningForm"
 import LoanApplicationForm from "./components/form/LoanApplicationForm"
@@ -147,6 +149,14 @@ function App() {
                       element={
                         <ProtectedAdminRoute requiredPermission="orders">
                           <AdminOrders />
+                        </ProtectedAdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/hero-section"
+                      element={
+                        <ProtectedAdminRoute>
+                          <AdminHeroSection />
                         </ProtectedAdminRoute>
                       }
                     />
@@ -260,6 +270,8 @@ function App() {
                               <Route path="/dashboard/:name" element={<CustomerDashboard />} />
                               <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
                               <Route path="/teams" element={<Team />} />
+                              <Route path="/gallery" element={<Gallery />} />
+
 
                               {/* Placeholder routes - to be implemented */}
                               <Route

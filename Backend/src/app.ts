@@ -14,8 +14,10 @@ import uploadRoutes from "./routes/upload"
 import accountApplicationRoutes from './routes/accountApplication';
 import loanApplicationRoutes from './routes/loanApplication'
 import noticeRoutes from "./routes/notices"
-
-
+import galleryRoutes from "./routes/gallery";
+import shareholderRoutes from "./routes/shareholders";
+import teamRoutes from "./routes/teams";
+import heroRoutes from "./routes/hero";
 
 // Middleware
 import errorHandler from "./middleware/errorHandler"
@@ -56,6 +58,10 @@ app.use("/api/upload", uploadRoutes)
 app.use('/api/account-applications', accountApplicationRoutes); 
 app.use('/api/loan-applications', loanApplicationRoutes); 
 app.use('/api/notices', noticeRoutes)
+app.use("/api/gallery", galleryRoutes);
+app.use("/api/shareholders", shareholderRoutes);
+app.use("/api/team", teamRoutes);
+app.use("/api/hero", heroRoutes);
 
 
 // Health check

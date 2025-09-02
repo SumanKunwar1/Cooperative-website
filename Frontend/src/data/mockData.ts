@@ -27,9 +27,9 @@ export const leadershipMessages = [
   {
     id: 'general-manager',
     title: 'Word from General Manager',
-    name: 'Ms. Sunita Thapa',
+    name: 'Mr. Laxman Aryal',
     position: 'General Manager',
-    image: 'https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://res.cloudinary.com/dcsgax3ld/image/upload/v1756800727/constellation/businesses/smc4iicbmf5azmg7tl0q.jpg',
     message: 'At Constellation, we believe in the power of cooperative banking to transform lives and communities. Our comprehensive range of saving schemes and loan products are designed to meet the diverse needs of our members - from daily savers to business entrepreneurs. With modern banking facilities, transparent operations, and a commitment to financial inclusion, we continue to expand our services while maintaining the trust and confidence of our valued members.',
     signature: 'assets/gm-signature.png'
   }

@@ -1,106 +1,168 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { PlusIcon, VideoCameraIcon, TrashIcon, EyeIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { galleryAPI, type Event } from "../../lib/api"
+import { useToast } from "../../hooks/use-toast"
 import AdminDashboard from "./AdminDashboard"
 
-interface MediaItem {
-  id: string
-  type: "image" | "video"
-  url: string
-  name: string
-  size: string
-}
-
-interface Event {
-  id: string
-  name: string
-  description: string
-  date: string
-  media: MediaItem[]
-}
-
 const AdminGallery: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: "1",
-      name: "Annual Conference 2024",
-      description: "Our biggest event of the year with industry leaders",
-      date: "2024-03-15",
-      media: [
-        { id: "1", type: "image", url: "/conference-hall.png", name: "conference-1.jpg", size: "2.3 MB" },
-        { id: "2", type: "video", url: "/video-thumbnail.png", name: "keynote-speech.mp4", size: "45.2 MB" },
-      ],
-    },
-    {
-      id: "2",
-      name: "Product Launch Event",
-      description: "Launching our new product line with exclusive previews",
-      date: "2024-02-20",
-      media: [{ id: "3", type: "image", url: "/product-launch.png", name: "product-1.jpg", size: "1.8 MB" }],
-    },
-  ])
-
+  const [events, setEvents] = useState<Event[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [showEventModal, setShowEventModal] = useState(false)
-  const [showMediaModal, setShowMediaModal] = useState(false)
-  const [editingEvent, setEditingEvent] = useState<Event | null>(null)
   const [newEventData, setNewEventData] = useState({ name: "", description: "", date: "" })
+  const [uploadingMedia, setUploadingMedia] = useState<string | null>(null)
+  const { toast } = useToast()
 
-  const handleCreateEvent = () => {
-    if (newEventData.name && newEventData.description && newEventData.date) {
-      const newEvent: Event = {
-        id: Date.now().toString(),
-        name: newEventData.name,
-        description: newEventData.description,
-        date: newEventData.date,
-        media: [],
-      }
-      setEvents([...events, newEvent])
-      setNewEventData({ name: "", description: "", date: "" })
-      setShowEventModal(false)
+  useEffect(() => {
+    loadEvents()
+  }, [])
+
+  const loadEvents = async () => {
+    try {
+      setLoading(true)
+      const eventsData = await galleryAPI.getAllEvents()
+      setEvents(eventsData)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load events",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleDeleteEvent = (eventId: string) => {
-    setEvents(events.filter((event) => event.id !== eventId))
+  const handleCreateEvent = async () => {
+    if (newEventData.name && newEventData.description && newEventData.date) {
+      try {
+        const newEvent = await galleryAPI.createEvent(newEventData)
+        setEvents([newEvent, ...events])
+        setNewEventData({ name: "", description: "", date: "" })
+        setShowEventModal(false)
+        toast({
+          title: "Success",
+          description: "Event created successfully",
+        })
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to create event",
+          variant: "destructive",
+        })
+      }
+    }
   }
 
-  const handleFileUpload = (eventId: string, files: FileList | null) => {
+  const handleDeleteEvent = async (eventId: string) => {
+    try {
+      await galleryAPI.deleteEvent(eventId)
+      setEvents(events.filter((event) => event._id !== eventId))
+      toast({
+        title: "Success",
+        description: "Event deleted successfully",
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete event",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleFileUpload = async (eventId: string, files: FileList | null) => {
     if (!files) return
 
-    Array.from(files).forEach((file) => {
-      const mediaItem: MediaItem = {
-        id: Date.now().toString() + Math.random(),
-        type: file.type.startsWith("video/") ? "video" : "image",
-        url: URL.createObjectURL(file),
-        name: file.name,
-        size: (file.size / (1024 * 1024)).toFixed(1) + " MB",
-      }
+    setUploadingMedia(eventId)
 
+    try {
+      const uploadPromises = Array.from(files).map((file) => galleryAPI.uploadMedia(eventId, file))
+
+      const uploadedMedia = await Promise.all(uploadPromises)
+
+      // Update the event with new media
       setEvents(
-        events.map((event) => (event.id === eventId ? { ...event, media: [...event.media, mediaItem] } : event)),
+        events.map((event) =>
+          event._id === eventId ? { ...event, media: [...event.media, ...uploadedMedia] } : event,
+        ),
       )
-    })
+
+      toast({
+        title: "Success",
+        description: `${uploadedMedia.length} file(s) uploaded successfully`,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to upload media",
+        variant: "destructive",
+      })
+    } finally {
+      setUploadingMedia(null)
+    }
   }
 
-  const handleDeleteMedia = (eventId: string, mediaId: string) => {
-    setEvents(
-      events.map((event) =>
-        event.id === eventId ? { ...event, media: event.media.filter((media) => media.id !== mediaId) } : event,
-      ),
+  const handleDeleteMedia = async (eventId: string, mediaId: string) => {
+    try {
+      await galleryAPI.deleteMedia(eventId, mediaId)
+      setEvents(
+        events.map((event) =>
+          event._id === eventId ? { ...event, media: event.media.filter((media) => media._id !== mediaId) } : event,
+        ),
+      )
+      toast({
+        title: "Success",
+        description: "Media deleted successfully",
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete media",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleTogglePublished = async (eventId: string, isPublished: boolean) => {
+    try {
+      const updatedEvent = await galleryAPI.updateEvent(eventId, { isPublished })
+      setEvents(events.map((event) => (event._id === eventId ? updatedEvent : event)))
+      toast({
+        title: "Success",
+        description: `Event ${isPublished ? "published" : "unpublished"} successfully`,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update event",
+        variant: "destructive",
+      })
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading events...</p>
+        </div>
+      </div>
     )
   }
 
   return (
     <AdminDashboard currentSection="gallery">
-      <div className="space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Event Gallery</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Event Gallery Admin</h1>
             <p className="text-gray-600 mt-1">Manage events and their media content</p>
           </div>
           <motion.button
@@ -118,7 +180,7 @@ const AdminGallery: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {events.map((event) => (
             <motion.div
-              key={event.id}
+              key={event._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
@@ -127,11 +189,28 @@ const AdminGallery: React.FC = () => {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{event.name}</h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900">{event.name}</h3>
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          event.isPublished ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {event.isPublished ? "Published" : "Draft"}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600 mb-3">{event.description}</p>
                     <p className="text-xs text-gray-500">Date: {new Date(event.date).toLocaleDateString()}</p>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => handleTogglePublished(event._id, !event.isPublished)}
+                      className={`p-2 rounded-full ${
+                        event.isPublished ? "text-green-600 hover:bg-green-50" : "text-gray-400 hover:bg-gray-50"
+                      }`}
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                    </button>
                     <button
                       onClick={() => setSelectedEvent(event)}
                       className="p-2 text-gray-400 hover:text-purple-600 rounded-full hover:bg-purple-50"
@@ -139,7 +218,7 @@ const AdminGallery: React.FC = () => {
                       <EyeIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => handleDeleteEvent(event.id)}
+                      onClick={() => handleDeleteEvent(event._id)}
                       className="p-2 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50"
                     >
                       <TrashIcon className="h-4 w-4" />
@@ -158,11 +237,18 @@ const AdminGallery: React.FC = () => {
                       multiple
                       accept="image/*,video/*"
                       className="hidden"
-                      onChange={(e) => handleFileUpload(event.id, e.target.files)}
+                      onChange={(e) => handleFileUpload(event._id, e.target.files)}
+                      disabled={uploadingMedia === event._id}
                     />
-                    <div className="flex items-center px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-colors">
+                    <div
+                      className={`flex items-center px-3 py-1 text-xs rounded-full transition-colors ${
+                        uploadingMedia === event._id
+                          ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+                          : "bg-purple-100 text-purple-700 hover:bg-purple-200"
+                      }`}
+                    >
                       <PlusIcon className="h-3 w-3 mr-1" />
-                      Upload
+                      {uploadingMedia === event._id ? "Uploading..." : "Upload"}
                     </div>
                   </label>
                 </div>
@@ -170,7 +256,7 @@ const AdminGallery: React.FC = () => {
                 {/* Media Grid */}
                 <div className="grid grid-cols-3 gap-2">
                   {event.media.slice(0, 6).map((media) => (
-                    <div key={media.id} className="relative group">
+                    <div key={media._id} className="relative group">
                       <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                         <img
                           src={media.url || "/placeholder.svg"}
@@ -184,7 +270,7 @@ const AdminGallery: React.FC = () => {
                         )}
                       </div>
                       <button
-                        onClick={() => handleDeleteMedia(event.id, media.id)}
+                        onClick={() => handleDeleteMedia(event._id, media._id!)}
                         className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <XMarkIcon className="h-3 w-3" />
@@ -283,7 +369,7 @@ const AdminGallery: React.FC = () => {
               <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {selectedEvent.media.map((media) => (
-                    <div key={media.id} className="relative group">
+                    <div key={media._id} className="relative group">
                       <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                         <img
                           src={media.url || "/placeholder.svg"}

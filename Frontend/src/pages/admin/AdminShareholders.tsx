@@ -1,14 +1,15 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Plus, Edit, Trash2, Search, Filter, Mail, Phone, User, Upload, Eye } from "lucide-react"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
+import { shareholdersAPI, type ShareholderStats } from "../../lib/shareholdersApi"
 
-interface Shareholder {
-  id: number
+interface ShareholderUI {
+  _id: string
   name: string
   picture: string
   position: string
@@ -20,81 +21,125 @@ interface Shareholder {
 const AdminShareholders: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [showAddModal, setShowAddModal] = useState(false)
-  const [editingShareholder, setEditingShareholder] = useState<Shareholder | null>(null)
-  const [viewingShareholder, setViewingShareholder] = useState<Shareholder | null>(null)
+  const [editingShareholder, setEditingShareholder] = useState<ShareholderUI | null>(null)
+  const [viewingShareholder, setViewingShareholder] = useState<ShareholderUI | null>(null)
 
-  const [shareholders, setShareholders] = useState<Shareholder[]>([
-    {
-      id: 1,
-      name: "Ram Bahadur Shrestha",
-      picture: "/placeholder.svg?height=200&width=200",
-      position: "Chairman",
-      companyName: "Constellation Saving & Credit Cooperative Ltd.",
-      email: "ram.shrestha@constellation.com",
-      phoneNumber: "+977-01-4254939",
-    },
-    {
-      id: 2,
-      name: "Sita Devi Maharjan",
-      picture: "/placeholder.svg?height=200&width=200",
-      position: "Vice Chairman",
-      companyName: "Constellation Saving & Credit Cooperative Ltd.",
-      email: "sita.maharjan@constellation.com",
-      phoneNumber: "+977-01-4254940",
-    },
-    {
-      id: 3,
-      name: "Krishna Kumar Tamang",
-      picture: "/placeholder.svg?height=200&width=200",
-      position: "Secretary",
-      companyName: "Constellation Saving & Credit Cooperative Ltd.",
-      email: "krishna.tamang@constellation.com",
-      phoneNumber: "+977-01-4254941",
-    },
-    {
-      id: 4,
-      name: "Maya Gurung",
-      picture: "/placeholder.svg?height=200&width=200",
-      position: "Treasurer",
-      companyName: "Constellation Saving & Credit Cooperative Ltd.",
-      email: "maya.gurung@constellation.com",
-      phoneNumber: "+977-01-4254942",
-    },
-  ])
+  const [shareholders, setShareholders] = useState<ShareholderUI[]>([])
+  const [statistics, setStatistics] = useState<ShareholderStats>({
+    totalShareholders: 0,
+    boardMembers: 0,
+    withEmail: 0,
+    withPhone: 0,
+  })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const filteredShareholders = shareholders.filter(
-    (shareholder) =>
-      shareholder.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      shareholder.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      shareholder.email.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
-
-  const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this shareholder?")) {
-      setShareholders((prev) => prev.filter((shareholder) => shareholder.id !== id))
+  const fetchShareholders = async (search?: string) => {
+    try {
+      setLoading(true)
+      const data = await shareholdersAPI.getAllShareholders(search)
+      setShareholders(data.map((s) => ({ ...s, _id: s._id })))
+      setError(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch shareholders")
+      console.error("Error fetching shareholders:", err)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleEdit = (shareholder: Shareholder) => {
+  const fetchStatistics = async () => {
+    try {
+      const stats = await shareholdersAPI.getStatistics()
+      setStatistics(stats)
+    } catch (err) {
+      console.error("Error fetching statistics:", err)
+    }
+  }
+
+  useEffect(() => {
+    fetchShareholders()
+    fetchStatistics()
+  }, [])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm !== "") {
+        fetchShareholders(searchTerm)
+      } else {
+        fetchShareholders()
+      }
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [searchTerm])
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this shareholder?")) {
+      try {
+        await shareholdersAPI.deleteShareholder(id)
+        await fetchShareholders()
+        await fetchStatistics()
+        alert("Shareholder deleted successfully!")
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to delete shareholder")
+      }
+    }
+  }
+
+  const handleEdit = (shareholder: ShareholderUI) => {
     setEditingShareholder(shareholder)
     setShowAddModal(true)
   }
 
-  const handleSave = (formData: Omit<Shareholder, "id">) => {
-    if (editingShareholder) {
-      // Update existing shareholder
-      setShareholders((prev) =>
-        prev.map((shareholder) =>
-          shareholder.id === editingShareholder.id ? { ...formData, id: editingShareholder.id } : shareholder,
-        ),
-      )
-    } else {
-      // Add new shareholder
-      const newId = Math.max(...shareholders.map((s) => s.id), 0) + 1
-      setShareholders((prev) => [...prev, { ...formData, id: newId }])
+  const handleSave = async (formData: Omit<ShareholderUI, "_id">, pictureFile?: File) => {
+    try {
+      if (editingShareholder) {
+        // Update existing shareholder
+        await shareholdersAPI.updateShareholder({
+          ...formData,
+          _id: editingShareholder._id,
+          picture: pictureFile,
+        })
+        alert("Shareholder updated successfully!")
+      } else {
+        // Add new shareholder
+        await shareholdersAPI.createShareholder({
+          ...formData,
+          picture: pictureFile,
+        })
+        alert("Shareholder created successfully!")
+      }
+
+      await fetchShareholders()
+      await fetchStatistics()
+      setShowAddModal(false)
+      setEditingShareholder(null)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to save shareholder")
     }
-    setShowAddModal(false)
-    setEditingShareholder(null)
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading shareholders...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error: {error}</p>
+          <Button onClick={() => fetchShareholders()}>Retry</Button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -126,7 +171,7 @@ const AdminShareholders: React.FC = () => {
         </Button>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Statistics Cards - Updated to use API statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card className="p-6">
           <div className="flex items-center">
@@ -135,7 +180,7 @@ const AdminShareholders: React.FC = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Shareholders</p>
-              <p className="text-2xl font-bold text-gray-900">{shareholders.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics.totalShareholders}</p>
             </div>
           </div>
         </Card>
@@ -146,9 +191,7 @@ const AdminShareholders: React.FC = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Board Members</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {shareholders.filter((s) => s.position !== "Board Member").length}
-              </p>
+              <p className="text-2xl font-bold text-gray-900">{statistics.boardMembers}</p>
             </div>
           </div>
         </Card>
@@ -159,7 +202,7 @@ const AdminShareholders: React.FC = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">With Email</p>
-              <p className="text-2xl font-bold text-gray-900">{shareholders.filter((s) => s.email).length}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics.withEmail}</p>
             </div>
           </div>
         </Card>
@@ -170,7 +213,7 @@ const AdminShareholders: React.FC = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">With Phone</p>
-              <p className="text-2xl font-bold text-gray-900">{shareholders.filter((s) => s.phoneNumber).length}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics.withPhone}</p>
             </div>
           </div>
         </Card>
@@ -178,9 +221,9 @@ const AdminShareholders: React.FC = () => {
 
       {/* Shareholders Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredShareholders.map((shareholder) => (
+        {shareholders.map((shareholder) => (
           <motion.div
-            key={shareholder.id}
+            key={shareholder._id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -5 }}
@@ -196,11 +239,13 @@ const AdminShareholders: React.FC = () => {
                 />
                 <div className="absolute top-2 right-2 flex space-x-1">
                   <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setViewingShareholder(shareholder)}
-                                icon={Eye}
-                                className="bg-white/90 hover:bg-white" children={undefined}                  />
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setViewingShareholder(shareholder)}
+                    icon={Eye}
+                    className="bg-white/90 hover:bg-white"
+                    children={undefined}
+                  />
                 </div>
               </div>
 
@@ -222,7 +267,7 @@ const AdminShareholders: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons - Updated to use _id */}
                 <div className="flex space-x-2">
                   <Button
                     size="sm"
@@ -236,7 +281,7 @@ const AdminShareholders: React.FC = () => {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleDelete(shareholder.id)}
+                    onClick={() => handleDelete(shareholder._id)}
                     icon={Trash2}
                     className="text-red-600 hover:text-red-700 hover:border-red-300"
                   >
@@ -302,10 +347,9 @@ const AdminShareholders: React.FC = () => {
   )
 }
 
-// Shareholder Form Component
 const ShareholderForm: React.FC<{
-  initialData?: Shareholder | null
-  onSave: (data: Omit<Shareholder, "id">) => void
+  initialData?: ShareholderUI | null
+  onSave: (data: Omit<ShareholderUI, "_id">, pictureFile?: File) => void
   onCancel: () => void
 }> = ({ initialData, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -317,14 +361,17 @@ const ShareholderForm: React.FC<{
     phoneNumber: initialData?.phoneNumber || "",
   })
 
+  const [pictureFile, setPictureFile] = useState<File | undefined>()
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSave(formData)
+    onSave(formData, pictureFile)
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setPictureFile(file)
       const reader = new FileReader()
       reader.onload = (e) => {
         setFormData({ ...formData, picture: e.target?.result as string })
