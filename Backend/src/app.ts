@@ -13,6 +13,8 @@ import businessDetailsRoutes from "./routes/businessDetails"
 import uploadRoutes from "./routes/upload"
 import accountApplicationRoutes from './routes/accountApplication';
 import loanApplicationRoutes from './routes/loanApplication'
+import noticeRoutes from "./routes/notices"
+
 
 
 // Middleware
@@ -53,7 +55,7 @@ app.use("/api/business-details", businessDetailsRoutes)
 app.use("/api/upload", uploadRoutes)
 app.use('/api/account-applications', accountApplicationRoutes); 
 app.use('/api/loan-applications', loanApplicationRoutes); 
-
+app.use('/api/notices', noticeRoutes)
 
 
 // Health check
