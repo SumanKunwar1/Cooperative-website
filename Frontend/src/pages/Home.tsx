@@ -100,6 +100,36 @@ const Home: React.FC = () => {
     fetchBusinesses()
   }, [])
 
+  const handleNoticeClick = (notice: any) => {
+    if (notice.documentUrl) {
+      window.open(notice.documentUrl, "_blank")
+    }
+  }
+
+  const createBusinessSlug = (name: string): string => {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+      .trim()
+  }
+
+  const getDocumentIcon = (type?: string) => {
+    switch (type) {
+      case "pdf":
+        return "📄"
+      case "doc":
+      case "docx":
+        return "📝"
+      case "jpg":
+      case "png":
+        return "🖼️"
+      default:
+        return "📎"
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <SEO />
@@ -224,30 +254,40 @@ const Home: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
                 >
-                  <Card className="h-full shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-card">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center">
-                        <Bell className="w-5 h-5 text-primary mr-2" />
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            notice.type === "announcement"
-                              ? "bg-primary-100 text-primary-800"
-                              : notice.type === "circular"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                          }`}
-                        >
-                          {notice.type || "notice"}
-                        </span>
+                  <div className="cursor-pointer" onClick={() => handleNoticeClick(notice)}>
+                    <Card className="h-full shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-card">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center">
+                          <Bell className="w-5 h-5 text-primary mr-2" />
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              notice.type === "announcement"
+                                ? "bg-primary-100 text-primary-800"
+                                : notice.type === "circular"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {notice.type || "notice"}
+                          </span>
+                        </div>
+                        {notice.important && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
                       </div>
-                      {notice.important && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 line-clamp-2">{notice.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{notice.content}</p>
-                    <p className="text-xs text-gray-500">
-                      {notice.createdAt ? new Date(notice.createdAt).toLocaleDateString() : notice.date}
-                    </p>
-                  </Card>
+                      <h3 className="text-lg font-semibold mb-3 line-clamp-2">{notice.title}</h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{notice.content}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-gray-500">
+                          {notice.createdAt ? new Date(notice.createdAt).toLocaleDateString() : notice.date}
+                        </p>
+                        {notice.documentUrl && (
+                          <div className="flex items-center gap-1 text-blue-600 hover:text-blue-800">
+                            <span className="text-lg">{getDocumentIcon(notice.documentType)}</span>
+                            <span className="text-xs font-medium">View Document</span>
+                          </div>
+                        )}
+                      </div>
+                    </Card>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -301,56 +341,65 @@ const Home: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
                 >
-                  <Card className="h-full shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-card">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm font-medium">
-                        {business.category}
-                      </span>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="ml-1 text-sm font-medium">{business.rating}</span>
-                        <span className="ml-1 text-xs text-gray-500">({business.reviews})</span>
+                  <Link
+                    to={`/business-directory/${createBusinessSlug(business.name)}`}
+                    state={{ business }}
+                    className="block"
+                  >
+                    <Card className="h-full shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-card cursor-pointer">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm font-medium">
+                          {business.category}
+                        </span>
+                        <div className="flex items-center">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="ml-1 text-sm font-medium">{business.rating}</span>
+                          <span className="ml-1 text-xs text-gray-500">({business.reviews})</span>
+                        </div>
                       </div>
-                    </div>
-                    {business.isVerified && (
-                      <div className="mb-2">
-                        <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                          ✓ Verified
-                        </span>
-                      </div>
-                    )}
-                    <h3 className="text-xl font-semibold mb-3">{business.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{business.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {business.services.slice(0, 3).map((service, serviceIndex) => (
-                        <span key={serviceIndex} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
-                          {service}
-                        </span>
-                      ))}
-                      {business.services.length > 3 && (
-                        <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs">
-                          +{business.services.length - 3} more
-                        </span>
+                      {business.isVerified && (
+                        <div className="mb-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                            ✓ Verified
+                          </span>
+                        </div>
                       )}
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      {business.location}
-                    </div>
-                  </Card>
+                      <h3 className="text-xl font-semibold mb-3">{business.name}</h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{business.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {business.services.slice(0, 3).map((service, serviceIndex) => (
+                          <span key={serviceIndex} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                            {service}
+                          </span>
+                        ))}
+                        {business.services.length > 3 && (
+                          <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs">
+                            +{business.services.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          {business.location}
+                        </div>
+                        <span className="text-xs text-blue-600 font-medium">View Details →</span>
+                      </div>
+                    </Card>
+                  </Link>
                 </motion.div>
               ))}
             </div>
