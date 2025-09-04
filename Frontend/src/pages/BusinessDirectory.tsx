@@ -4,26 +4,10 @@ import type React from "react"
 import { useState, useMemo, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
+import type { Business } from "../types/adminBusiness"
 
-interface Business {
-  _id: string
-  name: string
-  category: string
-  subcategory: string
-  description: string
-  image: string
-  rating: number
-  reviews: number
-  location: string
-  phone: string
-  email: string
-  website?: string
-  services: string[]
-  isVerified: boolean
-  owner: string
-  address: string
-  status: string
-  createdAt: string
+interface BusinessDirectoryProps {
+  businesses?: Business[]
 }
 
 const categories = [
@@ -47,13 +31,13 @@ const createBusinessSlug = (name: string): string => {
     .trim()
 }
 
-const BusinessDirectory: React.FC = () => {
+const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initialBusinesses }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All Categories")
   const [sortBy, setSortBy] = useState("name")
   const [currentPage, setCurrentPage] = useState(1)
-  const [businesses, setBusinesses] = useState<Business[]>([])
-  const [loading, setLoading] = useState(true)
+  const [businesses, setBusinesses] = useState<Business[]>(initialBusinesses || [])
+  const [loading, setLoading] = useState(!initialBusinesses)
   const [error, setError] = useState<string | null>(null)
   const businessesPerPage = 15
 
@@ -62,7 +46,7 @@ const BusinessDirectory: React.FC = () => {
     const fetchBusinesses = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/businesses/directory`)
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/business-details/directory`)
 
         if (!response.ok) {
           throw new Error("Failed to fetch businesses")
@@ -70,7 +54,10 @@ const BusinessDirectory: React.FC = () => {
 
         const data = await response.json()
         if (data.success) {
-          setBusinesses(data.data)
+          console.log("[v0] Businesses data received:", data.data)
+          const activeBusinesses = data.data.filter((business: Business) => business.status === "active")
+          console.log("[v0] Active businesses filtered:", activeBusinesses)
+          setBusinesses(activeBusinesses)
         } else {
           throw new Error(data.message || "Failed to fetch businesses")
         }
@@ -82,8 +69,10 @@ const BusinessDirectory: React.FC = () => {
       }
     }
 
-    fetchBusinesses()
-  }, [])
+    if (!initialBusinesses) {
+      fetchBusinesses()
+    }
+  }, [initialBusinesses])
 
   const filteredBusinesses = useMemo(() => {
     const filtered = businesses.filter((business) => {

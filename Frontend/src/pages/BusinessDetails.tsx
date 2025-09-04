@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
-import type { Business } from "../types/business"
+import type { Business } from "../types/adminBusiness"
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
@@ -35,13 +35,10 @@ const BusinessDetails: React.FC = () => {
           throw new Error("Business name not provided")
         }
 
-        // FIXED: Use the correct API endpoint
-        const response = await fetch(`${API_BASE_URL}/api/business-details/${businessName}`)
+        // Fetch the specific business by name/slug
+        const response = await fetch(`${API_BASE_URL}/api/business-details/directory/${encodeURIComponent(businessName)}`)
 
         if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error("Business not found")
-          }
           throw new Error(`Failed to fetch business: ${response.status}`)
         }
 
@@ -50,6 +47,10 @@ const BusinessDetails: React.FC = () => {
         if (!result.success || !result.data) {
           throw new Error("Invalid response format")
         }
+
+        console.log("[v1] Business data received:", result.data)
+        console.log("[v1] Phone:", result.data.phone)
+        console.log("[v1] Email:", result.data.email)
 
         setBusiness(result.data)
         setError(null)
@@ -64,6 +65,27 @@ const BusinessDetails: React.FC = () => {
 
     fetchBusiness()
   }, [businessName])
+
+  const createBusinessSlug = (name: string): string => {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim()
+  }
+
+  // Helper function to safely display phone
+  const displayPhone = (phone: any) => {
+    if (phone === null || phone === undefined || phone === "") return "Phone not available"
+    return String(phone)
+  }
+
+  // Helper function to safely display email
+  const displayEmail = (email: any) => {
+    if (email === null || email === undefined || email === "") return "Email not available"
+    return String(email)
+  }
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -237,20 +259,7 @@ const BusinessDetails: React.FC = () => {
                     </svg>
                     Book Service
                   </button>
-                  <a
-                    href={`tel:${business.phone}`}
-                    className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                      />
-                    </svg>
-                    Call Now
-                  </a>
+                  
                 </div>
               </div>
             </div>
@@ -318,7 +327,7 @@ const BusinessDetails: React.FC = () => {
                           d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                         />
                       </svg>
-                      <span className="text-gray-700">{business.phone}</span>
+                      <span className="text-gray-700">{displayPhone(business.phone)}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -329,7 +338,7 @@ const BusinessDetails: React.FC = () => {
                           d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                         />
                       </svg>
-                      <span className="text-gray-700">{business.email}</span>
+                      <span className="text-gray-700">{displayEmail(business.email)}</span>
                     </div>
                     {business.website && (
                       <div className="flex items-center gap-3">
@@ -370,6 +379,20 @@ const BusinessDetails: React.FC = () => {
                       {business.services.map((service, index) => (
                         <div key={index} className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
                           <h4 className="font-medium text-gray-900 mb-2">{service}</h4>
+                          {business.pricing &&
+                            typeof business.pricing === "object" &&
+                            !Array.isArray(business.pricing) && (
+                              <div className="mb-3">
+                                {Object.entries(business.pricing).map(([tier, price]) => (
+                                  <div key={tier} className="text-sm text-gray-600">
+                                    <span className="font-medium capitalize">{tier}:</span>{" "}
+                                    {typeof price === "string" || typeof price === "number"
+                                      ? String(price)
+                                      : "Contact for pricing"}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           <button
                             onClick={() => setShowBookingModal(true)}
                             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
@@ -399,7 +422,7 @@ const BusinessDetails: React.FC = () => {
                                 <h4 className="text-xl font-bold text-gray-900 mb-2 capitalize">{tier} Plan</h4>
                                 <div className="text-3xl font-bold text-blue-600 mb-4">
                                   {typeof price === "string" || typeof price === "number"
-                                    ? price
+                                    ? `$${String(price)}`
                                     : "Contact for pricing"}
                                 </div>
                                 <button
@@ -411,6 +434,23 @@ const BusinessDetails: React.FC = () => {
                               </div>
                             </div>
                           ))
+                        }
+                        // Handle pricing as string or number
+                        if (typeof business.pricing === "string" || typeof business.pricing === "number") {
+                          return (
+                            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+                              <div className="text-center">
+                                <h4 className="text-xl font-bold text-gray-900 mb-2">Standard Pricing</h4>
+                                <div className="text-3xl font-bold text-blue-600 mb-4">${String(business.pricing)}</div>
+                                <button
+                                  onClick={() => setShowBookingModal(true)}
+                                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                                >
+                                  Book Now
+                                </button>
+                              </div>
+                            </div>
+                          )
                         }
                         return null
                       })()}
@@ -477,36 +517,14 @@ const BusinessDetails: React.FC = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Address</h3>
-                      <p className="text-gray-600">{business.address || business.location}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                       />
                     </svg>
                     <div>
                       <h3 className="font-semibold text-gray-900">Phone</h3>
-                      <p className="text-gray-600">{business.phone}</p>
+                      <p className="text-gray-600">{displayPhone(business.phone)}</p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-4">
                     <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -518,7 +536,27 @@ const BusinessDetails: React.FC = () => {
                     </svg>
                     <div>
                       <h3 className="font-semibold text-gray-900">Email</h3>
-                      <p className="text-gray-600">{business.email}</p>
+                      <p className="text-gray-600">{displayEmail(business.email)}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Address</h3>
+                      <p className="text-gray-600">{business.address || business.location || "Address not available"}</p>
                     </div>
                   </div>
                 </div>
