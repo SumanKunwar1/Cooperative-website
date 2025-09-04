@@ -35,7 +35,8 @@ const BusinessDetails: React.FC = () => {
           throw new Error("Business name not provided")
         }
 
-        const response = await fetch(`${API_BASE_URL}/business-details/${businessName}`)
+        // FIXED: Use the correct API endpoint
+        const response = await fetch(`${API_BASE_URL}/api/business-details/${businessName}`)
 
         if (!response.ok) {
           if (response.status === 404) {
