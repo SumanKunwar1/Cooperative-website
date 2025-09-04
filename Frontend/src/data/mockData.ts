@@ -6,7 +6,7 @@ export const companyInfo = {
   name: 'Constellation Saving & Credit Co-operative Ltd.',
   registrationNo: '3436/064/65',
   panNo: '308300368',
-  established: '2064 B.S. (2007 A.D.)',
+  established: '2064 B.S. (2010 A.D.)',
   address: 'CTC Mall, Sundhara, Kathmandu, Nepal',
   phone: '01-4244953',
   email: 'constellationscc@gmail.com',
@@ -21,7 +21,7 @@ export const leadershipMessages = [
     name: 'Mr. Prakash Shrestha',
     position: 'President',
     image: 'https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952001/WhatsApp_Image_2025-09-03_at_21.48.44_8f3241f6_lqh4gn.jpg',
-    message: 'Constellation Saving & Credit Co-operative Ltd. stands as a beacon of financial empowerment in our community. Since our establishment in 2007, we have been committed to uplifting the financial, social, cultural, and educational standards of our members through cooperative principles. Our vision of "Today\'s Saving for Tomorrow\'s Bright Future" drives us to provide innovative financial solutions that promote mutual cooperation, self-reliance, and collective prosperity.',
+    message: 'Constellation Saving & Credit Co-operative Ltd. stands as a beacon of financial empowerment in our community. Since our establishment in 2010, we have been committed to uplifting the financial, social, cultural, and educational standards of our members through cooperative principles. Our vision of "Today\'s Saving for Tomorrow\'s Bright Future" drives us to provide innovative financial solutions that promote mutual cooperation, self-reliance, and collective prosperity.',
     signature: 'assets/president-signature.png'
   },
   {

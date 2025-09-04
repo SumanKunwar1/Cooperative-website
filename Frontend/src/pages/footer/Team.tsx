@@ -117,6 +117,88 @@ const Team: React.FC = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Audit Committee Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 mt-20"
+        >
+          <h2 className="text-4xl font-bold text-foreground mb-6 text-balance">Audit Committee</h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756973395/WhatsApp_Image_2025-09-04_at_09.20.50_a984039a_nws1od.jpg"
+                  alt="Purushottam Parajuli"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Purushottam Parajuli</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Convener</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Oversees audit activities, ensures financial transparency, and supports the cooperative's accountability.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Credit Sub-Committee Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 mt-20"
+        >
+          <h2 className="text-4xl font-bold text-foreground mb-6 text-balance">Credit Sub-Committee</h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756973384/WhatsApp_Image_2025-08-29_at_19.46.26_abb82577_c9mjtn.jpg"
+                  alt="Krishna Bahadur Tamang"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Krishna Bahadur Tamang</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Member</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Assists in loan evaluation, promotes fair lending, and supports members' financial needs.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
