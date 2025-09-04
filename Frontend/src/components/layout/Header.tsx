@@ -298,21 +298,6 @@ const Header: React.FC = () => {
             </div>
 
             <Link
-              to="/shareholders"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              <UsersIcon className="h-3 w-3 mr-1" />
-              Member Details
-            </Link>
-
-            <Link
-              to="/membership"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              <UsersIcon className="h-3 w-3 mr-1" />
-              Membership
-            </Link>
-            <Link
               to="/business-directory"
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
             >
@@ -327,7 +312,16 @@ const Header: React.FC = () => {
               <BellIcon className="h-3 w-3 mr-1" />
               Notices
             </Link>
+            <Link
+              to="/teams"
+              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
+            >
+              <UsersIcon className="h-3 w-3 mr-1" />
+              Our Team
+            </Link>
           </nav>
+
+          
 
           <div className="hidden xl:flex items-center space-x-3 flex-shrink-0">
             <Link
@@ -468,20 +462,6 @@ const Header: React.FC = () => {
                   </AnimatePresence>
                 </div>
 
-                <Link
-                  to="/shareholders"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  Shareholders
-                </Link>
-                <Link
-                  to="/membership"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  Membership
-                </Link>
                 <Link
                   to="/business-directories"
                   onClick={closeMobileMenu}

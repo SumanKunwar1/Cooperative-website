@@ -141,8 +141,14 @@ const Home: React.FC = () => {
       <QuickActionsSection />
 
       {/* Leadership Messages */}
+      {/* Leadership Messages */}
       <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Leadership Messages</h2>
+            <p className="text-muted-foreground text-lg">Inspiring words from our esteemed leaders</p>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {leadershipMessages.map((leader, index) => (
               <motion.div
@@ -153,24 +159,40 @@ const Home: React.FC = () => {
                 transition={{ delay: index * 0.2 }}
                 whileHover={{ scale: 1.02, y: -5 }}
               >
-                <Card className="h-full shadow-xl border-0 bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="w-16 h-16 rounded-full overflow-hidden mr-4 ring-4 ring-primary/20">
+                <Card className="h-full shadow-xl border-0 bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                  {/* Header with centered image */}
+                  <div className="flex flex-col items-center text-center mb-6 pb-6 border-b border-border">
+                    <div className="w-24 h-24 rounded-full overflow-hidden mb-4 ring-4 ring-primary/20 shadow-lg">
                       <img
                         src={leader.image || "/placeholder.svg"}
                         alt={leader.name}
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-foreground">{leader.title}</h3>
-                      <p className="text-primary font-medium">{leader.name}</p>
-                      <p className="text-muted-foreground text-sm">{leader.position}</p>
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-bold text-foreground">{leader.name}</h3>
+                      <p className="text-primary font-semibold text-lg">{leader.position}</p>
+                      <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+                        {leader.title}
+                      </div>
                     </div>
                   </div>
-                  <blockquote className="text-card-foreground leading-relaxed italic">"{leader.message}"</blockquote>
-                  <div className="mt-6 pt-4 border-t border-border">
-                    <p className="text-right text-primary font-semibold">- {leader.name}</p>
+                  
+                  {/* Message content */}
+                  <div className="px-2">
+                    <blockquote className="text-card-foreground leading-relaxed text-base italic relative">
+                      <div className="absolute -top-2 -left-2 text-4xl text-primary/20 font-serif">"</div>
+                      <div className="relative z-10 pl-6">{leader.message}</div>
+                      <div className="absolute -bottom-4 -right-2 text-4xl text-primary/20 font-serif transform rotate-180">"</div>
+                    </blockquote>
+                    
+                    <div className="mt-8 pt-4 border-t border-border">
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-8 h-0.5 bg-primary"></div>
+                        <p className="text-primary font-bold text-sm tracking-wider">{leader.name}</p>
+                        <div className="w-8 h-0.5 bg-primary"></div>
+                      </div>
+                    </div>
                   </div>
                 </Card>
               </motion.div>
@@ -178,7 +200,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-
       {/* Features Section */}
       <FeaturesSection />
 

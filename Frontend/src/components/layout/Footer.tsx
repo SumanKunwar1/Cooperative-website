@@ -99,7 +99,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/notices" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
+                <Link to="/notice" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
                   Notices
                 </Link>
               </li>
@@ -176,31 +176,16 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <motion.div
-          variants={itemVariants}
-          className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
-        >
-          <p className="text-gray-400 text-sm">
-            © 2024 Constellation Saving & Credit Cooperative Ltd. All rights reserved.
-          </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link
-              to="/privacy-policy"
-              className="text-gray-400 hover:text-primary-400 text-sm transition-colors duration-200"
-            >
-              Privacy
-            </Link>
-            <Link
-              to="/terms-conditions"
-              className="text-gray-400 hover:text-primary-400 text-sm transition-colors duration-200"
-            >
-              Terms
-            </Link>
-            <Link to="/sitemap" className="text-gray-400 hover:text-primary-400 text-sm transition-colors duration-200">
-              Sitemap
-            </Link>
-          </div>
-        </motion.div>
+            <motion.div
+      variants={itemVariants}
+      className="border-t border-gray-800 mt-8 pt-8 flex justify-center items-center"
+    >
+      <p className="text-gray-400 text-sm text-center">
+        © 2024 Constellation Saving & Credit Cooperative Ltd. All rights reserved.
+      </p>
+    </motion.div>
+
+
       </motion.div>
     </footer>
   )

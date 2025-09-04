@@ -117,7 +117,7 @@ const About: React.FC = () => {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="/modern-cooperative-office-building-ctc-mall-kathma.png"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-lifestyle-advertisement-for-constellat_FI7enEI2QL2txykwtyrADg_ndM-eqhmSj61c2yOQhmxig_zhfjec.jpg"
                   alt="Constellation Cooperative Building"
                   className="w-full h-80 object-cover"
                 />
@@ -213,7 +213,7 @@ const About: React.FC = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-lg">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-photograph-of-a-cooperative-boardroom-_6wY51f7wRICLsJIvK_U8-w_idJgcaJhS7uKnL0TyKO3eQ_dfgl3u.jpg"
                   alt="Member Meeting"
                   className="w-full h-64 object-cover"
                 />
@@ -221,14 +221,14 @@ const About: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-lg overflow-hidden shadow-md">
                   <img
-                    src="/placeholder.svg?height=200&width=250"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-lifestyle-advertisement-featuring-a-hy_E0x22UVzSD6uE0Q97QsUuA_Ttts0gdZRzWcxh_m5SJMSg_r2hjsj.jpg"
                     alt="ATM Services"
                     className="w-full h-32 object-cover"
                   />
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-md">
                   <img
-                    src="/placeholder.svg?height=200&width=250"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-photograph-of-a-vibrant-financial-educ_DnnYVJB0RbmyoEfPu-TNKQ_YgZtt-fBRL2Vjn34n-94aQ_cg8uqr.jpg"
                     alt="Financial Education"
                     className="w-full h-32 object-cover"
                   />
@@ -481,14 +481,14 @@ const About: React.FC = () => {
               <div className="space-y-4">
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img
-                    src="/placeholder.svg?height=200&width=300"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-photograph-of-a-financial-education-wo_KjyGH8n6QFS9lOTn8TUs8g_YgZtt-fBRL2Vjn34n-94aQ_aa8afm.jpg"
                     alt="Financial Literacy Workshop"
                     className="w-full h-32 object-cover"
                   />
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img
-                    src="/placeholder.svg?height=200&width=300"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-lifestyle-advertisement-for-constellat_FI7enEI2QL2txykwtyrADg_ndM-eqhmSj61c2yOQhmxig_zhfjec.jpg"
                     alt="Business Exhibition"
                     className="w-full h-40 object-cover"
                   />
@@ -497,14 +497,14 @@ const About: React.FC = () => {
               <div className="space-y-4 mt-8">
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img
-                    src="/placeholder.svg?height=200&width=300"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-photograph-of-a-cooperative-boardroom-_Qc-W-egkSmW3LZCcZmSpNw_idJgcaJhS7uKnL0TyKO3eQ_zs9yas.jpg"
                     alt="Cultural Festival"
                     className="w-full h-40 object-cover"
                   />
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img
-                    src="/placeholder.svg?height=200&width=300"
+                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756953197/a-dynamic-lifestyle-advertisement-for-co_7BNCAb3FS2y9y3KkatZczQ_ynsFbyEfR0W00xmli7OuEQ_esrgwe.jpg"
                     alt="Sports Event"
                     className="w-full h-32 object-cover"
                   />
