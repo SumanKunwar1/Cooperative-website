@@ -321,8 +321,6 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          
-
           <div className="hidden xl:flex items-center space-x-3 flex-shrink-0">
             <Link
               to="/login"
@@ -463,18 +461,27 @@ const Header: React.FC = () => {
                 </div>
 
                 <Link
-                  to="/business-directories"
+                  to="/business-directory"
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
                   Businesses
                 </Link>
+                
                 <Link
                   to="/notice"
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
                   Notices
+                </Link>
+                
+                <Link
+                  to="/teams"
+                  onClick={closeMobileMenu}
+                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
+                >
+                  Our Team
                 </Link>
 
                 <div className="flex flex-col space-y-3 pt-6 border-t border-gray-200">
