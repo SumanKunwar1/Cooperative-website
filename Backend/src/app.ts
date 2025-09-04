@@ -9,7 +9,6 @@ import dotenv from "dotenv"
 import authRoutes from "./routes/auth"
 import userRoutes from "./routes/users"
 import businessRoutes from "./routes/businesses"
-import businessDetailsRoutes from "./routes/businessDetails"
 import uploadRoutes from "./routes/upload"
 import accountApplicationRoutes from './routes/accountApplication';
 import loanApplicationRoutes from './routes/loanApplication'
@@ -52,8 +51,7 @@ app.use(morgan("combined"))
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
-app.use("/api/businesses", businessRoutes)
-app.use("/api/business-details", businessDetailsRoutes)
+app.use("/api/business-details", businessRoutes)
 app.use("/api/upload", uploadRoutes)
 app.use('/api/account-applications', accountApplicationRoutes); 
 app.use('/api/loan-applications', loanApplicationRoutes); 

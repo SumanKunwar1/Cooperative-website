@@ -1,31 +1,27 @@
-import express from "express"
+import express from 'express';
 import {
   getBusinesses,
-  getBusiness,
-  getBusinessBySlug,
+  getAdminBusinesses,
+  getBusinessById,
+  getBusinessByName,
   createBusiness,
   updateBusiness,
   deleteBusiness,
-  getCategories,
-} from "../controllers/business.controller"
-import { protect, authorize } from "../middleware/auth"
-import {upload} from "../middleware/upload"
+  searchBusinesses
+} from '../controllers/business.controller';
 
-const router = express.Router()
+const router = express.Router();
 
 // Public routes
-router.get("/directory", getBusinesses) // Public business directory
-router.get("/categories", getCategories)
-router.get("/:id", getBusiness)
-router.get("/slug/:slug", getBusinessBySlug)
+router.get('/directory', getBusinesses);
+router.get('/directory/:businessName', getBusinessByName);
+router.get('/search', searchBusinesses);
 
-// Protected routes (simple authentication)
-router.use(protect)
-router.use(authorize)
+// Admin routes (no auth for now as requested)
+router.get('/admin', getAdminBusinesses);
+router.get('/:id', getBusinessById);
+router.post('/', createBusiness);
+router.put('/:id', updateBusiness);
+router.delete('/:id', deleteBusiness);
 
-// Admin routes
-router.route("/").get(getBusinesses).post(upload.single("image"), createBusiness)
-
-router.route("/:id").put(upload.single("image"), updateBusiness).delete(deleteBusiness)
-
-export default router
+export default router;
