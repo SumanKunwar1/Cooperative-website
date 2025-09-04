@@ -18,9 +18,19 @@ const Team: React.FC = () => {
     try {
       setLoading(true)
       const members = await teamAPI.getPublicTeamMembers()
-      setTeamMembers(members)
+      // Sort by creation date to show first uploaded first
+      const sortedMembers = [...members].sort((a, b) => {
+        // Use createdAt field if available, otherwise use id or fallback to array position
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+        return dateA - dateB // Ascending order (oldest first)
+      })
+      setTeamMembers(sortedMembers)
     } catch (error) {
       console.error("Error fetching team members:", error)
+      // If there's an error, just set the members as-is without sorting
+      const members = await teamAPI.getPublicTeamMembers()
+      setTeamMembers(members)
     } finally {
       setLoading(false)
     }
