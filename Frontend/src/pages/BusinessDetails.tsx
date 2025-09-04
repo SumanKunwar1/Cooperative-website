@@ -6,7 +6,7 @@ import { useParams, Link } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 import type { Business } from "../types/business"
 
-const API_BASE_URL = "http://localhost:5000/api"
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
 const BusinessDetails: React.FC = () => {
   const { businessName } = useParams<{ businessName: string }>()
