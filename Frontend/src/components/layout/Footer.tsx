@@ -168,7 +168,7 @@ const Footer: React.FC = () => {
                 <ClockIcon className="h-5 w-5 text-primary-400 mt-0.5 flex-shrink-0" />
                 <div className="text-gray-400 text-sm">
                   <p>Sun - Fri: 10:00 AM - 5:00 PM</p>
-                  <p>Saturday: 10:00 AM - 3:00 PM</p>
+                  <p>Saturday: Closed</p>
                 </div>
               </div>
             </div>
