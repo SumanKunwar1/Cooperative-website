@@ -118,6 +118,134 @@ const Team: React.FC = () => {
           ))}
         </div>
 
+        {/* Executive Team Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 mt-20"
+        >
+          <h2 className="text-4xl font-bold text-foreground mb-6 text-balance">Executive Team</h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1757064395/WhatsApp_Image_2025-08-29_at_17.59.03_0133a582_mn8mtr.jpg"
+                  alt="Laxman Aryal"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Mr. Laxman Aryal</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">General Manager</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Oversees daily operations, manages resources efficiently, and ensures smooth implementation of policies and programs to achieve organizational goals.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1757064396/WhatsApp_Image_2025-09-05_at_14.59.15_1f2c75af_d7ko2b.jpg"
+                  alt="Kamala G.C."
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Ms. Kamala G.C.</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Cashier</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Handles financial transactions with accuracy and integrity, maintaining transparent records that strengthen trust and accountability.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1757064396/WhatsApp_Image_2025-09-05_at_13.30.56_5197a053_e24gmq.jpg"
+                  alt="Sushmita Tamang"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Ms. Sushmita Tamang</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Marketing Representative</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Promotes the cooperative's services through effective outreach and communication, fostering strong relationships with members and the community.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1757064429/WhatsApp_Image_2025-09-04_at_21.10.52_fc654d87_pd9ved.jpg"
+                  alt="Rikesh Khadka"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Mr. Rikesh Khadka</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Marketer</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
+                  Develops and executes marketing strategies to enhance visibility, support growth, and drive member engagement across all platforms.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
         {/* Audit Committee Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -153,6 +281,46 @@ const Team: React.FC = () => {
 
                 <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                   Oversees audit activities, ensures financial transparency, and supports the cooperative's accountability.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Accounting supervision comitee Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 mt-20"
+        >
+          <h2 className="text-4xl font-bold text-foreground mb-6 text-balance">Accounting Supervision Committee</h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            whileHover={{ y: -8 }}
+            className="group"
+          >
+            <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-border">
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1757064865/WhatsApp_Image_2025-09-05_at_15.08.32_10ed0ea3_swwnxb.jpg"
+                  alt="Sunita Bhattarai"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">Mrs. Sunita Bhattarai</h3>
+                <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">Member</p>
+
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                 </p>
               </div>
             </div>
