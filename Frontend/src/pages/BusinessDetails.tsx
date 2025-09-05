@@ -36,7 +36,9 @@ const BusinessDetails: React.FC = () => {
         }
 
         // Fetch the specific business by name/slug
-        const response = await fetch(`${API_BASE_URL}/api/business-details/directory/${encodeURIComponent(businessName)}`)
+        const response = await fetch(
+          `${API_BASE_URL}/api/business-details/directory/${encodeURIComponent(businessName)}`,
+        )
 
         if (!response.ok) {
           throw new Error(`Failed to fetch business: ${response.status}`)
@@ -65,15 +67,6 @@ const BusinessDetails: React.FC = () => {
 
     fetchBusiness()
   }, [businessName])
-
-  const createBusinessSlug = (name: string): string => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim()
-  }
 
   // Helper function to safely display phone
   const displayPhone = (phone: any) => {
@@ -259,7 +252,6 @@ const BusinessDetails: React.FC = () => {
                     </svg>
                     Book Service
                   </button>
-                  
                 </div>
               </div>
             </div>
@@ -378,21 +370,7 @@ const BusinessDetails: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                       {business.services.map((service, index) => (
                         <div key={index} className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-                          <h4 className="font-medium text-gray-900 mb-2">{service}</h4>
-                          {business.pricing &&
-                            typeof business.pricing === "object" &&
-                            !Array.isArray(business.pricing) && (
-                              <div className="mb-3">
-                                {Object.entries(business.pricing).map(([tier, price]) => (
-                                  <div key={tier} className="text-sm text-gray-600">
-                                    <span className="font-medium capitalize">{tier}:</span>{" "}
-                                    {typeof price === "string" || typeof price === "number"
-                                      ? String(price)
-                                      : "Contact for pricing"}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                          <h4 className="font-medium text-gray-900 mb-3">{service}</h4>
                           <button
                             onClick={() => setShowBookingModal(true)}
                             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
@@ -556,7 +534,9 @@ const BusinessDetails: React.FC = () => {
                     </svg>
                     <div>
                       <h3 className="font-semibold text-gray-900">Address</h3>
-                      <p className="text-gray-600">{business.address || business.location || "Address not available"}</p>
+                      <p className="text-gray-600">
+                        {business.address || business.location || "Address not available"}
+                      </p>
                     </div>
                   </div>
                 </div>

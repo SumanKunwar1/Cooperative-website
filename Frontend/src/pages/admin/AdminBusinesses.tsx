@@ -26,6 +26,7 @@ const categories = [
   "Home Services",
   "Retail",
   "Healthcare",
+  "Wellness & Personal Care",
   "Education",
   "Others",
 ]
@@ -36,10 +37,17 @@ const subcategories: { [key: string]: string[] } = {
   Hospitality: ["Hotel", "Resort", "Guest House", "Travel Agency"],
   "Home Services": ["Electrical", "Plumbing", "Cleaning", "Maintenance"],
   Retail: ["Wholesale", "Shopping", "Grocery", "Fashion"],
-  Healthcare: ["Medical", "Dental", "Pharmacy", "Clinic"],
+  Healthcare: ["Medical", "Dental", "Pharmacy", "Clinic", "Therapy"],
+  "Wellness & Personal Care": [
+    "Holistic Wellness",
+    "Healthy & Nourishing Cosmetics",
+    "Personal Care",
+    "Aromatherapy & Oils",
+  ],
   Education: ["School", "Training", "Tutoring", "Institute"],
   Others: ["General", "Miscellaneous"],
 }
+
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -685,7 +693,7 @@ const AdminBusinesses: React.FC = () => {
   const [pricingInput, setPricingInput] = useState({ tier: "", price: "" })
   const [galleryInput, setGalleryInput] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [, setImageFile] = useState<File | null>(null)
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
