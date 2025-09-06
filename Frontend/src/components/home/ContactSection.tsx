@@ -90,7 +90,7 @@ const ContactSection: React.FC = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mr-4">
                   <Send className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-foreground">Send us a Message</h3>
+                <h3 className="text-2xl font-bold text-foreground">Inquiry Message</h3>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -197,14 +197,14 @@ const ContactSection: React.FC = () => {
 
               <div className="w-full h-96 lg:h-[500px] bg-muted rounded-2xl overflow-hidden shadow-inner relative group">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.6869048469!2d85.31398931506213!3d27.69769998280624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb198a307baabf%3A0xb5137c1bf18db1ea!2sKathmandu%2C%20Nepal!5e0!3m2!1sen!2s!4v1635000000000!5m2!1sen!2s"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4982891234567!2d85.31055117616!3d27.697838699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1981be77a867%3A0x1de926e1d48a55ce!2sCTC%20Mall!5e0!3m2!1sen!2snp!4v1693123456789!5m2!1sen!2snp"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Constellation Location"
+                  title="CTC Mall Location - Kathmandu, Nepal"
                   className="transition-all duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -216,7 +216,7 @@ const ContactSection: React.FC = () => {
                     <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center mb-2">
                       <MapPin className="w-5 h-5 text-white" />
                     </div>
-                    <p className="text-sm font-semibold text-foreground">Kathmandu, Nepal</p>
+                    <p className="text-sm font-semibold text-foreground">CTC Mall, Sundhara, Kathmandu</p>
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center mb-2">
@@ -224,6 +224,17 @@ const ContactSection: React.FC = () => {
                     </div>
                     <p className="text-sm font-semibold text-foreground">Open 6 Days a Week</p>
                   </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <a
+                    href="https://www.google.com/maps/place/CTC+Mall/@27.6978387,85.3105512,17z/data=!3m1!4b1!4m6!3m5!1s0x39eb1981be77a867:0x1de926e1d48a55ce!8m2!3d27.697834!4d85.3131261!16s%2Fg%2F11jd74pr0n?hl=en&entry=ttu&g_ep=EgoyMDI1MDkwMy4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200 text-sm font-medium"
+                  >
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Get Directions
+                  </a>
                 </div>
               </div>
             </Card>
