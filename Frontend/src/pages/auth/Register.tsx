@@ -9,8 +9,10 @@ import SEO from "../../components/common/SEO"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
 import { useAuth } from "../../contexts/AuthContext"
+import { useTranslation } from "react-i18next"
 
 const Register: React.FC = () => {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState({
     businessName: "",
     email: "",
@@ -62,22 +64,22 @@ const Register: React.FC = () => {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      setError("Please fill in all fields")
+      setError(t("please-fill-all-fields"))
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
+      setError(t("passwords-do-not-match"))
       return
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long")
+      setError(t("password-min-length"))
       return
     }
 
     if (!formData.agreeToTerms) {
-      setError("Please agree to the terms and conditions")
+      setError(t("agree-to-terms-required"))
       return
     }
 
@@ -102,7 +104,7 @@ const Register: React.FC = () => {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed")
+        throw new Error(data.message || t("registration-failed"))
       }
 
       // Log the user in with the response data
@@ -146,7 +148,7 @@ const Register: React.FC = () => {
         navigate(`/dashboard/${encodedName}`)
       }
     } catch (error: any) {
-      setError(error.message || "Registration failed. Please try again.")
+      setError(error.message || t("registration-failed"))
     } finally {
       setIsLoading(false)
     }
@@ -155,8 +157,8 @@ const Register: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <SEO
-        title="Register - Constellation Saving and Credit Cooperative Ltd."
-        description="Join Constellation Saving and Credit Cooperative Ltd. Create your account to access our financial services, business directory, and member benefits."
+        title={`${t("register")} - Constellation Saving and Credit Cooperative Ltd.`}
+        description={t("register-subtitle")}
       />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -164,8 +166,8 @@ const Register: React.FC = () => {
           <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-4">
             <span className="text-white font-bold text-2xl">C</span>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">Join Constellation</h2>
-          <p className="mt-2 text-gray-600">Create your account and become a member</p>
+          <h2 className="text-3xl font-bold text-gray-900">{t("join-constellation")}</h2>
+          <p className="mt-2 text-gray-600">{t("register-subtitle")}</p>
         </motion.div>
       </div>
 
@@ -179,7 +181,7 @@ const Register: React.FC = () => {
 
               {/* Membership Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Membership Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t("membership-type")}</label>
                 <div className="grid grid-cols-2 gap-4">
                   <label className="relative">
                     <input
@@ -198,7 +200,7 @@ const Register: React.FC = () => {
                       }`}
                     >
                       <User className="w-6 h-6 mx-auto mb-2 text-blue-600" />
-                      <span className="text-sm font-medium">Individual</span>
+                      <span className="text-sm font-medium">{t("individual")}</span>
                     </div>
                   </label>
                   <label className="relative">
@@ -218,7 +220,7 @@ const Register: React.FC = () => {
                       }`}
                     >
                       <User className="w-6 h-6 mx-auto mb-2 text-blue-600" />
-                      <span className="text-sm font-medium">Business</span>
+                      <span className="text-sm font-medium">{t("business")}</span>
                     </div>
                   </label>
                 </div>
@@ -227,7 +229,7 @@ const Register: React.FC = () => {
               {/* Name Field */}
               <div>
                 <label htmlFor="businessName" className="block text-sm font-medium text-gray-700">
-                  Full Name
+                  {t("full-name")}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -238,7 +240,7 @@ const Register: React.FC = () => {
                     value={formData.businessName}
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your full name"
+                    placeholder={t("enter-full-name")}
                   />
                 </div>
               </div>
@@ -246,7 +248,7 @@ const Register: React.FC = () => {
               {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email Address
+                  {t("email-address")}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -258,7 +260,7 @@ const Register: React.FC = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your email"
+                    placeholder={t("enter-email")}
                   />
                   <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
@@ -267,7 +269,7 @@ const Register: React.FC = () => {
               {/* Phone */}
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Phone Number
+                  {t("phone-number")}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -278,7 +280,7 @@ const Register: React.FC = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="+977-98XXXXXXXX"
+                    placeholder={t("enter-phone")}
                   />
                   <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
@@ -287,7 +289,7 @@ const Register: React.FC = () => {
               {/* Password */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
+                  {t("password")}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -298,7 +300,7 @@ const Register: React.FC = () => {
                     value={formData.password}
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Create a strong password"
+                    placeholder={t("create-strong-password")}
                     minLength={6}
                   />
                   <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -319,7 +321,7 @@ const Register: React.FC = () => {
               {/* Confirm Password */}
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  Confirm Password
+                  {t("confirm-password")}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -330,7 +332,7 @@ const Register: React.FC = () => {
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Confirm your password"
+                    placeholder={t("confirm-your-password")}
                   />
                   <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                   <button
@@ -358,19 +360,19 @@ const Register: React.FC = () => {
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
-                  I agree to the{" "}
+                  {t("agree-to-terms")}{" "}
                   <Link to="/terms" className="text-blue-600 hover:text-blue-500">
-                    Terms of Service
+                    {t("terms-of-service")}
                   </Link>{" "}
-                  and{" "}
+                  {t("and")}{" "}
                   <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
-                    Privacy Policy
+                    {t("privacy-policy")}
                   </Link>
                 </label>
               </div>
 
               <Button type="submit" fullWidth size="lg" disabled={isLoading} icon={ArrowRight} iconPosition="right">
-                {isLoading ? "Creating Account..." : "Create Account"}
+                {isLoading ? t("creating-account") : t("create-account")}
               </Button>
             </form>
 
@@ -380,14 +382,14 @@ const Register: React.FC = () => {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Already have an account?</span>
+                  <span className="px-2 bg-white text-gray-500">{t("already-have-account")}</span>
                 </div>
               </div>
 
               <div className="mt-6">
                 <Link to="/login">
                   <Button fullWidth variant="outline" size="lg">
-                    Sign In
+                    {t("sign-in")}
                   </Button>
                 </Link>
               </div>
