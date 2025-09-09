@@ -148,7 +148,7 @@ const Home: React.FC = () => {
             <h2 className="text-3xl font-bold text-foreground mb-4">Leadership Messages</h2>
             <p className="text-muted-foreground text-lg">Inspiring words from our esteemed leaders</p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {leadershipMessages.map((leader, index) => (
               <motion.div
@@ -177,15 +177,17 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Message content */}
                   <div className="px-2">
                     <blockquote className="text-card-foreground leading-relaxed text-base italic relative">
                       <div className="absolute -top-2 -left-2 text-4xl text-primary/20 font-serif">"</div>
                       <div className="relative z-10 pl-6">{leader.message}</div>
-                      <div className="absolute -bottom-4 -right-2 text-4xl text-primary/20 font-serif transform rotate-180">"</div>
+                      <div className="absolute -bottom-4 -right-2 text-4xl text-primary/20 font-serif transform rotate-180">
+                        "
+                      </div>
                     </blockquote>
-                    
+
                     <div className="mt-8 pt-4 border-t border-border">
                       <div className="flex items-center justify-center space-x-2">
                         <div className="w-8 h-0.5 bg-primary"></div>

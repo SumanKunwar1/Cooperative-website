@@ -4,8 +4,11 @@ import type React from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { MapPinIcon, PhoneIcon, EnvelopeIcon, ClockIcon } from "@heroicons/react/24/outline"
+import { useTranslation } from "react-i18next"
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation()
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -51,12 +54,12 @@ const Footer: React.FC = () => {
                 <p className="text-sm text-gray-400">Saving & Credit Cooperative</p>
               </div>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Empowering communities through cooperative banking solutions. Building financial stability and prosperity
-              together.
-            </p>
+            <p className="text-gray-400 text-sm leading-relaxed">{t("footer-company-desc")}</p>
             <div className="flex space-x-4">
-              <a href="https://www.facebook.com/constellationcooperative1/" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
+              <a
+                href="https://www.facebook.com/constellationcooperative1/"
+                className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+              >
                 <span className="sr-only">Facebook</span>
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -73,21 +76,21 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-white">{t("footer-quick-links")}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/about" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  About Us
+                  {t("footer-about-us")}
                 </Link>
               </li>
               <li>
                 <Link to="/services" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  Our Services
+                  {t("footer-our-services")}
                 </Link>
               </li>
               <li>
                 <Link to="/membership" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  Membership
+                  {t("footer-membership")}
                 </Link>
               </li>
               <li>
@@ -95,12 +98,12 @@ const Footer: React.FC = () => {
                   to="/business-directory"
                   className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
                 >
-                  Business Directory
+                  {t("footer-business-directory")}
                 </Link>
               </li>
               <li>
                 <Link to="/notice" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  Notices
+                  {t("footer-notices")}
                 </Link>
               </li>
             </ul>
@@ -108,16 +111,16 @@ const Footer: React.FC = () => {
 
           {/* Resources */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Resources</h3>
+            <h3 className="text-lg font-semibold text-white">{t("footer-resources")}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/gallery" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  Gallery
+                  {t("footer-gallery")}
                 </Link>
               </li>
               <li>
                 <Link to="/teams" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  Our Team
+                  {t("footer-our-team")}
                 </Link>
               </li>
               <li>
@@ -125,7 +128,7 @@ const Footer: React.FC = () => {
                   to="/privacy-policy"
                   className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
                 >
-                  Privacy Policy
+                  {t("footer-privacy-policy")}
                 </Link>
               </li>
               <li>
@@ -133,12 +136,12 @@ const Footer: React.FC = () => {
                   to="/terms-conditions"
                   className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
                 >
-                  Terms & Conditions
+                  {t("footer-terms-conditions")}
                 </Link>
               </li>
               <li>
                 <Link to="/faq" className="text-gray-400 hover:text-primary-400 transition-colors duration-200">
-                  FAQ
+                  {t("footer-faq")}
                 </Link>
               </li>
             </ul>
@@ -146,14 +149,14 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Contact Info</h3>
+            <h3 className="text-lg font-semibold text-white">{t("footer-contact-info")}</h3>
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
                 <MapPinIcon className="h-5 w-5 text-primary-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-400 text-sm">
-                  Civil Trade Center, Sundhara, 
+                  {t("footer-address-1")}
                   <br />
-                 Ward No. 11, Kathmandu
+                  {t("footer-address-2")}
                 </p>
               </div>
               <div className="flex items-center space-x-3">
@@ -167,8 +170,8 @@ const Footer: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <ClockIcon className="h-5 w-5 text-primary-400 mt-0.5 flex-shrink-0" />
                 <div className="text-gray-400 text-sm">
-                  <p>Sun - Fri: 10:00 AM - 5:00 PM</p>
-                  <p>Saturday: Closed</p>
+                  <p>{t("footer-hours-1")}</p>
+                  <p>{t("footer-hours-2")}</p>
                 </div>
               </div>
             </div>
@@ -176,16 +179,12 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-            <motion.div
-      variants={itemVariants}
-      className="border-t border-gray-800 mt-8 pt-8 flex justify-center items-center"
-    >
-      <p className="text-gray-400 text-sm text-center">
-        © 2024 Constellation Saving & Credit Cooperative Ltd. All rights reserved.
-      </p>
-    </motion.div>
-
-
+        <motion.div
+          variants={itemVariants}
+          className="border-t border-gray-800 mt-8 pt-8 flex justify-center items-center"
+        >
+          <p className="text-gray-400 text-sm text-center">{t("footer-copyright")}</p>
+        </motion.div>
       </motion.div>
     </footer>
   )

@@ -3,29 +3,32 @@
 import type React from "react"
 import { motion } from "framer-motion"
 import { Shield, TrendingUp, Users, Globe } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import Card from "../ui/Card"
 
 const FeaturesSection: React.FC = () => {
+  const { t } = useTranslation()
+
   const features = [
     {
       icon: Shield,
-      title: "Reliability",
-      description: "Secure cooperative licensed under Nepal's Cooperative Act with proven track record since 2007.",
+      title: t("feature-reliability-title"),
+      description: t("feature-reliability-desc"),
     },
     {
       icon: TrendingUp,
-      title: "Accessibility",
-      description: "Easy savings and credit services for all members with flexible deposit and withdrawal options.",
+      title: t("feature-accessibility-title"),
+      description: t("feature-accessibility-desc"),
     },
     {
       icon: Users,
-      title: "Modern Facilities",
-      description: "Digital banking, ATM, online transactions, and contemporary banking solutions.",
+      title: t("feature-modern-title"),
+      description: t("feature-modern-desc"),
     },
     {
       icon: Globe,
-      title: "Transparency",
-      description: "Regular audits, financial reporting, and transparent operations for member confidence.",
+      title: t("feature-transparency-title"),
+      description: t("feature-transparency-desc"),
     },
   ]
 
@@ -38,10 +41,8 @@ const FeaturesSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Key Features of Constellation</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Reliability, Accessibility, Modern Facilities, Transparency, Community Focus, and Professional Management.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("features-title")}</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t("features-subtitle")}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

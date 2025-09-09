@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { User, MapPin, Upload, CreditCard, Building2, CheckCircle, ArrowLeft, DollarSign } from "lucide-react"
 import Button from "../ui/Button"
 import Card from "../ui/Card"
-import { loanApplicationService, type LoanApplicationData } from "../../services/loanApplicationService"
+import { useTranslation } from "react-i18next"
 
 interface LoanApplicationFormProps {
   onBack: () => void
@@ -14,6 +14,8 @@ interface LoanApplicationFormProps {
 }
 
 const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selectedLoanType }) => {
+  const { t } = useTranslation()
+
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -52,12 +54,12 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const loanTypes = [
-    "Personal Loan",
-    "Business Loan",
-    "Education Loan",
-    "Household Loan",
-    "Emergency Loan",
-    "Loan Against FD/Share",
+    t("personal-loan"),
+    t("business-loan"),
+    t("education-loan"),
+    t("household-loan"),
+    t("emergency-loan"),
+    t("loan-against-fd"),
   ]
 
   const handleInputChange = (field: string, value: string) => {
@@ -75,32 +77,32 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
     const newErrors: Record<string, string> = {}
 
     if (step === 1) {
-      if (!formData.firstName) newErrors.firstName = "First name is required"
-      if (!formData.lastName) newErrors.lastName = "Last name is required"
-      if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of birth is required"
-      if (!formData.gender) newErrors.gender = "Gender is required"
+      if (!formData.firstName) newErrors.firstName = t("first-name-required")
+      if (!formData.lastName) newErrors.lastName = t("last-name-required")
+      if (!formData.dateOfBirth) newErrors.dateOfBirth = t("date-of-birth-required")
+      if (!formData.gender) newErrors.gender = t("gender-required")
     }
 
     if (step === 2) {
-      if (!formData.email) newErrors.email = "Email is required"
-      if (!formData.primaryPhone) newErrors.primaryPhone = "Primary phone is required"
-      if (!formData.permanentAddress) newErrors.permanentAddress = "Permanent address is required"
+      if (!formData.email) newErrors.email = t("email-required")
+      if (!formData.primaryPhone) newErrors.primaryPhone = t("primary-phone-required")
+      if (!formData.permanentAddress) newErrors.permanentAddress = t("permanent-address-required")
     }
 
     if (step === 3) {
-      if (!formData.citizenshipNo) newErrors.citizenshipNo = "Citizenship number is required"
+      if (!formData.citizenshipNo) newErrors.citizenshipNo = t("citizenship-required")
     }
 
     if (step === 4) {
-      if (!formData.occupation) newErrors.occupation = "Occupation is required"
-      if (!formData.monthlyIncome) newErrors.monthlyIncome = "Monthly income is required"
+      if (!formData.occupation) newErrors.occupation = t("occupation-required")
+      if (!formData.monthlyIncome) newErrors.monthlyIncome = t("monthly-income-required")
     }
 
     if (step === 5) {
-      if (!formData.loanType) newErrors.loanType = "Loan type is required"
-      if (!formData.loanAmount) newErrors.loanAmount = "Loan amount is required"
-      if (!formData.loanPurpose) newErrors.loanPurpose = "Loan purpose is required"
-      if (!formData.loanTerm) newErrors.loanTerm = "Loan term is required"
+      if (!formData.loanType) newErrors.loanType = t("loan-type-required")
+      if (!formData.loanAmount) newErrors.loanAmount = t("loan-amount-required")
+      if (!formData.loanPurpose) newErrors.loanPurpose = t("loan-purpose-required")
+      if (!formData.loanTerm) newErrors.loanTerm = t("loan-term-required")
     }
 
     setErrors(newErrors)
@@ -109,7 +111,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 6)) // Reduced to 6 steps
+      setCurrentStep((prev) => Math.min(prev + 1, 6))
     }
   }
 
@@ -123,17 +125,8 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
     setIsSubmitting(true)
 
     try {
-      // Prepare the data for submission
-      const applicationData: LoanApplicationData = {
-        ...formData,
-        profilePhoto: uploadedFiles.profilePhoto || undefined,
-        citizenshipFront: uploadedFiles.citizenshipFront || undefined,
-        citizenshipBack: uploadedFiles.citizenshipBack || undefined,
-        incomeProof: uploadedFiles.incomeProof || undefined,
-      }
-
-      const response = await loanApplicationService.submitApplication(applicationData)
-
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       alert("Loan application submitted successfully! We will contact you within 2-3 business days for verification.")
       onBack()
     } catch (error) {
@@ -176,8 +169,10 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           ) : (
             <div className="flex flex-col items-center">
               <Upload className="w-8 h-8 text-gray-400 mb-2" />
-              <span className="text-sm text-gray-600">Click to upload {label.toLowerCase()}</span>
-              <span className="text-xs text-gray-400 mt-1">PDF, JPG, PNG (Max 5MB)</span>
+              <span className="text-sm text-gray-600">
+                {t("click-to-upload")} {label.toLowerCase()}
+              </span>
+              <span className="text-xs text-gray-400 mt-1">{t("file-format")}</span>
             </div>
           )}
         </label>
@@ -192,34 +187,34 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <User className="w-6 h-6 mr-2 text-blue-600" />
-              Personal Information
+              {t("personal-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name <span className="text-red-500">*</span>
+                  {t("first-name")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter first name"
+                  placeholder={t("enter-first-name")}
                 />
                 {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name <span className="text-red-500">*</span>
+                  {t("last-name")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter last name"
+                  placeholder={t("enter-last-name")}
                 />
                 {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
               </div>
@@ -228,7 +223,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date of Birth <span className="text-red-500">*</span>
+                  {t("date-of-birth")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -241,17 +236,17 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Gender <span className="text-red-500">*</span>
+                  {t("gender")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.gender}
                   onChange={(e) => handleInputChange("gender", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <option value="">{t("select-gender")}</option>
+                  <option value="Male">{t("male")}</option>
+                  <option value="Female">{t("female")}</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
                 {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
               </div>
@@ -264,34 +259,34 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <MapPin className="w-6 h-6 mr-2 text-blue-600" />
-              Contact Information
+              {t("contact-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address <span className="text-red-500">*</span>
+                  {t("email-address")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter email address"
+                  placeholder={t("enter-email")}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Primary Phone <span className="text-red-500">*</span>
+                  {t("primary-phone")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   value={formData.primaryPhone}
                   onChange={(e) => handleInputChange("primaryPhone", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter primary phone"
+                  placeholder={t("enter-primary-phone")}
                 />
                 {errors.primaryPhone && <p className="text-red-500 text-xs mt-1">{errors.primaryPhone}</p>}
               </div>
@@ -299,14 +294,14 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Permanent Address <span className="text-red-500">*</span>
+                {t("permanent-address")} <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={formData.permanentAddress}
                 onChange={(e) => handleInputChange("permanentAddress", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter permanent address"
+                placeholder={t("enter-permanent-address")}
               />
               {errors.permanentAddress && <p className="text-red-500 text-xs mt-1">{errors.permanentAddress}</p>}
             </div>
@@ -318,27 +313,27 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
-              Identification
+              {t("identification-documents")}
             </h3>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Citizenship Number <span className="text-red-500">*</span>
+                {t("citizenship-number")} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.citizenshipNo}
                 onChange={(e) => handleInputChange("citizenshipNo", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter citizenship number"
+                placeholder={t("enter-citizenship")}
               />
               {errors.citizenshipNo && <p className="text-red-500 text-xs mt-1">{errors.citizenshipNo}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadField label="Profile Photo" field="profilePhoto" required />
-              <FileUploadField label="Citizenship Front" field="citizenshipFront" required />
-              <FileUploadField label="Citizenship Back" field="citizenshipBack" required />
+              <FileUploadField label={t("picture")} field="profilePhoto" required />
+              <FileUploadField label={t("citizenship-front")} field="citizenshipFront" required />
+              <FileUploadField label={t("citizenship-back")} field="citizenshipBack" required />
             </div>
           </div>
         )
@@ -348,46 +343,46 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <Building2 className="w-6 h-6 mr-2 text-blue-600" />
-              Employment Information
+              {t("employment-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Occupation <span className="text-red-500">*</span>
+                  {t("occupation")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.occupation}
                   onChange={(e) => handleInputChange("occupation", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Occupation</option>
-                  <option value="Government Employee">Government Employee</option>
-                  <option value="Private Employee">Private Employee</option>
-                  <option value="Business Owner">Business Owner</option>
-                  <option value="Self Employed">Self Employed</option>
+                  <option value="">{t("select-occupation")}</option>
+                  <option value="Government Employee">{t("government-employee")}</option>
+                  <option value="Private Employee">{t("private-employee")}</option>
+                  <option value="Business Owner">{t("business-owner")}</option>
+                  <option value="Self Employed">{t("self-employed")}</option>
                   <option value="Professional">Professional</option>
-                  <option value="Other">Other</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
                 {errors.occupation && <p className="text-red-500 text-xs mt-1">{errors.occupation}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Monthly Income (NPR) <span className="text-red-500">*</span>
+                  {t("monthly-income")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   value={formData.monthlyIncome}
                   onChange={(e) => handleInputChange("monthlyIncome", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter monthly income"
+                  placeholder={t("enter-monthly-income")}
                 />
                 {errors.monthlyIncome && <p className="text-red-500 text-xs mt-1">{errors.monthlyIncome}</p>}
               </div>
             </div>
 
-            <FileUploadField label="Income Proof" field="incomeProof" required />
+            <FileUploadField label={t("income-proof")} field="incomeProof" required />
           </div>
         )
 
@@ -396,20 +391,20 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <DollarSign className="w-6 h-6 mr-2 text-blue-600" />
-              Loan Information
+              {t("loan-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Loan Type <span className="text-red-500">*</span>
+                  {t("loan-type")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.loanType}
                   onChange={(e) => handleInputChange("loanType", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Loan Type</option>
+                  <option value="">{t("select-loan-type")}</option>
                   {loanTypes.map((type) => (
                     <option key={type} value={type}>
                       {type}
@@ -421,14 +416,14 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Loan Amount (NPR) <span className="text-red-500">*</span>
+                  {t("loan-amount")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   value={formData.loanAmount}
                   onChange={(e) => handleInputChange("loanAmount", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter loan amount"
+                  placeholder={t("enter-loan-amount")}
                 />
                 {errors.loanAmount && <p className="text-red-500 text-xs mt-1">{errors.loanAmount}</p>}
               </div>
@@ -436,32 +431,32 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Loan Purpose <span className="text-red-500">*</span>
+                {t("loan-purpose")} <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={formData.loanPurpose}
                 onChange={(e) => handleInputChange("loanPurpose", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Describe the purpose of the loan"
+                placeholder={t("describe-loan-purpose")}
               />
               {errors.loanPurpose && <p className="text-red-500 text-xs mt-1">{errors.loanPurpose}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Loan Term <span className="text-red-500">*</span>
+                {t("loan-term")} <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.loanTerm}
                 onChange={(e) => handleInputChange("loanTerm", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Select Loan Term</option>
-                <option value="1 Month">1 Month</option>
-                <option value="3 Months">3 Months</option>
-                <option value="6 Months">6 Months</option>
-                <option value="1 Year">1 Year</option>
+                <option value="">{t("select-loan-term")}</option>
+                <option value="1 Month">{t("1-month")}</option>
+                <option value="3 Months">{t("3-months")}</option>
+                <option value="6 Months">{t("6-months")}</option>
+                <option value="1 Year">{t("1-year")}</option>
                 <option value="2 Years">2 Years</option>
                 <option value="3 Years">3 Years</option>
               </select>
@@ -475,36 +470,36 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <CheckCircle className="w-6 h-6 mr-2 text-green-600" />
-              Review & Submit
+              {t("review-submit")}
             </h3>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h4 className="font-semibold text-blue-900 mb-4">Loan Application Summary</h4>
+              <h4 className="font-semibold text-blue-900 mb-4">{t("loan-application-summary")}</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium">Name:</span>
+                  <span className="font-medium">{t("name")}:</span>
                   <span className="ml-2">
                     {formData.firstName} {formData.lastName}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium">Email:</span>
+                  <span className="font-medium">{t("email")}:</span>
                   <span className="ml-2">{formData.email}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Phone:</span>
+                  <span className="font-medium">{t("phone")}:</span>
                   <span className="ml-2">{formData.primaryPhone}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Loan Type:</span>
+                  <span className="font-medium">{t("loan-type")}:</span>
                   <span className="ml-2">{formData.loanType}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Loan Amount:</span>
+                  <span className="font-medium">{t("loan-amount")}:</span>
                   <span className="ml-2">NPR {formData.loanAmount}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Loan Term:</span>
+                  <span className="font-medium">{t("loan-term")}:</span>
                   <span className="ml-2">{formData.loanTerm}</span>
                 </div>
               </div>
@@ -513,7 +508,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
             <div className="flex items-center space-x-2">
               <input type="checkbox" id="loanTerms" className="rounded" />
               <label htmlFor="loanTerms" className="text-sm text-gray-700">
-                I agree to the loan terms and conditions and confirm that all information provided is accurate
+                {t("agree-loan-terms")}
               </label>
             </div>
           </div>
@@ -524,7 +519,14 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
     }
   }
 
-  const steps = ["Personal Info", "Contact Info", "Documents", "Employment", "Loan Details", "Review & Submit"]
+  const steps = [
+    t("personal-information"),
+    t("contact-information"),
+    t("identification-documents"),
+    t("employment-information"),
+    t("loan-information"),
+    t("review-submit"),
+  ]
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -532,11 +534,11 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         <div className="mb-8">
           <button onClick={onBack} className="flex items-center text-blue-600 hover:text-blue-700 mb-4">
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Services
+            {t("back-to-services")}
           </button>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Loan Application</h1>
-          <p className="text-gray-600">Complete the form below to apply for your loan</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("loan-application")}</h1>
+          <p className="text-gray-600">{t("complete-form-loan")}</p>
         </div>
 
         {/* Progress Steps */}
@@ -581,12 +583,12 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
             className="flex items-center bg-transparent"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Previous
+            {t("previous")}
           </Button>
 
           {currentStep < 6 ? (
             <Button onClick={nextStep} className="flex items-center">
-              Next
+              {t("next")}
               <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
             </Button>
           ) : (
@@ -595,7 +597,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
               disabled={isSubmitting}
               className="flex items-center bg-green-600 hover:bg-green-700"
             >
-              {isSubmitting ? "Submitting..." : "Submit Application"}
+              {isSubmitting ? t("submitting") : t("submit-application")}
               <CheckCircle className="w-4 h-4 ml-2" />
             </Button>
           )}

@@ -30,6 +30,7 @@ import {
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
 import Button from "../components/ui/Button"
+import { useTranslation } from "react-i18next"
 
 interface ServicesProps {
   onOpenAccount?: (scheme?: string) => void
@@ -41,106 +42,108 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
   const [expandedScheme, setExpandedScheme] = useState<string | null>(null)
   const [selectedLoanTerm, setSelectedLoanTerm] = useState("1 Year")
 
+  const { t } = useTranslation()
+
   const savingSchemes = [
     {
       id: "general",
-      title: "Constellation General Saving Scheme",
+      title: t("constellation-general-saving"),
       icon: PiggyBank,
       minDeposit: "Rs. 200",
       minBalance: "Rs. 500",
       interestRate: "5%",
       maxWithdrawal: "Rs. 200,000",
-      targetGroup: "Housewives, Businesspersons, Employees",
+      targetGroup: t("target-group-housewives"),
       features: [
-        "Flexible saving: Daily, Weekly, or Monthly",
-        "Interest calculated on daily balance",
-        "Interest merged with principal every 6 months",
-        "Flexible withdrawal as per need",
+        t("feature-flexible-saving"),
+        t("feature-interest-daily"),
+        t("feature-interest-merged"),
+        t("feature-flexible-withdrawal"),
       ],
       color: "blue",
     },
     {
       id: "special",
-      title: "Constellation Special Saving Scheme",
+      title: t("constellation-special-saving"),
       icon: Star,
       minDeposit: "Rs. 500",
       minBalance: "Rs. 1,000",
       interestRate: "6%",
       maxWithdrawal: "Rs. 300,000",
-      targetGroup: "All Members",
+      targetGroup: t("target-group-all"),
       features: [
-        "Higher interest rate than general scheme",
-        "Daily, Weekly, or Monthly deposits",
-        'Slogan: "Increased income and employment"',
-        "Better withdrawal limits",
+        t("feature-higher-interest"),
+        t("feature-daily-weekly-monthly"),
+        t("feature-slogan"),
+        t("feature-better-withdrawal"),
       ],
       color: "green",
     },
     {
       id: "super",
-      title: "Constellation Super Saving Scheme",
+      title: t("constellation-super-saving"),
       icon: Award,
       minDeposit: "Rs. 1,000",
       minBalance: "Rs. 5,000",
       interestRate: "7%",
       maxWithdrawal: "Rs. 500,000",
-      targetGroup: "High-value Savers",
+      targetGroup: t("target-group-high-value"),
       features: [
-        "Maximum interest rate for regular savings",
-        "Heavy savings with maximum benefits",
-        "Flexible deposit options",
-        "Highest withdrawal facility",
+        t("feature-maximum-interest"),
+        t("feature-heavy-savings"),
+        t("feature-flexible-deposit"),
+        t("feature-highest-withdrawal"),
       ],
       color: "purple",
     },
     {
       id: "daily",
-      title: "Constellation Daily Saving Scheme",
+      title: t("constellation-daily-saving"),
       icon: Clock,
       minDeposit: "Rs. 200",
       minBalance: "Rs. 300",
       interestRate: "8%",
       maxWithdrawal: "Rs. 300,000",
-      targetGroup: "Businesspersons",
+      targetGroup: t("target-group-business"),
       features: [
-        "Daily savings only",
-        "Highest interest rate (8%)",
-        "Interest on monthly minimum balance",
-        "Perfect for daily income earners",
+        t("feature-daily-only"),
+        t("feature-highest-interest"),
+        t("feature-monthly-minimum"),
+        t("feature-daily-income"),
       ],
       color: "orange",
     },
     {
       id: "shareholder",
-      title: "Constellation Shareholder Saving Scheme",
+      title: t("constellation-shareholder-saving"),
       icon: Users,
       minDeposit: "Rs. 1,500",
       minBalance: "Rs. 1,500",
       interestRate: "10%",
       maxWithdrawal: "As per requirement",
-      targetGroup: "Shareholding Members",
+      targetGroup: t("target-group-shareholders"),
       features: [
-        "Highest interest rate (10%)",
-        "Monthly compulsory savings",
-        "Exclusive for shareholders",
-        "Premium member benefits",
+        t("feature-highest-rate"),
+        t("feature-monthly-compulsory"),
+        t("feature-exclusive-shareholders"),
+        t("feature-premium-benefits"),
       ],
       color: "red",
     },
     {
       id: "business",
-      title: "Constellation Business Saving Scheme",
+      title: t("constellation-business-saving"),
       icon: Briefcase,
       minDeposit: "Rs. 5,000",
       minBalance: "Rs. 15,000",
       interestRate: "10%",
       maxWithdrawal: "Unlimited",
-      targetGroup: "Business Members with Shares",
+      targetGroup: t("target-group-business-members"),
       features: [
-        "Business-focused savings",
-        "Overdraft facility available",
-        "Daily savings with high interest",
-        "Withdraw more than available balance",
+        t("feature-business-focused"),
+        t("feature-overdraft"),
+        t("feature-daily-high-interest"),
+        t("feature-withdraw-more"),
       ],
       color: "indigo",
     },
@@ -148,85 +151,85 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
 
   const loanSchemes = [
     {
-      type: "Personal Loan",
+      type: t("personal-loan"),
       icon: Users,
       rates: { "1 Month": "14%", "3 Months": "15%", "6 Months": "16%", "1 Year": "17%" },
-      description: "For personal financial needs and emergencies",
-      features: ["Quick approval", "Minimal documentation", "Flexible repayment"],
+      description: t("personal-loan-desc"),
+      features: [t("quick-approval"), t("minimal-documentation"), t("flexible-repayment")],
     },
     {
-      type: "Business Loan",
+      type: t("business-loan"),
       icon: Building2,
       rates: { "1 Month": "14%", "3 Months": "15%", "6 Months": "16%", "1 Year": "17%" },
-      description: "Support your business growth and expansion",
-      features: ["Business development", "Working capital", "Equipment purchase"],
+      description: t("business-loan-desc"),
+      features: [t("business-development"), t("working-capital"), t("equipment-purchase")],
     },
     {
-      type: "Education Loan",
+      type: t("education-loan"),
       icon: GraduationCap,
       rates: { "1 Month": "14%", "3 Months": "15%", "6 Months": "16%", "1 Year": "17%" },
-      description: "Invest in education for a brighter future",
-      features: ["Student-friendly terms", "Deferred payments", "Competitive rates"],
+      description: t("education-loan-desc"),
+      features: [t("student-friendly"), t("deferred-payments"), t("competitive-rates")],
     },
     {
-      type: "Household Loan",
+      type: t("household-loan"),
       icon: Home,
       rates: { "1 Month": "14%", "3 Months": "15%", "6 Months": "16%", "1 Year": "17%" },
-      description: "For household needs and improvements",
-      features: ["Home improvements", "Appliance purchase", "Family needs"],
+      description: t("household-loan-desc"),
+      features: [t("home-improvements"), t("appliance-purchase"), t("family-needs")],
     },
     {
-      type: "Emergency Loan",
+      type: t("emergency-loan"),
       icon: Zap,
       rates: { "1 Month": "15%", "3 Months": "15%", "6 Months": "16%", "1 Year": "17%" },
-      description: "Quick financial assistance for urgent needs",
-      features: ["Same-day approval", "Minimal requirements", "Fast disbursement"],
+      description: t("emergency-loan-desc"),
+      features: [t("same-day-approval"), t("minimal-requirements"), t("fast-disbursement")],
     },
     {
-      type: "Loan Against FD/Share",
+      type: t("loan-against-fd"),
       icon: Shield,
       rates: { "1 Month": "10%", "3 Months": "11%", "6 Months": "12%", "1 Year": "13%" },
-      description: "Lowest rates against your deposits/shares",
-      features: ["Lowest interest rates", "Instant approval", "No additional collateral"],
+      description: t("loan-against-fd-desc"),
+      features: [t("lowest-interest"), t("instant-approval"), t("no-additional-collateral")],
     },
   ]
 
   const additionalFacilities = [
     {
-      title: "ATM Services",
-      description: "Convenient 24/7 access to your funds",
+      title: t("atm-services"),
+      description: t("atm-services-desc"),
       icon: CreditCard,
-      features: ["24/7 cash withdrawal", "Balance inquiry", "Mini statements", "PIN change facility"],
+      features: [t("24-7-withdrawal"), t("balance-inquiry"), t("mini-statements"), t("pin-change")],
     },
     {
-      title: "Digital Banking",
-      description: "Online and mobile banking services (planned expansion)",
+      title: t("digital-banking"),
+      description: t("digital-banking-desc"),
       icon: Smartphone,
-      features: ["Account management", "Fund transfers", "Bill payments", "Transaction history"],
+      features: [t("account-management"), t("fund-transfers"), t("bill-payments"), t("transaction-history")],
     },
     {
-      title: "Insurance Services",
-      description: "Life and health insurance for members",
+      title: t("insurance-services"),
+      description: t("insurance-services-desc"),
       icon: Shield,
-      features: ["Life insurance coverage", "Health insurance plans", "Family protection", "Affordable premiums"],
+      features: [t("life-insurance"), t("health-insurance"), t("family-protection"), t("affordable-premiums")],
     },
     {
-      title: "Financial Literacy",
-      description: "Educational programs and workshops",
+      title: t("financial-literacy"),
+      description: t("financial-literacy-desc"),
       icon: Calculator,
-      features: ["Financial workshops", "Investment guidance", "Savings planning", "Business training"],
+      features: [t("financial-workshops"), t("investment-guidance"), t("savings-planning"), t("business-training")],
     },
     {
-      title: "Community Programs",
-      description: "Social and cultural activities for members",
+      title: t("community-programs"),
+      description: t("community-programs-desc"),
       icon: Heart,
-      features: ["Festival celebrations", "Sports events", "Group tours", "Cultural programs"],
+      features: [t("festival-celebrations"), t("sports-events"), t("group-tours"), t("cultural-programs")],
     },
     {
-      title: "Business Directory",
-      description: "Networking and business promotion services",
+      title: t("business-directory"),
+      description: t("business-directory-desc"),
       icon: Building2,
-      features: ["Business listings", "Networking events", "Trade exhibitions", "Member promotions"],
+      features: [t("business-listings"), t("networking-events"), t("trade-exhibitions"), t("member-promotions")],
     },
   ]
 
@@ -261,7 +264,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Our Services - Constellation Saving and Credit Cooperative Ltd."
+        title={`${t("services")} - Constellation Saving and Credit Cooperative Ltd.`}
         description="Explore our comprehensive financial services including 6 saving schemes, competitive loan rates, ATM services, insurance, and community programs designed for your financial growth."
       />
 
@@ -275,15 +278,13 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Our Services</h1>
-            <p className="text-xl md:text-2xl max-w-4xl mx-auto mb-8">
-              Comprehensive financial solutions with competitive rates and member-focused benefits
-            </p>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("services-hero-title")}</h1>
+            <p className="text-xl md:text-2xl max-w-4xl mx-auto mb-8">{t("services-hero-subtitle")}</p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="bg-white/20 rounded-full px-4 py-2">6 Saving Schemes</div>
-              <div className="bg-white/20 rounded-full px-4 py-2">10 Loan Types</div>
-              <div className="bg-white/20 rounded-full px-4 py-2">ATM Services</div>
-              <div className="bg-white/20 rounded-full px-4 py-2">Insurance Coverage</div>
+              <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-schemes")}</div>
+              <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-loans")}</div>
+              <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-atm")}</div>
+              <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-insurance")}</div>
             </div>
           </motion.div>
         </div>
@@ -295,9 +296,9 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
           <div className="flex justify-center mb-12">
             <div className="bg-gray-100 rounded-xl p-2 flex flex-wrap gap-2">
               {[
-                { id: "savings", label: "Saving Schemes", icon: PiggyBank },
-                { id: "loans", label: "Loan Services", icon: CreditCard },
-                { id: "facilities", label: "Additional Facilities", icon: Star },
+                { id: "savings", label: t("saving-schemes"), icon: PiggyBank },
+                { id: "loans", label: t("loan-services"), icon: CreditCard },
+                { id: "facilities", label: t("additional-facilities"), icon: Star },
               ].map((category) => (
                 <button
                   key={category.id}
@@ -326,10 +327,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Saving Schemes</h2>
-                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Choose from our 6 specialized saving schemes designed for different financial goals and lifestyles
-                  </p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("saving-schemes")}</h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t("saving-schemes-subtitle")}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -358,7 +357,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                               </div>
                               <div className="text-right">
                                 <div className="text-2xl font-bold">{scheme.interestRate}</div>
-                                <div className="text-white/90 text-sm">Annual Interest</div>
+                                <div className="text-white/90 text-sm">{t("annual-interest")}</div>
                               </div>
                             </div>
                           </div>
@@ -366,18 +365,18 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                           {/* Key Details */}
                           <div className="grid grid-cols-2 gap-4 mb-6">
                             <div className="text-center p-3 bg-gray-50 rounded-lg">
-                              <div className="text-sm text-gray-600">Min. Deposit</div>
+                              <div className="text-sm text-gray-600">{t("min-deposit")}</div>
                               <div className="font-semibold text-gray-900">{scheme.minDeposit}</div>
                             </div>
                             <div className="text-center p-3 bg-gray-50 rounded-lg">
-                              <div className="text-sm text-gray-600">Min. Balance</div>
+                              <div className="text-sm text-gray-600">{t("min-balance")}</div>
                               <div className="font-semibold text-gray-900">{scheme.minBalance}</div>
                             </div>
                           </div>
 
                           {/* Features */}
                           <div className="mb-6">
-                            <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
+                            <h4 className="font-semibold text-gray-900 mb-3">{t("key-features")}</h4>
                             <ul className="space-y-2">
                               {scheme.features.map((feature, idx) => (
                                 <li key={idx} className="flex items-start">
@@ -394,7 +393,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                               onClick={() => toggleScheme(scheme.id)}
                               className="flex items-center justify-between w-full text-left font-medium text-gray-900 hover:text-blue-600 transition-colors"
                             >
-                              <span>View Details</span>
+                              <span>{t("view-details")}</span>
                               {expandedScheme === scheme.id ? (
                                 <ChevronUp className="w-5 h-5" />
                               ) : (
@@ -413,19 +412,19 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                                 >
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                     <div>
-                                      <span className="font-medium">Max Withdrawal:</span>
+                                      <span className="font-medium">{t("max-withdrawal")}:</span>
                                       <span className="ml-2 text-gray-700">{scheme.maxWithdrawal}</span>
                                     </div>
                                     <div>
-                                      <span className="font-medium">Interest Calculation:</span>
-                                      <span className="ml-2 text-gray-700">Daily Balance</span>
+                                      <span className="font-medium">{t("interest-calculation")}:</span>
+                                      <span className="ml-2 text-gray-700">{t("daily-balance")}</span>
                                     </div>
                                     <div>
-                                      <span className="font-medium">Compounding:</span>
-                                      <span className="ml-2 text-gray-700">Every 6 months</span>
+                                      <span className="font-medium">{t("compounding")}:</span>
+                                      <span className="ml-2 text-gray-700">{t("every-6-months")}</span>
                                     </div>
                                     <div>
-                                      <span className="font-medium">Target Group:</span>
+                                      <span className="font-medium">{t("target-group")}:</span>
                                       <span className="ml-2 text-gray-700">{scheme.targetGroup}</span>
                                     </div>
                                   </div>
@@ -441,7 +440,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                             iconPosition="right"
                             onClick={() => handleOpenAccountClick(scheme.title)}
                           >
-                            Open Account
+                            {t("open-account")}
                           </Button>
                         </Card>
                       </motion.div>
@@ -461,15 +460,13 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Loan Services</h2>
-                  <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                    Competitive interest rates with flexible repayment options for all your financial needs
-                  </p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("loan-services")}</h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">{t("loan-services-subtitle")}</p>
 
                   {/* Loan Term Selector */}
                   <div className="flex justify-center">
                     <div className="bg-gray-100 rounded-lg p-1 flex">
-                      {["1 Month", "3 Months", "6 Months", "1 Year"].map((term) => (
+                      {[t("1-month"), t("3-months"), t("6-months"), t("1-year")].map((term) => (
                         <button
                           key={term}
                           onClick={() => setSelectedLoanTerm(term)}
@@ -510,13 +507,15 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                             <div className="text-3xl font-bold mb-1">
                               {loan.rates[selectedLoanTerm as keyof typeof loan.rates]}
                             </div>
-                            <div className="text-blue-100 text-sm">Interest Rate ({selectedLoanTerm})</div>
+                            <div className="text-blue-100 text-sm">
+                              {t("annual-interest")} ({selectedLoanTerm})
+                            </div>
                           </div>
                         </div>
 
                         {/* Features */}
                         <div className="mb-6">
-                          <h4 className="font-semibold text-gray-900 mb-3">Features:</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">{t("features")}</h4>
                           <ul className="space-y-2">
                             {loan.features.map((feature, idx) => (
                               <li key={idx} className="flex items-center text-sm">
@@ -533,7 +532,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                           iconPosition="right"
                           onClick={() => handleApplyLoanClick(loan.type)}
                         >
-                          Apply Now
+                          {t("apply-now")}
                         </Button>
                       </Card>
                     </motion.div>
@@ -548,16 +547,18 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                   className="mt-16"
                 >
                   <Card>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Interest Rate Comparison</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                      {t("interest-rate-comparison")}
+                    </h3>
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
                           <tr className="border-b">
-                            <th className="text-left py-3 px-4 font-semibold text-gray-900">Loan Type</th>
-                            <th className="text-center py-3 px-4 font-semibold text-gray-900">1 Month</th>
-                            <th className="text-center py-3 px-4 font-semibold text-gray-900">3 Months</th>
-                            <th className="text-center py-3 px-4 font-semibold text-gray-900">6 Months</th>
-                            <th className="text-center py-3 px-4 font-semibold text-gray-900">1 Year</th>
+                            <th className="text-left py-3 px-4 font-semibold text-gray-900">{t("loan-type")}</th>
+                            <th className="text-center py-3 px-4 font-semibold text-gray-900">{t("1-month")}</th>
+                            <th className="text-center py-3 px-4 font-semibold text-gray-900">{t("3-months")}</th>
+                            <th className="text-center py-3 px-4 font-semibold text-gray-900">{t("6-months")}</th>
+                            <th className="text-center py-3 px-4 font-semibold text-gray-900">{t("1-year")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -588,10 +589,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Additional Facilities</h2>
-                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Beyond banking - comprehensive services for your complete financial and social well-being
-                  </p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("additional-facilities")}</h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t("additional-facilities-subtitle")}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -636,31 +635,31 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Constellation?</h2>
-            <p className="text-xl text-gray-600">Special features that set us apart</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("why-choose-constellation")}</h2>
+            <p className="text-xl text-gray-600">{t("special-features")}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 icon: Users,
-                title: "Equal Partnership",
-                description: "Equal shares, equal rights, equal duties for all members",
+                title: t("equal-partnership"),
+                description: t("equal-partnership-desc"),
               },
               {
                 icon: Award,
-                title: "Member Recognition",
-                description: "Rewards and recognition for active members",
+                title: t("member-recognition"),
+                description: t("member-recognition-desc"),
               },
               {
                 icon: Target,
-                title: "Group-Targeted Schemes",
-                description: "Specialized saving schemes for different groups",
+                title: t("group-targeted-schemes"),
+                description: t("group-targeted-schemes-desc"),
               },
               {
                 icon: TrendingUp,
-                title: "Business Growth",
-                description: "Promotion of entrepreneurship and business development",
+                title: t("business-growth"),
+                description: t("business-growth-desc"),
               },
             ].map((feature, index) => (
               <motion.div
@@ -686,17 +685,15 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Financial Journey?</h2>
-            <p className="text-xl mb-8 opacity-90">
-              Join over 1,000 satisfied members who trust Constellation for their financial growth
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("ready-to-start")}</h2>
+            <p className="text-xl mb-8 opacity-90">{t("join-members")}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register">
                 <Button
                   size="lg"
                   className="bg-white text-blue-700 hover:bg-blue-600 hover:text-white font-semibold shadow-lg transition-all duration-300"
                 >
-                  Become a Member Today
+                  {t("become-member")}
                 </Button>
               </Link>
               <Button
@@ -704,7 +701,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white hover:text-blue-700 bg-transparent font-semibold transition-all duration-300"
               >
-                Contact Us: 01-4254939
+                {t("contact-us")}
               </Button>
             </div>
             <div className="mt-8 text-sm opacity-75">

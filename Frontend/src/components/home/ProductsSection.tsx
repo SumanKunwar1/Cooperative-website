@@ -5,12 +5,14 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { useCart } from "../../contexts/CartContext"
 import ProductCard from "../ecommerce/ProductCard"
 import Button from "../ui/Button"
 import { mockProducts } from "../../data/mockData"
 
 const ProductsSection: React.FC = () => {
+  const { t } = useTranslation()
   const { addToCart } = useCart()
   const [, setWishlist] = useState<string[]>([])
 
@@ -34,12 +36,12 @@ const ProductsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Featured Products</h2>
-            <p className="text-gray-600">Discover quality products from our member businesses</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("products-title")}</h2>
+            <p className="text-gray-600">{t("products-subtitle")}</p>
           </div>
           <Link to="/shop">
             <Button icon={ArrowRight} iconPosition="right">
-              View More Products
+              {t("products-view-more")}
             </Button>
           </Link>
         </div>

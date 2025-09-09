@@ -47,6 +47,10 @@ import AdminHeroSection from "./pages/admin/AdminHero"
 import AccountOpeningForm from "./components/form/AccountOpeningForm"
 import LoanApplicationForm from "./components/form/LoanApplicationForm"
 
+// i18n import
+import { useTranslation } from "react-i18next"
+import "./pages/i18n" // This will initialize i18n
+
 function AccountOpeningWrapper() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -83,6 +87,16 @@ function ServicesWrapper() {
   }
 
   return <Services onOpenAccount={handleOpenAccount} onApplyLoan={handleApplyLoan} />
+}
+
+function PlaceholderPage({ titleKey }: { titleKey: string }) {
+  const { t } = useTranslation()
+  
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <h1 className="text-2xl">{t(titleKey)}</h1>
+    </div>
+  )
 }
 
 function App() {
@@ -272,64 +286,14 @@ function App() {
                               <Route path="/teams" element={<Team />} />
                               <Route path="/gallery" element={<Gallery />} />
 
-
-                              {/* Placeholder routes - to be implemented */}
-                              <Route
-                                path="/membership"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Membership Page - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/events"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Events - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/contact"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Contact - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/business-registration"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Business Registration - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/forgot-password"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Forgot Password - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/terms"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Terms of Service - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
-                              <Route
-                                path="/privacy"
-                                element={
-                                  <div className="min-h-screen flex items-center justify-center">
-                                    <h1 className="text-2xl">Privacy Policy - Coming Soon</h1>
-                                  </div>
-                                }
-                              />
+                              {/* Placeholder routes with translations */}
+                              <Route path="/membership" element={<PlaceholderPage titleKey="membershipPage" />} />
+                              <Route path="/events" element={<PlaceholderPage titleKey="events" />} />
+                              <Route path="/contact" element={<PlaceholderPage titleKey="contact" />} />
+                              <Route path="/business-registration" element={<PlaceholderPage titleKey="businessRegistration" />} />
+                              <Route path="/forgot-password" element={<PlaceholderPage titleKey="forgotPassword" />} />
+                              <Route path="/terms" element={<PlaceholderPage titleKey="termsOfService" />} />
+                              <Route path="/privacy" element={<PlaceholderPage titleKey="privacyPolicy" />} />
                             </Routes>
                           </main>
                           <Footer />

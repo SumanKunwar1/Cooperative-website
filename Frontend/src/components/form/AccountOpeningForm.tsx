@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { User, MapPin, Upload, CreditCard, Building2, Users, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react"
 import Button from "../ui/Button"
 import Card from "../ui/Card"
+import { useTranslation } from "react-i18next"
 import { useApplications } from "../../contexts/ApplicationContext"
 import { accountApplicationService, type AccountApplicationData } from "../../services/accountApplicationService"
 
@@ -15,6 +16,8 @@ interface AccountOpeningFormProps {
 }
 
 const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selectedScheme }) => {
+  const { t } = useTranslation()
+
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -95,12 +98,12 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
   const { addAccountApplication } = useApplications()
 
   const savingSchemes = [
-    "Constellation General Saving Scheme",
-    "Constellation Special Saving Scheme",
-    "Constellation Super Saving Scheme",
-    "Constellation Daily Saving Scheme",
-    "Constellation Shareholder Saving Scheme",
-    "Constellation Business Saving Scheme",
+    t("constellation-general-saving"),
+    t("constellation-special-saving"),
+    t("constellation-super-saving"),
+    t("constellation-daily-saving"),
+    t("constellation-shareholder-saving"),
+    t("constellation-business-saving"),
   ]
 
   const handleInputChange = (field: string, value: string) => {
@@ -118,18 +121,18 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
     const newErrors: Record<string, string> = {}
 
     if (step === 1) {
-      if (!formData.firstName) newErrors.firstName = "First name is required"
-      if (!formData.lastName) newErrors.lastName = "Last name is required"
-      if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of birth is required"
-      if (!formData.gender) newErrors.gender = "Gender is required"
+      if (!formData.firstName) newErrors.firstName = t("first-name-required")
+      if (!formData.lastName) newErrors.lastName = t("last-name-required")
+      if (!formData.dateOfBirth) newErrors.dateOfBirth = t("date-of-birth-required")
+      if (!formData.gender) newErrors.gender = t("gender-required")
       if (!formData.nationality) newErrors.nationality = "Nationality is required"
     }
 
     if (step === 2) {
-      if (!formData.email) newErrors.email = "Email is required"
-      if (!formData.primaryPhone) newErrors.primaryPhone = "Primary phone is required"
-      if (!formData.permanentAddress) newErrors.permanentAddress = "Permanent address is required"
-      if (!formData.district) newErrors.district = "District is required"
+      if (!formData.email) newErrors.email = t("email-required")
+      if (!formData.primaryPhone) newErrors.primaryPhone = t("primary-phone-required")
+      if (!formData.permanentAddress) newErrors.permanentAddress = t("permanent-address-required")
+      if (!formData.district) newErrors.district = t("district-required")
     }
 
     if (step === 3) {
@@ -139,13 +142,13 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
     }
 
     if (step === 4) {
-      if (!formData.occupation) newErrors.occupation = "Occupation is required"
-      if (!formData.monthlyIncome) newErrors.monthlyIncome = "Monthly income is required"
+      if (!formData.occupation) newErrors.occupation = t("occupation-required")
+      if (!formData.monthlyIncome) newErrors.monthlyIncome = t("monthly-income-required")
     }
 
     if (step === 6) {
-      if (!formData.accountType) newErrors.accountType = "Account type is required"
-      if (!formData.initialDeposit) newErrors.initialDeposit = "Initial deposit is required"
+      if (!formData.accountType) newErrors.accountType = t("account-type-required")
+      if (!formData.initialDeposit) newErrors.initialDeposit = t("initial-deposit-required")
     }
 
     setErrors(newErrors)
@@ -233,8 +236,10 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           ) : (
             <div className="flex flex-col items-center">
               <Upload className="w-8 h-8 text-gray-400 mb-2" />
-              <span className="text-sm text-gray-600">Click to upload {label.toLowerCase()}</span>
-              <span className="text-xs text-gray-400 mt-1">PDF, JPG, PNG (Max 5MB)</span>
+              <span className="text-sm text-gray-600">
+                {t("click-to-upload")} {label.toLowerCase()}
+              </span>
+              <span className="text-xs text-gray-400 mt-1">{t("file-format")}</span>
             </div>
           )}
         </label>
@@ -249,45 +254,45 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <User className="w-6 h-6 mr-2 text-blue-600" />
-              Personal Information
+              {t("personal-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name <span className="text-red-500">*</span>
+                  {t("first-name")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter first name"
+                  placeholder={t("enter-first-name")}
                 />
                 {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("middle-name")}</label>
                 <input
                   type="text"
                   value={formData.middleName}
                   onChange={(e) => handleInputChange("middleName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter middle name"
+                  placeholder={t("enter-middle-name")}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name <span className="text-red-500">*</span>
+                  {t("last-name")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter last name"
+                  placeholder={t("enter-last-name")}
                 />
                 {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
               </div>
@@ -296,7 +301,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date of Birth <span className="text-red-500">*</span>
+                  {t("date-of-birth")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -309,33 +314,33 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Gender <span className="text-red-500">*</span>
+                  {t("gender")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.gender}
                   onChange={(e) => handleInputChange("gender", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <option value="">{t("select-gender")}</option>
+                  <option value="Male">{t("male")}</option>
+                  <option value="Female">{t("female")}</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
                 {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Marital Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("marital-status")}</label>
                 <select
                   value={formData.maritalStatus}
                   onChange={(e) => handleInputChange("maritalStatus", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Status</option>
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                  <option value="Divorced">Divorced</option>
-                  <option value="Widowed">Widowed</option>
+                  <option value="">{t("select-status")}</option>
+                  <option value="Single">{t("single")}</option>
+                  <option value="Married">{t("married")}</option>
+                  <option value="Divorced">{t("divorced")}</option>
+                  <option value="Widowed">{t("widowed")}</option>
                 </select>
               </div>
             </div>
@@ -343,25 +348,25 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nationality <span className="text-red-500">*</span>
+                  {t("nationality")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.nationality}
                   onChange={(e) => handleInputChange("nationality", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter nationality"
+                  placeholder={t("enter-nationality")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Religion</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("religion")}</label>
                 <input
                   type="text"
                   value={formData.religion}
                   onChange={(e) => handleInputChange("religion", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter religion"
+                  placeholder={t("enter-religion")}
                 />
               </div>
             </div>
@@ -373,109 +378,109 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <MapPin className="w-6 h-6 mr-2 text-blue-600" />
-              Contact Information
+              {t("contact-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address <span className="text-red-500">*</span>
+                  {t("email-address")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter email address"
+                  placeholder={t("enter-email")}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Primary Phone <span className="text-red-500">*</span>
+                  {t("primary-phone")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   value={formData.primaryPhone}
                   onChange={(e) => handleInputChange("primaryPhone", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter primary phone"
+                  placeholder={t("enter-primary-phone")}
                 />
                 {errors.primaryPhone && <p className="text-red-500 text-xs mt-1">{errors.primaryPhone}</p>}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Alternate Phone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("alternate-phone")}</label>
               <input
                 type="tel"
                 value={formData.alternatePhone}
                 onChange={(e) => handleInputChange("alternatePhone", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter alternate phone"
+                placeholder={t("enter-alternate-phone")}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Permanent Address <span className="text-red-500">*</span>
+                {t("permanent-address")} <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={formData.permanentAddress}
                 onChange={(e) => handleInputChange("permanentAddress", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter permanent address"
+                placeholder={t("enter-permanent-address")}
               />
               {errors.permanentAddress && <p className="text-red-500 text-xs mt-1">{errors.permanentAddress}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Temporary Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("temporary-address")}</label>
               <textarea
                 value={formData.temporaryAddress}
                 onChange={(e) => handleInputChange("temporaryAddress", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter temporary address (if different)"
+                placeholder={t("enter-temporary-address")}
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  District <span className="text-red-500">*</span>
+                  {t("district")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.district}
                   onChange={(e) => handleInputChange("district", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter district"
+                  placeholder={t("enter-district")}
                 />
                 {errors.district && <p className="text-red-500 text-xs mt-1">{errors.district}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Municipality</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("municipality")}</label>
                 <input
                   type="text"
                   value={formData.municipality}
                   onChange={(e) => handleInputChange("municipality", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter municipality"
+                  placeholder={t("enter-municipality")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ward No.</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("ward-no")}</label>
                 <input
                   type="number"
                   value={formData.wardNo}
                   onChange={(e) => handleInputChange("wardNo", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter ward number"
+                  placeholder={t("enter-ward")}
                 />
               </div>
             </div>
@@ -487,53 +492,53 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
-              Identification Documents
+              {t("identification-documents")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Citizenship Number <span className="text-red-500">*</span>
+                  {t("citizenship-number")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.citizenshipNo}
                   onChange={(e) => handleInputChange("citizenshipNo", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter citizenship number"
+                  placeholder={t("enter-citizenship")}
                 />
                 {errors.citizenshipNo && <p className="text-red-500 text-xs mt-1">{errors.citizenshipNo}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Passport Number</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("passport-number")}</label>
                 <input
                   type="text"
                   value={formData.passportNo}
                   onChange={(e) => handleInputChange("passportNo", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter passport number"
+                  placeholder={t("enter-passport")}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">PAN Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("pan-number")}</label>
               <input
                 type="text"
                 value={formData.panNo}
                 onChange={(e) => handleInputChange("panNo", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter PAN number"
+                placeholder={t("enter-pan")}
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadField label="Picture" field="profilePhoto" required accept="image/*" />
-              <FileUploadField label="Citizenship Front" field="citizenshipFront" required accept="image/*,.pdf" />
-              <FileUploadField label="Citizenship Back" field="citizenshipBack" required accept="image/*,.pdf" />
-              <FileUploadField label="Passport" field="passport" accept="image/*,.pdf" />
-              <FileUploadField label="PAN Card" field="panCard" accept="image/*,.pdf" />
+              <FileUploadField label={t("picture")} field="profilePhoto" required accept="image/*" />
+              <FileUploadField label={t("citizenship-front")} field="citizenshipFront" required accept="image/*,.pdf" />
+              <FileUploadField label={t("citizenship-back")} field="citizenshipBack" required accept="image/*,.pdf" />
+              <FileUploadField label={t("passport")} field="passport" accept="image/*,.pdf" />
+              <FileUploadField label={t("pan-card")} field="panCard" accept="image/*,.pdf" />
             </div>
           </div>
         )
@@ -543,40 +548,40 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <Building2 className="w-6 h-6 mr-2 text-blue-600" />
-              Employment Information
+              {t("employment-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Occupation <span className="text-red-500">*</span>
+                  {t("occupation")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.occupation}
                   onChange={(e) => handleInputChange("occupation", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Occupation</option>
-                  <option value="Government Employee">Government Employee</option>
-                  <option value="Private Employee">Private Employee</option>
-                  <option value="Business Owner">Business Owner</option>
-                  <option value="Self Employed">Self Employed</option>
-                  <option value="Student">Student</option>
-                  <option value="Housewife">Housewife</option>
-                  <option value="Retired">Retired</option>
-                  <option value="Other">Other</option>
+                  <option value="">{t("select-occupation")}</option>
+                  <option value="Government Employee">{t("government-employee")}</option>
+                  <option value="Private Employee">{t("private-employee")}</option>
+                  <option value="Business Owner">{t("business-owner")}</option>
+                  <option value="Self Employed">{t("self-employed")}</option>
+                  <option value="Student">{t("student")}</option>
+                  <option value="Housewife">{t("housewife")}</option>
+                  <option value="Retired">{t("retired")}</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
                 {errors.occupation && <p className="text-red-500 text-xs mt-1">{errors.occupation}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Employer Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("employer-name")}</label>
                 <input
                   type="text"
                   value={formData.employerName}
                   onChange={(e) => handleInputChange("employerName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter employer name"
+                  placeholder={t("enter-employer")}
                 />
               </div>
             </div>
@@ -584,42 +589,38 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Monthly Income (NPR) <span className="text-red-500">*</span>
+                  {t("monthly-income")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   value={formData.monthlyIncome}
                   onChange={(e) => handleInputChange("monthlyIncome", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter monthly income"
+                  placeholder={t("enter-monthly-income")}
                 />
                 {errors.monthlyIncome && <p className="text-red-500 text-xs mt-1">{errors.monthlyIncome}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Income Source</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("income-source")}</label>
                 <select
                   value={formData.incomeSource}
                   onChange={(e) => handleInputChange("incomeSource", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Income Source</option>
-                  <option value="Salary">Salary</option>
-                  <option value="Business">Business</option>
-                  <option value="Investment">Investment</option>
-                  <option value="Pension">Pension</option>
-                  <option value="Other">Other</option>
+                  <option value="">{t("select-income-source")}</option>
+                  <option value="Salary">{t("salary")}</option>
+                  <option value="Business">{t("business")}</option>
+                  <option value="Investment">{t("investment")}</option>
+                  <option value="Pension">{t("pension")}</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadField label="Income Proof (Optional)" field="incomeProof" accept="image/*,.pdf" />
-              <FileUploadField
-                label="Bank Statement - Last 3 months (Optional)"
-                field="bankStatement"
-                accept="image/*,.pdf"
-              />
+              <FileUploadField label={t("income-proof")} field="incomeProof" accept="image/*,.pdf" />
+              <FileUploadField label={t("bank-statement")} field="bankStatement" accept="image/*,.pdf" />
             </div>
           </div>
         )
@@ -629,83 +630,83 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <Users className="w-6 h-6 mr-2 text-blue-600" />
-              Family Information
+              {t("family-information")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Father's Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("fathers-name")}</label>
                 <input
                   type="text"
                   value={formData.fatherName}
                   onChange={(e) => handleInputChange("fatherName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter father's name"
+                  placeholder={t("enter-fathers-name")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mother's Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("mothers-name")}</label>
                 <input
                   type="text"
                   value={formData.motherName}
                   onChange={(e) => handleInputChange("motherName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter mother's name"
+                  placeholder={t("enter-mothers-name")}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Spouse's Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("spouses-name")}</label>
               <input
                 type="text"
                 value={formData.spouseName}
                 onChange={(e) => handleInputChange("spouseName", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter spouse's name (if married)"
+                placeholder={t("enter-spouses-name")}
               />
             </div>
 
             <div className="border-t pt-6">
-              <h4 className="text-lg font-medium text-gray-900 mb-4">Emergency Contact</h4>
+              <h4 className="text-lg font-medium text-gray-900 mb-4">{t("emergency-contact")}</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("contact-name")}</label>
                   <input
                     type="text"
                     value={formData.emergencyContactName}
                     onChange={(e) => handleInputChange("emergencyContactName", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter contact name"
+                    placeholder={t("enter-contact-name")}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Contact Phone</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("contact-phone")}</label>
                   <input
                     type="tel"
                     value={formData.emergencyContactPhone}
                     onChange={(e) => handleInputChange("emergencyContactPhone", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter contact phone"
+                    placeholder={t("enter-contact-phone")}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("relationship")}</label>
                   <select
                     value={formData.emergencyContactRelation}
                     onChange={(e) => handleInputChange("emergencyContactRelation", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select Relationship</option>
-                    <option value="Father">Father</option>
-                    <option value="Mother">Mother</option>
-                    <option value="Spouse">Spouse</option>
-                    <option value="Sibling">Sibling</option>
-                    <option value="Friend">Friend</option>
-                    <option value="Other">Other</option>
+                    <option value="">{t("select-relationship")}</option>
+                    <option value="Father">{t("father")}</option>
+                    <option value="Mother">{t("mother")}</option>
+                    <option value="Spouse">{t("spouse")}</option>
+                    <option value="Sibling">{t("sibling")}</option>
+                    <option value="Friend">{t("friend")}</option>
+                    <option value="Other">{t("other")}</option>
                   </select>
                 </div>
               </div>
@@ -718,19 +719,19 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
-              Account Details
+              {t("account-details")}
             </h3>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Account Type <span className="text-red-500">*</span>
+                {t("account-type")} <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.accountType}
                 onChange={(e) => handleInputChange("accountType", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Select Account Type</option>
+                <option value="">{t("select-account-type")}</option>
                 {savingSchemes.map((scheme) => (
                   <option key={scheme} value={scheme}>
                     {scheme}
@@ -743,29 +744,29 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Initial Deposit (NPR) <span className="text-red-500">*</span>
+                  {t("initial-deposit")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   value={formData.initialDeposit}
                   onChange={(e) => handleInputChange("initialDeposit", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter initial deposit amount"
+                  placeholder={t("enter-initial-deposit")}
                 />
                 {errors.initialDeposit && <p className="text-red-500 text-xs mt-1">{errors.initialDeposit}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Deposit Frequency</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("deposit-frequency")}</label>
                 <select
                   value={formData.depositFrequency}
                   onChange={(e) => handleInputChange("depositFrequency", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Frequency</option>
-                  <option value="Daily">Daily</option>
-                  <option value="Weekly">Weekly</option>
-                  <option value="Monthly">Monthly</option>
+                  <option value="">{t("select-frequency")}</option>
+                  <option value="Daily">{t("daily")}</option>
+                  <option value="Weekly">{t("weekly")}</option>
+                  <option value="Monthly">{t("monthly")}</option>
                 </select>
               </div>
             </div>
@@ -777,135 +778,135 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <Users className="w-6 h-6 mr-2 text-blue-600" />
-              Nominee Information
+              {t("nominee-references")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nominee Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("nominee-name")}</label>
                 <input
                   type="text"
                   value={formData.nomineeName}
                   onChange={(e) => handleInputChange("nomineeName", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter nominee name"
+                  placeholder={t("enter-nominee-name")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("relationship")}</label>
                 <select
                   value={formData.nomineeRelation}
                   onChange={(e) => handleInputChange("nomineeRelation", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Relationship</option>
-                  <option value="Father">Father</option>
-                  <option value="Mother">Mother</option>
-                  <option value="Spouse">Spouse</option>
-                  <option value="Son">Son</option>
-                  <option value="Daughter">Daughter</option>
-                  <option value="Sibling">Sibling</option>
-                  <option value="Other">Other</option>
+                  <option value="">{t("select-relationship")}</option>
+                  <option value="Father">{t("father")}</option>
+                  <option value="Mother">{t("mother")}</option>
+                  <option value="Spouse">{t("spouse")}</option>
+                  <option value="Son">{t("son")}</option>
+                  <option value="Daughter">{t("daughter")}</option>
+                  <option value="Sibling">{t("sibling")}</option>
+                  <option value="Other">{t("other")}</option>
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nominee Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("nominee-phone")}</label>
                 <input
                   type="tel"
                   value={formData.nomineePhone}
                   onChange={(e) => handleInputChange("nomineePhone", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter nominee phone"
+                  placeholder={t("enter-nominee-phone")}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nominee Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("nominee-address")}</label>
               <textarea
                 value={formData.nomineeAddress}
                 onChange={(e) => handleInputChange("nomineeAddress", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter nominee address"
+                placeholder={t("enter-nominee-address")}
               />
             </div>
 
-            <FileUploadField label="Nominee Picture" field="nomineePhoto" accept="image/*" />
+            <FileUploadField label={t("nominee-picture")} field="nomineePhoto" accept="image/*" />
 
             <div className="border-t pt-6">
-              <h4 className="text-lg font-medium text-gray-900 mb-4">References</h4>
+              <h4 className="text-lg font-medium text-gray-900 mb-4">{t("references")}</h4>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 1 Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-1-name")}</label>
                     <input
                       type="text"
                       value={formData.reference1Name}
                       onChange={(e) => handleInputChange("reference1Name", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference name"
+                      placeholder={t("enter-reference-name")}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 1 Phone</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-1-phone")}</label>
                     <input
                       type="tel"
                       value={formData.reference1Phone}
                       onChange={(e) => handleInputChange("reference1Phone", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference phone"
+                      placeholder={t("enter-reference-phone")}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 1 Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-1-address")}</label>
                     <input
                       type="text"
                       value={formData.reference1Address}
                       onChange={(e) => handleInputChange("reference1Address", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference address"
+                      placeholder={t("enter-reference-address")}
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 2 Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-2-name")}</label>
                     <input
                       type="text"
                       value={formData.reference2Name}
                       onChange={(e) => handleInputChange("reference2Name", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference name"
+                      placeholder={t("enter-reference-name")}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 2 Phone</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-2-phone")}</label>
                     <input
                       type="tel"
                       value={formData.reference2Phone}
                       onChange={(e) => handleInputChange("reference2Phone", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference phone"
+                      placeholder={t("enter-reference-phone")}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Reference 2 Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("reference-2-address")}</label>
                     <input
                       type="text"
                       value={formData.reference2Address}
                       onChange={(e) => handleInputChange("reference2Address", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter reference address"
+                      placeholder={t("enter-reference-address")}
                     />
                   </div>
                 </div>
@@ -919,36 +920,36 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
               <CheckCircle className="w-6 h-6 mr-2 text-green-600" />
-              Review & Submit
+              {t("review-submit")}
             </h3>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h4 className="font-semibold text-blue-900 mb-4">Application Summary</h4>
+              <h4 className="font-semibold text-blue-900 mb-4">{t("application-summary")}</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium">Name:</span>
+                  <span className="font-medium">{t("name")}:</span>
                   <span className="ml-2">
                     {formData.firstName} {formData.middleName} {formData.lastName}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium">Email:</span>
+                  <span className="font-medium">{t("email")}:</span>
                   <span className="ml-2">{formData.email}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Phone:</span>
+                  <span className="font-medium">{t("phone")}:</span>
                   <span className="ml-2">{formData.primaryPhone}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Account Type:</span>
+                  <span className="font-medium">{t("account-type")}:</span>
                   <span className="ml-2">{formData.accountType}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Initial Deposit:</span>
+                  <span className="font-medium">{t("initial-deposit")}:</span>
                   <span className="ml-2">NPR {formData.initialDeposit}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Occupation:</span>
+                  <span className="font-medium">{t("occupation")}:</span>
                   <span className="ml-2">{formData.occupation}</span>
                 </div>
               </div>
@@ -958,12 +959,12 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               <div className="flex items-start">
                 <AlertCircle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
                 <div className="text-sm text-yellow-800">
-                  <p className="font-medium mb-2">Important Notes:</p>
+                  <p className="font-medium mb-2">{t("important-notes")}</p>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Please ensure all information provided is accurate and complete</li>
-                    <li>Account opening is subject to verification and approval</li>
-                    <li>You will be contacted within 2-3 business days for document verification</li>
-                    <li>Bring original documents for verification when visiting our office</li>
+                    <li>{t("ensure-accurate")}</li>
+                    <li>{t("subject-to-verification")}</li>
+                    <li>{t("contact-within-days")}</li>
+                    <li>{t("bring-original-documents")}</li>
                   </ul>
                 </div>
               </div>
@@ -972,7 +973,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             <div className="flex items-center space-x-2">
               <input type="checkbox" id="terms" className="rounded" />
               <label htmlFor="terms" className="text-sm text-gray-700">
-                I agree to the terms and conditions and confirm that all information provided is accurate
+                {t("agree-terms")}
               </label>
             </div>
           </div>
@@ -984,14 +985,14 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
   }
 
   const steps = [
-    "Personal Info",
-    "Contact Info",
-    "Documents",
-    "Employment",
-    "Family Info",
-    "Account Details",
-    "Nominee & References",
-    "Review & Submit",
+    t("personal-information"),
+    t("contact-information"),
+    t("identification-documents"),
+    t("employment-information"),
+    t("family-information"),
+    t("account-details"),
+    t("nominee-references"),
+    t("review-submit"),
   ]
 
   return (
@@ -1000,11 +1001,11 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         <div className="mb-8">
           <button onClick={onBack} className="flex items-center text-blue-600 hover:text-blue-700 mb-4">
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Services
+            {t("back-to-services")}
           </button>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Account Opening Application</h1>
-          <p className="text-gray-600">Complete the form below to open your savings account</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("account-opening-application")}</h1>
+          <p className="text-gray-600">{t("complete-form-account")}</p>
         </div>
 
         {/* Progress Steps */}
@@ -1049,12 +1050,12 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
             className="flex items-center bg-transparent"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Previous
+            {t("previous")}
           </Button>
 
           {currentStep < 8 ? (
             <Button onClick={nextStep} className="flex items-center">
-              Next
+              {t("next")}
               <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
             </Button>
           ) : (
@@ -1063,7 +1064,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               disabled={isSubmitting}
               className="flex items-center bg-green-600 hover:bg-green-700"
             >
-              {isSubmitting ? "Submitting..." : "Submit Application"}
+              {isSubmitting ? t("submitting") : t("submit-application")}
               <CheckCircle className="w-4 h-4 ml-2" />
             </Button>
           )}

@@ -1,3 +1,4 @@
+// About.tsx
 "use client"
 
 import type React from "react"
@@ -6,73 +7,85 @@ import { motion } from "framer-motion"
 import { Target, Eye, Award, Users, TrendingUp, Building, Calendar, Globe, MapPin, Star } from "lucide-react"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
+import { useTranslation } from "react-i18next"
 
 const About: React.FC = () => {
   const [] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("mission")
+  const { t } = useTranslation()
 
   const values = [
     {
       icon: Target,
-      title: "Mutual Trust",
-      description:
-        "We work with the true spirit of cooperative values - mutual trust, shared success, and community support.",
+      title: t("value-title-mutual-trust"),
+      description: t("value-desc-mutual-trust"),
     },
     {
       icon: Users,
-      title: "Community Support",
-      description: "Together, everyone can achieve more. We believe in the power of community and collective growth.",
+      title: t("value-title-community-support"),
+      description: t("value-desc-community-support"),
     },
     {
       icon: TrendingUp,
-      title: "Financial Empowerment",
-      description:
-        "We provide professional, transparent, and member-friendly services for shared growth and financial empowerment.",
+      title: t("value-title-financial-empowerment"),
+      description: t("value-desc-financial-empowerment"),
     },
     {
       icon: Award,
-      title: "Strong Relationships",
-      description: "Building a trusted platform where people support each other and grow together for generations.",
+      title: t("value-title-strong-relationships"),
+      description: t("value-desc-strong-relationships"),
     },
   ]
 
   const milestones = [
     {
       year: "2010",
-      event: "Constellation Saving and Credit Cooperative Limited established on 12th May 2010",
+      event: t("milestone-2010-0"),
       icon: Building,
     },
-    { year: "2010", event: "Registered under Department of Cooperatives (Registration No. 3163/066/067)", icon: Users },
+    { 
+      year: "2010", 
+      event: t("milestone-2010-1"), 
+      icon: Users 
+    },
     {
       year: "2015",
-      event: "Established head office at 6th Floor, Civil Trade Centre (CTC Mall), Sundhara",
+      event: t("milestone-2015-2"),
       icon: TrendingUp,
     },
-    { year: "2020", event: "Expanded services with experienced management team (20+ years experience)", icon: Globe },
+    { 
+      year: "2020", 
+      event: t("milestone-2020-3"), 
+      icon: Globe 
+    },
     {
       year: "2024",
-      event: "Operating under Ministry of Land Management, Cooperatives and Poverty Alleviation",
+      event: t("milestone-2024-4"),
       icon: Calendar,
     },
-    { year: "2025", event: "Continuing to serve members with modern facilities and homely atmosphere", icon: Award },
+    { 
+      year: "2025", 
+      event: t("milestone-2025-5"), 
+      icon: Award 
+    },
   ]
 
   const stats = [
-    { label: "Years of Service", value: "15+", description: "Serving since 2010" },
-    { label: "Registration No.", value: "3163", description: "Officially registered" },
-    { label: "Experience", value: "20+", description: "Years of staff experience" },
-    { label: "Committee Term", value: "2081-2086", description: "Current working period" },
+    { label: t("stat-years-of-service"), value: "15+", description: t("stat-desc-years-of-service") },
+    { label: t("stat-registration-no."), value: "3163/066/067", description: t("stat-desc-registration-no.") },
+    { label: t("stat-experience"), value: "20+", description: t("stat-desc-experience") },
+    { label: t("stat-committee-term"), value: "2081-2086", description: t("stat-desc-committee-term") },
   ]
 
   const purposes = [
-    "Create a vibrant business community where people support each other",
-    "Promote shared growth and financial empowerment among members",
-    "Build strong relationships that last for generations to come",
-    "Provide professional, transparent, and member-friendly services",
-    "Ensure every member enjoys comfort, efficiency, and homely atmosphere",
-    "Foster mutual trust and shared success in our community",
-    "Support members as partners in progress, not just shareholders",
-    "Create opportunities where dreams meet opportunity and community becomes family",
+    t("purpose-1"),
+    t("purpose-2"),
+    t("purpose-3"),
+    t("purpose-4"),
+    t("purpose-5"),
+    t("purpose-6"),
+    t("purpose-7"),
+    t("purpose-8"),
   ]
 
   return (
@@ -88,23 +101,22 @@ const About: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">About Constellation</h1>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("about-hero-title")}</h1>
               <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-                Together, everyone can achieve more - A trusted platform for shared growth, financial empowerment, and
-                strong relationships
+                {t("about-hero-subtitle")}
               </p>
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Established 12th May 2010
+                  {t("established-date")}
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <MapPin className="w-4 h-4 mr-2" />
-                  CTC Mall, Sundhara, Kathmandu
+                  {t("location")}
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Users className="w-4 h-4 mr-2" />
-                  Reg. No. 3163/066/067
+                  {t("registration-number")}
                 </div>
               </div>
             </motion.div>
@@ -123,8 +135,8 @@ const About: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <p className="text-sm font-medium">Our Office Location</p>
-                  <p className="text-xs opacity-90">6th Floor, Civil Trade Centre (CTC Mall), Sundhara</p>
+                  <p className="text-sm font-medium">{t("office-location-label")}</p>
+                  <p className="text-xs opacity-90">{t("office-address")}</p>
                 </div>
               </div>
             </motion.div>
@@ -162,43 +174,35 @@ const About: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story Since 2010</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t("our-story-title")}</h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                On 12th May 2010, a group of passionate young entrepreneurs came together with a bold vision to create a
-                vibrant business community where people support each other, grow together, and succeed for generations
-                to come.
+                {t("story-paragraph-1")}
               </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                That vision became Constellation Saving and Credit Cooperative Limited - a trusted platform for shared
-                growth, financial empowerment, and strong relationships. We are proudly registered under the Department
-                of Cooperatives and now operate under the Ministry of Land Management, Cooperatives and Poverty
-                Alleviation.
+                {t("story-paragraph-2")}
               </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                For over a decade, our Board of Directors and management team, backed by staff with 20+ years of
-                experience, have been delivering professional, transparent, and member-friendly services. Our office is
-                fully equipped with modern facilities, ensuring every member enjoys comfort, efficiency, and a homely
-                atmosphere.
+                {t("story-paragraph-3")}
               </p>
 
               {/* Contact Information */}
               <div className="bg-white rounded-lg p-6 shadow-md">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">Contact Information</h3>
+                <h3 className="text-xl font-semibold mb-4 text-gray-900">{t("contact-info-title")}</h3>
                 <div className="space-y-3">
                   <div className="flex items-start">
                     <MapPin className="w-5 h-5 text-blue-600 mr-3 mt-0.5" />
                     <span className="text-gray-700">
-                      6th Floor, Civil Trade Centre (CTC Mall)
+                      {t("contact-address-1")}
                       <br />
-                      Sundhara, Kathmandu Metropolitan City Ward No. 22
+                      {t("contact-address-2")}
                       <br />
-                      Registration No.: 3163/066/067
+                      {t("contact-registration")}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Globe className="w-5 h-5 text-blue-600 mr-3" />
                     <span className="text-gray-700">
-                      Ministry of Land Management, Cooperatives and Poverty Alleviation
+                      {t("ministry-name")}
                     </span>
                   </div>
                 </div>
@@ -248,8 +252,8 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Foundation</h2>
-            <p className="text-xl text-gray-600">The principles that guide our cooperative</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("foundation-title")}</h2>
+            <p className="text-xl text-gray-600">{t("foundation-subtitle")}</p>
           </motion.div>
 
           {/* Tab Navigation */}
@@ -263,7 +267,7 @@ const About: React.FC = () => {
                     activeTab === tab ? "bg-blue-600 text-white shadow-md" : "text-gray-600 hover:text-blue-600"
                   }`}
                 >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {t(`tab-${tab}`)}
                 </button>
               ))}
             </div>
@@ -282,11 +286,9 @@ const About: React.FC = () => {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Target className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("mission-title")}</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  To create a vibrant business community where people support each other, grow together, and succeed for
-                  generations to come. We work with the true spirit of cooperative values - mutual trust, shared
-                  success, and community support, delivering professional, transparent, and member-friendly services.
+                  {t("mission-content")}
                 </p>
               </Card>
             )}
@@ -296,11 +298,9 @@ const About: React.FC = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Eye className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("vision-title")}</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  At Constellation, you are not just a shareholder - you are a partner in progress. We invite you to
-                  engage with us, benefit from our services, and be part of a cooperative family where dreams meet
-                  opportunity, and community becomes family. Together, everyone can achieve more.
+                  {t("vision-content")}
                 </p>
               </Card>
             )}
@@ -311,7 +311,7 @@ const About: React.FC = () => {
                   <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Star className="w-8 h-8 text-orange-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Our Core Purposes</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">{t("purposes-title")}</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {purposes.map((purpose, index) => (
@@ -342,8 +342,8 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Values</h3>
-            <p className="text-xl text-gray-600">The principles that guide everything we do</p>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("values-title")}</h3>
+            <p className="text-xl text-gray-600">{t("values-subtitle")}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -378,8 +378,8 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Journey</h3>
-            <p className="text-xl text-gray-600">Key milestones in our cooperative's growth</p>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("journey-title")}</h3>
+            <p className="text-xl text-gray-600">{t("journey-subtitle")}</p>
           </motion.div>
 
           <div className="relative">
@@ -439,34 +439,31 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Community Impact</h3>
-            <p className="text-xl text-gray-600">How we're making a difference in our community</p>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("community-impact-title")}</h3>
+            <p className="text-xl text-gray-600">{t("community-impact-subtitle")}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="space-y-6">
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-blue-900 mb-4">Financial Literacy Programs</h4>
+                  <h4 className="text-xl font-semibold text-blue-900 mb-4">{t("financial-literacy-title")}</h4>
                   <p className="text-blue-800">
-                    Educational workshops and seminars to improve financial knowledge and skills among community
-                    members.
+                    {t("financial-literacy-desc")}
                   </p>
                 </div>
 
                 <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-green-900 mb-4">Business Development</h4>
+                  <h4 className="text-xl font-semibold text-green-900 mb-4">{t("business-development-title")}</h4>
                   <p className="text-green-800">
-                    Supporting local entrepreneurs through business exhibitions, directories, and networking
-                    opportunities.
+                    {t("business-development-desc")}
                   </p>
                 </div>
 
                 <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-orange-900 mb-4">Cultural Programs</h4>
+                  <h4 className="text-xl font-semibold text-orange-900 mb-4">{t("cultural-programs-title")}</h4>
                   <p className="text-orange-800">
-                    Organizing traditional events like Deusi-Bhailo, festivals, sports activities, and community
-                    gatherings.
+                    {t("cultural-programs-desc")}
                   </p>
                 </div>
               </div>

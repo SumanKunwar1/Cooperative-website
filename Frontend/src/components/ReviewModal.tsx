@@ -35,7 +35,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, productId, p
     try {
       addReview({
         userId: user.id,
-        userName: user.name,
+        userName: user.businessName,
         productId,
         orderId,
         rating,

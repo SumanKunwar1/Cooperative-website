@@ -15,6 +15,8 @@ import {
   BellIcon,
 } from "@heroicons/react/24/outline"
 import { shopCategories } from "../../data/shop"
+import { useTranslation } from "react-i18next"
+import LanguageSelector from "./LanguageSelector"
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -25,6 +27,7 @@ const Header: React.FC = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useTranslation()
 
   const closeMobileMenu = () => {
     setIsMenuOpen(false)
@@ -38,11 +41,11 @@ const Header: React.FC = () => {
     if (isOnShopPage) {
       // If already on shop page, just trigger a custom event to update filters
       // without changing the URL
-      const event = new CustomEvent('shopFilterChange', {
+      const event = new CustomEvent("shopFilterChange", {
         detail: {
           category: categorySlug,
-          subcategory: subcategorySlug || ""
-        }
+          subcategory: subcategorySlug || "",
+        },
       })
       window.dispatchEvent(event)
     } else {
@@ -61,11 +64,11 @@ const Header: React.FC = () => {
   const handleMobileCategoryNavigation = (categorySlug: string, subcategorySlug?: string) => {
     if (isOnShopPage) {
       // If already on shop page, trigger filter change event
-      const event = new CustomEvent('shopFilterChange', {
+      const event = new CustomEvent("shopFilterChange", {
         detail: {
           category: categorySlug,
-          subcategory: subcategorySlug || ""
-        }
+          subcategory: subcategorySlug || "",
+        },
       })
       window.dispatchEvent(event)
     } else {
@@ -86,11 +89,11 @@ const Header: React.FC = () => {
   const handleViewAllProducts = () => {
     if (isOnShopPage) {
       // If already on shop page, clear filters without changing URL
-      const event = new CustomEvent('shopFilterChange', {
+      const event = new CustomEvent("shopFilterChange", {
         detail: {
           category: "",
-          subcategory: ""
-        }
+          subcategory: "",
+        },
       })
       window.dispatchEvent(event)
     } else {
@@ -106,11 +109,11 @@ const Header: React.FC = () => {
   const handleMobileViewAllProducts = () => {
     if (isOnShopPage) {
       // If already on shop page, clear filters without changing URL
-      const event = new CustomEvent('shopFilterChange', {
+      const event = new CustomEvent("shopFilterChange", {
         detail: {
           category: "",
-          subcategory: ""
-        }
+          subcategory: "",
+        },
       })
       window.dispatchEvent(event)
     } else {
@@ -165,21 +168,21 @@ const Header: React.FC = () => {
               to="/"
               className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
-              Home
+              {t("home")}
             </Link>
 
             <Link
               to="/about"
               className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
-              About Us
+              {t("about")}
             </Link>
 
             <Link
               to="/services"
               className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
-              Services
+              {t("services")}
             </Link>
 
             <div
@@ -192,7 +195,7 @@ const Header: React.FC = () => {
             >
               <button className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50">
                 <ShoppingBagIcon className="h-3 w-3 mr-1" />
-                Shop
+                {t("shop")}
                 <ChevronDownIcon className="ml-1 h-3 w-3" />
               </button>
 
@@ -212,9 +215,9 @@ const Header: React.FC = () => {
                     <div className="flex">
                       <div className="w-1/3 border-r border-gray-100 p-4">
                         <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide mb-4 px-3">
-                          Categories
+                          {t("categories")}
                           {isOnShopPage && (
-                            <span className="text-xs text-blue-600 font-normal ml-2">(Filters only)</span>
+                            <span className="text-xs text-blue-600 font-normal ml-2">{t("filtersOnly")}</span>
                           )}
                         </h3>
                         <div className="space-y-1">
@@ -244,7 +247,7 @@ const Header: React.FC = () => {
                             onClick={handleViewAllProducts}
                             className="block w-full text-center bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 font-medium text-sm transition-colors duration-200"
                           >
-                            {isOnShopPage ? "Show All Products" : "View All Products"}
+                            {isOnShopPage ? t("showAllProducts") : t("viewAllProducts")}
                           </button>
                         </div>
                       </div>
@@ -281,12 +284,7 @@ const Header: React.FC = () => {
                           <div className="flex items-center justify-center h-full text-gray-500">
                             <div className="text-center">
                               <ShoppingBagIcon className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                              <p className="text-sm">
-                                {isOnShopPage 
-                                  ? "Hover over a category to filter products" 
-                                  : "Hover over a category to see subcategories"
-                                }
-                              </p>
+                              <p className="text-sm">{isOnShopPage ? t("hoverToFilter") : t("hoverToSee")}</p>
                             </div>
                           </div>
                         )}
@@ -302,7 +300,7 @@ const Header: React.FC = () => {
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
             >
               <Building2 className="h-3 w-3 mr-1" />
-              Businesses
+              {t("businesses")}
             </Link>
 
             <Link
@@ -310,31 +308,34 @@ const Header: React.FC = () => {
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
               <BellIcon className="h-3 w-3 mr-1" />
-              Notices
+              {t("notices")}
             </Link>
             <Link
               to="/teams"
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
             >
               <UsersIcon className="h-3 w-3 mr-1" />
-              Our Team
+              {t("ourTeam")}
             </Link>
           </nav>
 
           <div className="hidden xl:flex items-center space-x-3 flex-shrink-0">
+            {/* Language Selector */}
+            <LanguageSelector className="mr-2" />
+
             <Link
               to="/login"
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
             >
               <UserIcon className="h-3 w-3 mr-1" />
-              Login
+              {t("login")}
             </Link>
 
             <Link
               to="/register"
               className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg text-sm whitespace-nowrap"
             >
-              Register
+              {t("register")}
             </Link>
           </div>
 
@@ -361,14 +362,14 @@ const Header: React.FC = () => {
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  Home
+                  {t("home")}
                 </Link>
                 <Link
                   to="/about"
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  About
+                  {t("about")}
                 </Link>
 
                 <Link
@@ -376,7 +377,7 @@ const Header: React.FC = () => {
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  Services
+                  {t("services")}
                 </Link>
 
                 <div className="space-y-2">
@@ -386,7 +387,7 @@ const Header: React.FC = () => {
                   >
                     <div className="flex items-center">
                       <ShoppingBagIcon className="h-4 w-4 mr-2" />
-                      Shop {isOnShopPage && <span className="text-xs text-blue-600 ml-1">(Filter)</span>}
+                      {t("shop")} {isOnShopPage && <span className="text-xs text-blue-600 ml-1">({t("filter")})</span>}
                     </div>
                     <ChevronDownIcon
                       className={`h-4 w-4 transition-transform duration-200 ${isMobileShopOpen ? "rotate-180" : ""}`}
@@ -406,7 +407,7 @@ const Header: React.FC = () => {
                           onClick={handleMobileViewAllProducts}
                           className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200 border border-primary-200"
                         >
-                          {isOnShopPage ? "Show All Products" : "View All Products"}
+                          {isOnShopPage ? t("showAllProducts") : t("viewAllProducts")}
                         </button>
 
                         {shopCategories.map((category) => (
@@ -438,7 +439,9 @@ const Header: React.FC = () => {
                                     onClick={() => handleMobileCategoryNavigation(category.slug)}
                                     className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                                   >
-                                    {isOnShopPage ? `Filter ${category.name}` : `View All ${category.name}`}
+                                    {isOnShopPage
+                                      ? `${t("filter")} ${category.name}`
+                                      : `${t("viewAllProducts")} ${category.name}`}
                                   </button>
 
                                   {category.subcategories.map((subcategory) => (
@@ -465,32 +468,37 @@ const Header: React.FC = () => {
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  Businesses
+                  {t("businesses")}
                 </Link>
-                
+
                 <Link
                   to="/notice"
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  Notices
+                  {t("notices")}
                 </Link>
-                
+
                 <Link
                   to="/teams"
                   onClick={closeMobileMenu}
                   className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                 >
-                  Our Team
+                  {t("ourTeam")}
                 </Link>
 
                 <div className="flex flex-col space-y-3 pt-6 border-t border-gray-200">
+                  {/* Language Selector for Mobile */}
+                  <div className="flex justify-center">
+                    <LanguageSelector />
+                  </div>
+
                   <Link
                     to="/login"
                     onClick={closeMobileMenu}
                     className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
                   >
-                    Login
+                    {t("login")}
                   </Link>
                   <motion.div whileTap={{ scale: 0.95 }}>
                     <Link
@@ -498,7 +506,7 @@ const Header: React.FC = () => {
                       onClick={closeMobileMenu}
                       className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold text-center shadow-md hover:shadow-lg transition-all duration-200"
                     >
-                      Register
+                      {t("register")}
                     </Link>
                   </motion.div>
                 </div>

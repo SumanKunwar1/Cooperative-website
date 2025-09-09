@@ -4,9 +4,12 @@ import type React from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Users, Store, Globe, Calendar } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import Card from "../ui/Card"
 
 const QuickActionsSection: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,8 +20,8 @@ const QuickActionsSection: React.FC = () => {
                 <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="w-6 h-6 text-primary-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Member Login</h3>
-                <p className="text-gray-600 text-sm">Access your account and banking services</p>
+                <h3 className="text-lg font-semibold mb-2">{t("quick-actions-member-login")}</h3>
+                <p className="text-gray-600 text-sm">{t("quick-actions-member-login-desc")}</p>
               </Card>
             </Link>
           </motion.div>
@@ -34,8 +37,8 @@ const QuickActionsSection: React.FC = () => {
                 <div className="w-12 h-12 bg-gold-200 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Store className="w-6 h-6 text-gold-700" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Register Business</h3>
-                <p className="text-gray-600 text-sm">Join our business directory platform</p>
+                <h3 className="text-lg font-semibold mb-2">{t("quick-actions-register-business")}</h3>
+                <p className="text-gray-600 text-sm">{t("quick-actions-register-business-desc")}</p>
               </Card>
             </Link>
           </motion.div>
@@ -51,8 +54,8 @@ const QuickActionsSection: React.FC = () => {
                 <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Globe className="w-6 h-6 text-primary-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Shop</h3>
-                <p className="text-gray-600 text-sm">Shop from member businesses</p>
+                <h3 className="text-lg font-semibold mb-2">{t("quick-actions-shop")}</h3>
+                <p className="text-gray-600 text-sm">{t("quick-actions-shop-desc")}</p>
               </Card>
             </Link>
           </motion.div>
@@ -68,8 +71,8 @@ const QuickActionsSection: React.FC = () => {
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Calendar className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Event Tickets</h3>
-                <p className="text-gray-600 text-sm">Book tickets for workshops and events</p>
+                <h3 className="text-lg font-semibold mb-2">{t("quick-actions-events")}</h3>
+                <p className="text-gray-600 text-sm">{t("quick-actions-events-desc")}</p>
               </Card>
             </Link>
           </motion.div>
