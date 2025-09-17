@@ -72,7 +72,8 @@ const Home: React.FC = () => {
       try {
         setBusinessesLoading(true)
         setBusinessesError(null)
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/businesses/directory`)
+        // Use the same API endpoint as BusinessDirectory
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/business-details/directory`)
 
         if (!response.ok) {
           throw new Error("Failed to fetch businesses")
@@ -80,8 +81,12 @@ const Home: React.FC = () => {
 
         const data = await response.json()
         if (data.success) {
+          console.log("[Home] Businesses data received:", data.data)
+          // Filter only active businesses like in BusinessDirectory
+          const activeBusinesses = data.data.filter((business: Business) => business.status === "active")
+          console.log("[Home] Active businesses filtered:", activeBusinesses)
           // Get latest 3 businesses sorted by creation date
-          const sortedBusinesses = data.data.sort(
+          const sortedBusinesses = activeBusinesses.sort(
             (a: Business, b: Business) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           )
           setBusinesses(sortedBusinesses.slice(0, 3))
@@ -140,7 +145,6 @@ const Home: React.FC = () => {
       {/* Quick Actions */}
       <QuickActionsSection />
 
-      {/* Leadership Messages */}
       {/* Leadership Messages */}
       <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

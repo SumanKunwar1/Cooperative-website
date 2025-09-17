@@ -49,7 +49,7 @@ import LoanApplicationForm from "./components/form/LoanApplicationForm"
 
 // i18n import
 import { useTranslation } from "react-i18next"
-import "./pages/i18n" // This will initialize i18n
+import "./pages/i18n"
 
 function AccountOpeningWrapper() {
   const navigate = useNavigate()
