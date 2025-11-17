@@ -106,7 +106,7 @@ function PlaceholderPage({ titleKey }: { titleKey: string }) {
 
 function AppContent() {
   const [showNoticeModal, setShowNoticeModal] = useState(false)
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [] = useState(true)
 
   useEffect(() => {
     // Always show modal on initial website load if enabled and notice is selected

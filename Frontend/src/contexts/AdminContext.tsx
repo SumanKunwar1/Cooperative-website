@@ -56,10 +56,10 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     // Simulate API call - replace with actual admin authentication
     try {
       // Demo admin credentials
-      if (email === "admin@constellation.coop" && password === "admin123") {
+      if (email === "admin@constellationcooperative.com" && password === "constellation@123") {
         const adminUser: Admin = {
           id: "1",
-          email: "admin@constellation.coop",
+          email: "admin@constellationcooperative.com",
           name: "System Administrator",
           role: "super_admin",
           permissions: ["users", "businesses", "products", "services", "notices", "settings"],

@@ -132,7 +132,7 @@ const AdminLogin: React.FC = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">Demo Credentials: admin@constellation.coop / admin123</p>
+          <p className="text-xs text-gray-500"></p>
         </div>
       </motion.div>
     </div>
