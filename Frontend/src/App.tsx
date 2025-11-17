@@ -47,6 +47,11 @@ import AdminHeroSection from "./pages/admin/AdminHero"
 import AccountOpeningForm from "./components/form/AccountOpeningForm"
 import LoanApplicationForm from "./components/form/LoanApplicationForm"
 
+// Notice Modal imports
+import { useState, useEffect } from "react"
+import NoticeModal from "./pages/NoticeModal"
+import { noticeModalService } from "./services/NoticeModalService"
+
 // i18n import
 import { useTranslation } from "react-i18next"
 import "./pages/i18n"
@@ -99,6 +104,251 @@ function PlaceholderPage({ titleKey }: { titleKey: string }) {
   )
 }
 
+function AppContent() {
+  const [showNoticeModal, setShowNoticeModal] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+
+  useEffect(() => {
+    // Always show modal on initial website load if enabled and notice is selected
+    const checkModal = () => {
+      const shouldShow = noticeModalService.shouldShowModal()
+      console.log('Should show modal:', shouldShow)
+      console.log('Modal settings:', noticeModalService.getSettings())
+      
+      if (shouldShow) {
+        setShowNoticeModal(true)
+      }
+    }
+
+    // Check immediately on component mount
+    checkModal()
+
+    // Also check after a short delay to ensure everything is loaded
+    const timer = setTimeout(checkModal, 1000)
+
+    // Listen for manual trigger from header
+    const handleShowNoticeModal = () => {
+      setShowNoticeModal(true)
+    }
+
+    window.addEventListener('showNoticeModal', handleShowNoticeModal)
+    
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('showNoticeModal', handleShowNoticeModal)
+    }
+  }, [])
+
+  const handleCloseNoticeModal = () => {
+    setShowNoticeModal(false)
+    noticeModalService.markAsClosed()
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboard />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedAdminRoute requiredPermission="users">
+              <AdminUsers />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/businesses"
+          element={
+            <ProtectedAdminRoute requiredPermission="businesses">
+              <AdminBusinesses />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedAdminRoute requiredPermission="products">
+              <AdminProducts />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/services"
+          element={
+            <ProtectedAdminRoute requiredPermission="services">
+              <AdminServices />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/notices"
+          element={
+            <ProtectedAdminRoute requiredPermission="notices">
+              <AdminNotices />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedAdminRoute requiredPermission="orders">
+              <AdminOrders />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/hero-section"
+          element={
+            <ProtectedAdminRoute>
+              <AdminHeroSection />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/gallery"
+          element={
+            <ProtectedAdminRoute requiredPermission="orders">
+              <AdminGallery />
+            </ProtectedAdminRoute>
+          }
+        />
+        
+        <Route
+          path="/admin/teams"
+          element={
+            <ProtectedAdminRoute requiredPermission="team">
+              <AdminTeam />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/about"
+          element={
+            <ProtectedAdminRoute requiredPermission="content">
+              <AdminAbout />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/analytics"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboard currentSection="analytics">
+                <div className="text-center py-12">
+                  <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
+                  <p className="text-gray-600 mt-2">Coming Soon</p>
+                </div>
+              </AdminDashboard>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/content"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboard currentSection="content">
+                <div className="text-center py-12">
+                  <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
+                  <p className="text-gray-600 mt-2">Coming Soon</p>
+                </div>
+              </AdminDashboard>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/shareholders"
+          element={
+            <ProtectedAdminRoute requiredPermission="shareholders">
+              <AdminShareholders />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/account-applications"
+          element={
+            <ProtectedAdminRoute>
+              <AdminAccountApplications />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/loan-applications"
+          element={
+            <ProtectedAdminRoute>
+              <AdminLoanApplications />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/*"
+          element={
+            <>
+              <Header />
+              <main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/services" element={<ServicesWrapper />} />
+                  <Route path="/open-account" element={<AccountOpeningWrapper />} />
+                  <Route path="/apply-loan" element={<LoanApplicationWrapper />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/shop/category/:category" element={<Shop />} />
+                  <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
+                  <Route path="/shop/product/:id" element={<ShopDetails />} />
+
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
+
+                  {/* Business Directory Routes */}
+                  <Route path="/business-directory" element={<BusinessDirectory />} />
+                  <Route path="/business-directory/:businessName" element={<BusinessDetails />} />
+
+                  <Route path="/shareholders" element={<Shareholders />} />
+                  <Route path="/notice" element={<Notice />} />
+
+                  <Route path="/dashboard/:name" element={<CustomerDashboard />} />
+                  <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
+                  <Route path="/teams" element={<Team />} />
+                  <Route path="/gallery" element={<Gallery />} />
+
+                  {/* Placeholder routes with translations */}
+                  <Route path="/membership" element={<PlaceholderPage titleKey="membershipPage" />} />
+                  <Route path="/events" element={<PlaceholderPage titleKey="events" />} />
+                  <Route path="/contact" element={<PlaceholderPage titleKey="contact" />} />
+                  <Route path="/business-registration" element={<PlaceholderPage titleKey="businessRegistration" />} />
+                  <Route path="/forgot-password" element={<PlaceholderPage titleKey="forgotPassword" />} />
+                  <Route path="/terms" element={<PlaceholderPage titleKey="termsOfService" />} />
+                  <Route path="/privacy" element={<PlaceholderPage titleKey="privacyPolicy" />} />
+                </Routes>
+              </main>
+              <Footer />
+              
+              {/* Notice Modal - Always check if it should be shown */}
+              <NoticeModal 
+                isEnabled={showNoticeModal}
+                onClose={handleCloseNoticeModal}
+              />
+            </>
+          }
+        />
+      </Routes>
+    </div>
+  )
+}
+
 function App() {
   return (
     <HelmetProvider>
@@ -107,201 +357,7 @@ function App() {
           <ApplicationProvider>
             <CartProvider>
               <Router>
-                <div className="min-h-screen bg-white">
-                  <Routes>
-                    <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route
-                      path="/admin/dashboard"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminDashboard />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/users"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="users">
-                          <AdminUsers />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/businesses"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="businesses">
-                          <AdminBusinesses />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/products"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="products">
-                          <AdminProducts />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/services"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="services">
-                          <AdminServices />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/notices"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="notices">
-                          <AdminNotices />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/orders"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="orders">
-                          <AdminOrders />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/hero-section"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminHeroSection />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/gallery"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="orders">
-                          <AdminGallery />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    
-                    <Route
-                      path="/admin/teams"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="team">
-                          <AdminTeam />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/about"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="content">
-                          <AdminAbout />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/analytics"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminDashboard currentSection="analytics">
-                            <div className="text-center py-12">
-                              <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
-                              <p className="text-gray-600 mt-2">Coming Soon</p>
-                            </div>
-                          </AdminDashboard>
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/content"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminDashboard currentSection="content">
-                            <div className="text-center py-12">
-                              <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
-                              <p className="text-gray-600 mt-2">Coming Soon</p>
-                            </div>
-                          </AdminDashboard>
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/shareholders"
-                      element={
-                        <ProtectedAdminRoute requiredPermission="shareholders">
-                          <AdminShareholders />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/account-applications"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminAccountApplications />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin/loan-applications"
-                      element={
-                        <ProtectedAdminRoute>
-                          <AdminLoanApplications />
-                        </ProtectedAdminRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/*"
-                      element={
-                        <>
-                          <Header />
-                          <main>
-                            <Routes>
-                              <Route path="/" element={<Home />} />
-                              <Route path="/about" element={<About />} />
-                              <Route path="/services" element={<ServicesWrapper />} />
-                              <Route path="/open-account" element={<AccountOpeningWrapper />} />
-                              <Route path="/apply-loan" element={<LoanApplicationWrapper />} />
-                              <Route path="/login" element={<Login />} />
-                              <Route path="/register" element={<Register />} />
-                              <Route path="/shop" element={<Shop />} />
-                              <Route path="/shop/category/:category" element={<Shop />} />
-                              <Route path="/shop/category/:category/:subcategory" element={<Shop />} />
-                              <Route path="/shop/product/:id" element={<ShopDetails />} />
-
-                              <Route path="/cart" element={<Cart />} />
-                              <Route path="/checkout" element={<Checkout />} />
-                              <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-                              <Route path="/order-confirmation" element={<OrderConfirmation />} />
-
-                              {/* Business Directory Routes */}
-                              <Route path="/business-directory" element={<BusinessDirectory />} />
-                              <Route path="/business-directory/:businessName" element={<BusinessDetails />} />
-
-                              <Route path="/shareholders" element={<Shareholders />} />
-                              <Route path="/notice" element={<Notice />} />
-
-                              <Route path="/dashboard/:name" element={<CustomerDashboard />} />
-                              <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
-                              <Route path="/teams" element={<Team />} />
-                              <Route path="/gallery" element={<Gallery />} />
-
-                              {/* Placeholder routes with translations */}
-                              <Route path="/membership" element={<PlaceholderPage titleKey="membershipPage" />} />
-                              <Route path="/events" element={<PlaceholderPage titleKey="events" />} />
-                              <Route path="/contact" element={<PlaceholderPage titleKey="contact" />} />
-                              <Route path="/business-registration" element={<PlaceholderPage titleKey="businessRegistration" />} />
-                              <Route path="/forgot-password" element={<PlaceholderPage titleKey="forgotPassword" />} />
-                              <Route path="/terms" element={<PlaceholderPage titleKey="termsOfService" />} />
-                              <Route path="/privacy" element={<PlaceholderPage titleKey="privacyPolicy" />} />
-                            </Routes>
-                          </main>
-                          <Footer />
-                        </>
-                      }
-                    />
-                  </Routes>
-                </div>
+                <AppContent />
               </Router>
             </CartProvider>
           </ApplicationProvider>

@@ -114,17 +114,23 @@ const HeroSection: React.FC = () => {
         <div className="h-full w-full object-cover">
           {currentMedia ? (
             currentMedia.type === "video" ? (
-              <video className="w-full h-full object-cover opacity-80" autoPlay loop muted src={currentMedia.url} />
+              <video
+                className="w-full h-full object-cover opacity-90"
+                autoPlay
+                loop
+                muted
+                src={currentMedia.url}
+              />
             ) : (
               <img
-                className="w-full h-full object-cover opacity-80"
+                className="w-full h-full object-cover opacity-90"
                 src={currentMedia.url || "/placeholder.svg"}
                 alt={currentMedia.alt}
               />
             )
           ) : (
             <video
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-90"
               autoPlay
               loop
               muted
@@ -132,7 +138,9 @@ const HeroSection: React.FC = () => {
             />
           )}
         </div>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+
+        {/* LIGHT OVERLAY for visibility */}
+        <div className="absolute inset-0 bg-black opacity-20"></div>
       </div>
 
       <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -174,8 +182,6 @@ const HeroSection: React.FC = () => {
                 />
                 <Search className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
               </div>
-
-              {/* ... existing search results ... */}
             </motion.div>
 
             <motion.div
@@ -191,6 +197,7 @@ const HeroSection: React.FC = () => {
                 <div className="text-2xl font-semibold text-white">500+</div>
                 <div className="text-sm text-gray-300">{t("hero-stat-businesses")}</div>
               </div>
+
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <Users className="h-6 w-6 text-blue-600" />
@@ -198,6 +205,7 @@ const HeroSection: React.FC = () => {
                 <div className="text-2xl font-semibold text-white">10K+</div>
                 <div className="text-sm text-gray-300">{t("hero-stat-members")}</div>
               </div>
+
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <Award className="h-6 w-6 text-blue-600" />
@@ -205,6 +213,7 @@ const HeroSection: React.FC = () => {
                 <div className="text-2xl font-semibold text-white">50+</div>
                 <div className="text-sm text-gray-300">{t("hero-stat-services")}</div>
               </div>
+
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <TrendingUp className="h-6 w-6 text-blue-600" />
@@ -228,6 +237,7 @@ const HeroSection: React.FC = () => {
               >
                 {t("hero-cta-primary")}
               </motion.button>
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

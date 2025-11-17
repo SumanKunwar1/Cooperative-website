@@ -126,6 +126,11 @@ const Header: React.FC = () => {
     setIsMenuOpen(false)
   }
 
+  // Handle manual notice modal trigger
+  const handleShowNotices = () => {
+    window.dispatchEvent(new CustomEvent('showNoticeModal'))
+  }
+
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -310,6 +315,17 @@ const Header: React.FC = () => {
               <BellIcon className="h-3 w-3 mr-1" />
               {t("notices")}
             </Link>
+
+            {/* Manual Notice Modal Trigger */}
+            <button
+              onClick={handleShowNotices}
+              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
+              title="View Important Notices"
+            >
+              <BellIcon className="h-3 w-3 mr-1" />
+              Important Notices
+            </button>
+
             <Link
               to="/teams"
               className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
@@ -478,6 +494,17 @@ const Header: React.FC = () => {
                 >
                   {t("notices")}
                 </Link>
+
+                {/* Manual Notice Modal Trigger for Mobile */}
+                <button
+                  onClick={() => {
+                    handleShowNotices()
+                    closeMobileMenu()
+                  }}
+                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200 text-left"
+                >
+                  Important Notices
+                </button>
 
                 <Link
                   to="/teams"

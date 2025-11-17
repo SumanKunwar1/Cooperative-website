@@ -13,8 +13,11 @@ import {
   XMarkIcon,
   DocumentIcon,
   PhotoIcon,
+  EyeSlashIcon,
+  PlayIcon,
 } from "@heroicons/react/24/outline"
 import { noticeService, type Notice, type NoticeFormData } from "../../services/noticeService"
+import { noticeModalService, type NoticeModalSettings } from "../../services/NoticeModalService"
 
 // Mock AdminDashboard wrapper
 const AdminDashboard: React.FC<{ children: React.ReactNode; currentSection: string }> = ({ children }) => {
@@ -36,6 +39,7 @@ const AdminNotices: React.FC = () => {
   const [editingNotice, setEditingNotice] = useState<Notice | null>(null)
   const [viewingNotice, setViewingNotice] = useState<Notice | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [modalSettings, setModalSettings] = useState<NoticeModalSettings>(noticeModalService.getSettings())
 
   const [formData, setFormData] = useState<NoticeFormData>({
     title: "",
@@ -49,12 +53,18 @@ const AdminNotices: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [filePreview, setFilePreview] = useState<string | null>(null)
 
+  // Fetch notices only when component mounts
   useEffect(() => {
     fetchNotices()
   }, [])
 
+  // Fetch notices when filters change - with debouncing
   useEffect(() => {
-    fetchNotices()
+    const timeoutId = setTimeout(() => {
+      fetchNotices()
+    }, 500) // Debounce for 500ms
+
+    return () => clearTimeout(timeoutId)
   }, [searchTerm, filterType, filterStatus])
 
   const fetchNotices = async () => {
@@ -113,6 +123,42 @@ const AdminNotices: React.FC = () => {
 
   const handleViewNotice = (notice: Notice) => {
     setViewingNotice(notice)
+  }
+
+  const handleSetModalNotice = (notice: Notice) => {
+    if (notice.status !== 'published') {
+      alert('Only published notices can be shown in the modal window.')
+      return
+    }
+    
+    if (!notice.documentUrl) {
+      alert('This notice does not have a document attached. Please attach a document to set it as modal notice.')
+      return
+    }
+    
+    noticeModalService.setSelectedNotice(notice.id)
+    noticeModalService.resetLastClosed() // Reset to show immediately
+    setModalSettings(noticeModalService.getSettings())
+    alert(`"${notice.title}" has been set as the modal notice. Users will see this notice every time they visit the website.`)
+  }
+
+  const handleRemoveModalNotice = () => {
+    noticeModalService.setSelectedNotice(null)
+    setModalSettings(noticeModalService.getSettings())
+    alert('Modal notice has been removed. No notice will be shown in modal window.')
+  }
+
+  const handlePreviewModalNotice = () => {
+    const currentModalNotice = getCurrentModalNotice()
+    if (currentModalNotice) {
+      handleViewNotice(currentModalNotice)
+    }
+  }
+
+  const handleForceShowModal = () => {
+    noticeModalService.resetLastClosed()
+    setModalSettings(noticeModalService.getSettings())
+    alert('Modal will be shown on next page load regardless of when it was last closed.')
   }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,6 +243,11 @@ const AdminNotices: React.FC = () => {
       try {
         await noticeService.deleteNotice(noticeId)
         setNotices(notices.filter((notice) => notice.id !== noticeId))
+        
+        // If the deleted notice was the modal notice, remove it
+        if (modalSettings.selectedNoticeId === noticeId) {
+          handleRemoveModalNotice()
+        }
       } catch (err) {
         console.error("Error deleting notice:", err)
         setError("Failed to delete notice. Please try again.")
@@ -211,10 +262,20 @@ const AdminNotices: React.FC = () => {
 
       const updatedNotice = await noticeService.updateNotice(noticeId, { status: newStatus })
       setNotices(notices.map((n) => (n.id === noticeId ? updatedNotice : n)))
+
+      // If the notice was the modal notice and is no longer published, remove it
+      if (modalSettings.selectedNoticeId === noticeId && newStatus !== 'published') {
+        handleRemoveModalNotice()
+      }
     } catch (err) {
       console.error("Error updating notice status:", err)
       setError("Failed to update notice status. Please try again.")
     }
+  }
+
+  const handleModalSettingsChange = (newSettings: Partial<NoticeModalSettings>) => {
+    noticeModalService.saveSettings(newSettings)
+    setModalSettings(noticeModalService.getSettings())
   }
 
   const getTypeColor = (type: string) => {
@@ -257,6 +318,13 @@ const AdminNotices: React.FC = () => {
         return <DocumentIcon className="h-4 w-4" />
     }
   }
+
+  const getCurrentModalNotice = () => {
+    if (!modalSettings.selectedNoticeId) return null
+    return notices.find(notice => notice.id === modalSettings.selectedNoticeId)
+  }
+
+  const currentModalNotice = getCurrentModalNotice()
 
   return (
     <AdminDashboard currentSection="notices">
@@ -303,6 +371,138 @@ const AdminNotices: React.FC = () => {
           <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
             <div className="text-2xl font-bold text-gray-600">{notices.length}</div>
             <div className="text-sm text-gray-600">Total</div>
+          </div>
+        </div>
+
+        {/* Modal Settings Card */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Notice Modal Settings</h3>
+          
+          {/* Current Modal Notice Display */}
+          {currentModalNotice ? (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <BellIcon className="h-5 w-5 text-green-600" />
+                  <div>
+                    <h4 className="font-medium text-green-900">Current Modal Notice</h4>
+                    <p className="text-sm text-green-700">{currentModalNotice.title}</p>
+                    <p className="text-xs text-green-600">
+                      Published on {new Date(currentModalNotice.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handlePreviewModalNotice}
+                    className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  >
+                    <PlayIcon className="h-4 w-4 mr-1" />
+                    Preview Modal
+                  </button>
+                  <button
+                    onClick={handleForceShowModal}
+                    className="inline-flex items-center px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                  >
+                    <EyeIcon className="h-4 w-4 mr-1" />
+                    Force Show
+                  </button>
+                  <button
+                    onClick={handleRemoveModalNotice}
+                    className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                  >
+                    <EyeSlashIcon className="h-4 w-4 mr-1" />
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <BellIcon className="h-5 w-5 text-yellow-600" />
+                <div>
+                  <h4 className="font-medium text-yellow-900">No Modal Notice Selected</h4>
+                  <p className="text-sm text-yellow-700">
+                    Select a published notice with document below to show in the modal window
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Enable Notice Modal
+                </label>
+                <p className="text-sm text-gray-500">Show selected notice in modal window</p>
+              </div>
+              <button
+                onClick={() => handleModalSettingsChange({ enabled: !modalSettings.enabled })}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  modalSettings.enabled ? 'bg-blue-600' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    modalSettings.enabled ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Auto Show Modal
+                </label>
+                <p className="text-sm text-gray-500">Automatically show modal on page visit</p>
+              </div>
+              <button
+                onClick={() => handleModalSettingsChange({ autoShow: !modalSettings.autoShow })}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  modalSettings.autoShow ? 'bg-blue-600' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    modalSettings.autoShow ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Show Interval
+              </label>
+              <select
+                value={modalSettings.showInterval}
+                onChange={(e) => handleModalSettingsChange({ showInterval: parseInt(e.target.value) })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="0">Every time website opens</option>
+                <option value="1">Every day</option>
+                <option value="3">Every 3 days</option>
+                <option value="7">Every week</option>
+                <option value="30">Every month</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+            <div className="flex items-center">
+              <BellIcon className="h-5 w-5 text-blue-600 mr-2" />
+              <p className="text-sm text-blue-700">
+                {modalSettings.enabled && currentModalNotice
+                  ? `Modal is enabled and will show "${currentModalNotice.title}" ${modalSettings.showInterval === 0 ? 'every time the website opens' : modalSettings.autoShow ? 'automatically' : 'manually'}.`
+                  : modalSettings.enabled 
+                  ? 'Modal is enabled but no notice is selected.'
+                  : 'Notice modal is currently disabled.'}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -361,7 +561,9 @@ const AdminNotices: React.FC = () => {
                 key={notice.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-200"
+                className={`bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-all duration-200 ${
+                  notice.id === modalSettings.selectedNoticeId ? 'border-green-500 border-2' : 'border-gray-200'
+                }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -375,6 +577,11 @@ const AdminNotices: React.FC = () => {
                       {notice.important && (
                         <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-medium">
                           Important
+                        </span>
+                      )}
+                      {notice.id === modalSettings.selectedNoticeId && (
+                        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                          Modal Notice
                         </span>
                       )}
                     </div>
@@ -391,39 +598,78 @@ const AdminNotices: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 ml-4">
+                  
+                  {/* Action Buttons - Moved to a separate clearly visible section */}
+                  <div className="flex flex-col space-y-3 ml-6 min-w-[200px]">
+                    {/* Status Dropdown */}
                     <select
                       value={notice.status}
                       onChange={(e) =>
                         handleStatusChange(notice.id, e.target.value as "published" | "draft" | "archived")
                       }
-                      className={`text-xs font-semibold rounded-full px-3 py-2 border-0 ${getStatusColor(notice.status)} focus:ring-2 focus:ring-blue-500`}
+                      className={`w-full text-xs font-semibold rounded-lg px-3 py-2 border-0 ${getStatusColor(notice.status)} focus:ring-2 focus:ring-blue-500`}
                     >
                       <option value="draft">Draft</option>
                       <option value="published">Published</option>
                       <option value="archived">Archived</option>
                     </select>
-                    <div className="flex items-center space-x-2">
+                    
+                    {/* Modal Action Buttons - Very Clear and Visible */}
+                    {notice.status === 'published' && notice.documentUrl && (
+                      notice.id === modalSettings.selectedNoticeId ? (
+                        <button
+                          onClick={() => handleRemoveModalNotice()}
+                          className="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-md"
+                          title="Remove from Modal"
+                        >
+                          <EyeSlashIcon className="h-4 w-4 mr-2" />
+                          Remove Modal
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleSetModalNotice(notice)}
+                          className="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium shadow-md"
+                          title="Set as Modal Notice"
+                        >
+                          <PlayIcon className="h-4 w-4 mr-2" />
+                          Set as Modal
+                        </button>
+                      )
+                    )}
+
+                    {notice.status === 'published' && !notice.documentUrl && (
+                      <button
+                        disabled
+                        className="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed text-sm font-medium"
+                        title="Add document to set as modal"
+                      >
+                        <DocumentIcon className="h-4 w-4 mr-2" />
+                        No Document
+                      </button>
+                    )}
+
+                    {/* Standard Action Buttons */}
+                    <div className="flex items-center justify-between space-x-2 pt-2 border-t">
                       <button
                         onClick={() => handleViewNotice(notice)}
-                        className="text-purple-600 hover:text-purple-900 p-2 rounded-md hover:bg-purple-50 transition-colors"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
                         title="View Notice"
                       >
-                        <EyeIcon className="h-5 w-5" />
+                        <EyeIcon className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleEditNotice(notice)}
-                        className="text-blue-600 hover:text-blue-900 p-2 rounded-md hover:bg-blue-50 transition-colors"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                         title="Edit Notice"
                       >
-                        <PencilIcon className="h-5 w-5" />
+                        <PencilIcon className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteNotice(notice.id)}
-                        className="text-red-600 hover:text-red-900 p-2 rounded-md hover:bg-red-50 transition-colors"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
                         title="Delete Notice"
                       >
-                        <TrashIcon className="h-5 w-5" />
+                        <TrashIcon className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -682,6 +928,11 @@ const AdminNotices: React.FC = () => {
                 {viewingNotice.important && (
                   <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">Important</span>
                 )}
+                {viewingNotice.id === modalSettings.selectedNoticeId && (
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    Current Modal Notice
+                  </span>
+                )}
               </div>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{viewingNotice.title}</h2>
@@ -724,6 +975,21 @@ const AdminNotices: React.FC = () => {
                   )}
                 </div>
               </div>
+
+              {viewingNotice.status === 'published' && viewingNotice.documentUrl && viewingNotice.id !== modalSettings.selectedNoticeId && (
+                <div className="flex justify-end pt-4 border-t">
+                  <button
+                    onClick={() => {
+                      handleSetModalNotice(viewingNotice)
+                      setViewingNotice(null)
+                    }}
+                    className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  >
+                    <PlayIcon className="h-4 w-4 mr-2" />
+                    Set as Modal Notice
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
