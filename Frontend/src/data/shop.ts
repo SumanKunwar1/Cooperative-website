@@ -90,6 +90,51 @@ export const shopCategories: Category[] = [
       { id: "6-6", name: "Cycling", slug: "cycling" },
     ],
   },
+
+  // NEW CATEGORY: Grocery
+  {
+    id: "7",
+    name: "Grocery",
+    slug: "grocery",
+    subcategories: [
+      { id: "7-1", name: "Vegetables", slug: "vegetables" },
+      { id: "7-2", name: "Fruits", slug: "fruits" },
+      { id: "7-3", name: "Rice & Grains", slug: "rice-grains" },
+      { id: "7-4", name: "Cooking Essentials", slug: "cooking-essentials" },
+      { id: "7-5", name: "Oil & Ghee", slug: "oil-ghee" },
+      { id: "7-6", name: "Masala & Spices", slug: "spices" },
+      { id: "7-7", name: "Bakery Items", slug: "bakery-items" },
+    ],
+  },
+
+  // NEW CATEGORY: Agriculture
+  {
+    id: "8",
+    name: "Agriculture",
+    slug: "agriculture",
+    subcategories: [
+      { id: "8-1", name: "Seeds", slug: "seeds" },
+      { id: "8-2", name: "Fertilizers", slug: "fertilizers" },
+      { id: "8-3", name: "Pesticides", slug: "pesticides" },
+      { id: "8-4", name: "Farm Tools & Equipment", slug: "farm-tools" },
+      { id: "8-5", name: "Irrigation Equipment", slug: "irrigation" },
+      { id: "8-6", name: "Animal Feed", slug: "animal-feed" },
+    ],
+  },
+
+  // OPTIONAL EXTRA CATEGORY: Automotive
+  {
+    id: "9",
+    name: "Automotive",
+    slug: "automotive",
+    subcategories: [
+      { id: "9-1", name: "Car Accessories", slug: "car-accessories" },
+      { id: "9-2", name: "Bike Accessories", slug: "bike-accessories" },
+      { id: "9-3", name: "Engine Oils & Fluids", slug: "engine-oils" },
+      { id: "9-4", name: "Spare Parts", slug: "spare-parts" },
+      { id: "9-5", name: "Tyres & Batteries", slug: "tyres-batteries" },
+    ],
+  },
 ]
 
 // Helper functions
@@ -97,7 +142,10 @@ export const getCategoryBySlug = (slug: string): Category | undefined => {
   return shopCategories.find((category) => category.slug === slug)
 }
 
-export const getSubcategoryBySlug = (categorySlug: string, subcategorySlug: string): Subcategory | undefined => {
+export const getSubcategoryBySlug = (
+  categorySlug: string,
+  subcategorySlug: string
+): Subcategory | undefined => {
   const category = getCategoryBySlug(categorySlug)
   return category?.subcategories.find((sub) => sub.slug === subcategorySlug)
 }
