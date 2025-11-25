@@ -1,548 +1,191 @@
 "use client"
 
-import type React from "react"
 import { useState } from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
-import { motion, AnimatePresence } from "framer-motion"
-import { Building2 } from "lucide-react"
-import {
-  ChevronDownIcon,
-  Bars3Icon,
-  XMarkIcon,
-  UserIcon,
-  ShoppingBagIcon,
-  UsersIcon,
-  BellIcon,
-} from "@heroicons/react/24/outline"
-import { shopCategories } from "../../data/shop"
-import { useTranslation } from "react-i18next"
+import { Menu, X } from "lucide-react"
 import LanguageSelector from "./LanguageSelector"
+import { useTranslation } from "react-i18next"
 
-const Header: React.FC = () => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isShopOpen, setIsShopOpen] = useState(false)
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
-  const [isMobileShopOpen, setIsMobileShopOpen] = useState(false)
-  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null)
-
-  const navigate = useNavigate()
-  const location = useLocation()
   const { t } = useTranslation()
 
-  const closeMobileMenu = () => {
-    setIsMenuOpen(false)
-    setIsMobileShopOpen(false)
-    setExpandedMobileCategory(null)
-  }
+  const socialMedia = [
+    {
+      name: "Facebook",
+      url: "https://facebook.com",
+      icon: "https://img.freepik.com/premium-vector/round-facebook-logo-isolated-white-background_469489-897.jpg?semt=ais_hybrid&w=740&q=80",
+    },
+    {
+      name: "Twitter",
+      url: "https://twitter.com",
+      icon: "https://img.freepik.com/free-vector/twitter-new-2023-x-logo-white-background-vector_1017-45422.jpg",
+    },
+    {
+      name: "WhatsApp",
+      url: "https://wa.me",
+      icon: "https://img.freepik.com/premium-photo/round-whatsapp-logo-isolated-white-background_469489-1039.jpg?semt=ais_incoming&w=740&q=80",
+    },
+    {
+      name: "YouTube",
+      url: "https://youtube.com",
+      icon: "https://img.freepik.com/premium-vector/youtube-logo-youtube-is-videosharing-website-youtube-icon-eps-10-vector-illustration_981536-469.jpg?semt=ais_hybrid&w=740&q=80",
+    },
+    {
+      name: "Instagram",
+      url: "https://instagram.com",
+      icon: "https://img.freepik.com/premium-vector/purple-gradiend-social-media-logo_197792-1883.jpg?semt=ais_hybrid&w=740&q=80",
+    },
+    {
+      name: "Messenger",
+      url: "https://messenger.com",
+      icon: "https://img.freepik.com/premium-vector/messenger-app-icon-facebook-meta-platforms_277909-524.jpg?semt=ais_hybrid&w=740&q=80",
+    },
+  ]
 
-  const isOnShopPage = location.pathname === "/shop"
-
-  const handleCategoryNavigation = (categorySlug: string, subcategorySlug?: string) => {
-    if (isOnShopPage) {
-      // If already on shop page, just trigger a custom event to update filters
-      // without changing the URL
-      const event = new CustomEvent("shopFilterChange", {
-        detail: {
-          category: categorySlug,
-          subcategory: subcategorySlug || "",
-        },
-      })
-      window.dispatchEvent(event)
-    } else {
-      // If not on shop page, navigate with URL params
-      const url = subcategorySlug
-        ? `/shop?category=${categorySlug}&subcategory=${subcategorySlug}`
-        : `/shop?category=${categorySlug}`
-      navigate(url, { replace: false })
-    }
-
-    // Close the dropdown
-    setIsShopOpen(false)
-    setHoveredCategory(null)
-  }
-
-  const handleMobileCategoryNavigation = (categorySlug: string, subcategorySlug?: string) => {
-    if (isOnShopPage) {
-      // If already on shop page, trigger filter change event
-      const event = new CustomEvent("shopFilterChange", {
-        detail: {
-          category: categorySlug,
-          subcategory: subcategorySlug || "",
-        },
-      })
-      window.dispatchEvent(event)
-    } else {
-      // If not on shop page, navigate with URL params
-      const url = subcategorySlug
-        ? `/shop?category=${categorySlug}&subcategory=${subcategorySlug}`
-        : `/shop?category=${categorySlug}`
-      navigate(url, { replace: false })
-    }
-
-    // Close all mobile menus
-    setIsMobileShopOpen(false)
-    setExpandedMobileCategory(null)
-    setIsMenuOpen(false)
-  }
-
-  // Handle "View All Products" navigation
-  const handleViewAllProducts = () => {
-    if (isOnShopPage) {
-      // If already on shop page, clear filters without changing URL
-      const event = new CustomEvent("shopFilterChange", {
-        detail: {
-          category: "",
-          subcategory: "",
-        },
-      })
-      window.dispatchEvent(event)
-    } else {
-      // If not on shop page, navigate to shop
-      navigate("/shop", { replace: false })
-    }
-
-    setIsShopOpen(false)
-    setHoveredCategory(null)
-  }
-
-  // Handle mobile "View All Products" navigation
-  const handleMobileViewAllProducts = () => {
-    if (isOnShopPage) {
-      // If already on shop page, clear filters without changing URL
-      const event = new CustomEvent("shopFilterChange", {
-        detail: {
-          category: "",
-          subcategory: "",
-        },
-      })
-      window.dispatchEvent(event)
-    } else {
-      // If not on shop page, navigate to shop
-      navigate("/shop", { replace: false })
-    }
-
-    setIsMobileShopOpen(false)
-    setExpandedMobileCategory(null)
-    setIsMenuOpen(false)
-  }
-
-  // Handle manual notice modal trigger
-  const handleShowNotices = () => {
-    window.dispatchEvent(new CustomEvent('showNoticeModal'))
-  }
+  const navItems = [
+    { label: t("home"), href: "/", key: "home" },
+    { label: t("about"), href: "/about", key: "about" },
+    { label: t("services"), href: "/services", key: "services" },
+    { label: t("shop"), href: "/shop", key: "shop" },
+    { label: t("businesses"), href: "/business-directory", key: "businesses" },
+    { label: t("notices"), href: "/notice", key: "notices" },
+    { label: t("ourTeam"), href: "/teams", key: "ourTeam" },
+    { label: t("footer-gallery"), href: "/gallery", key: "footer-gallery" },
+    { label: t("footer-contact-info"), href: "/contact", key: "footer-contact-info" },
+  ]
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-24 px-2">
-          <motion.div
-            className="flex items-center mr-8"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <Link to="/" className="block">
-              <motion.img
-                src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1755759270/299574930_451468846995643_7716478953910668088_n_vndizu.jpg"
-                alt="Constellation Saving & Credit Cooperative"
-                className="h-20 w-20 rounded-full object-cover shadow-lg border-3 border-primary-200"
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                  borderColor: "rgb(59 130 246)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                animate={{
-                  boxShadow: [
-                    "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                    "0 20px 25px -5px rgba(59, 130, 246, 0.1)",
-                    "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                  ],
-                }}
-                style={{
-                  animationDuration: "4s",
-                  animationIterationCount: "infinite",
-                }}
+    <>
+      {/* Top Section - Logo, Social Icons, Flags, Auth (NOT STICKY) */}
+      <div className="bg-white border-b-2 border-[#1e6b3e]">
+        <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4">
+          <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 lg:gap-6">
+            {/* Logo - Far Left */}
+            <div className="flex-shrink-0">
+              <img
+                src="https://res.cloudinary.com/dihev9qxc/image/upload/v1763985739/WhatsApp_Image_2025-11-24_at_10.47.58_37464530_pqsbzb.jpg"
+                alt="Constellation Logo"
+                className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto object-contain"
               />
-            </Link>
-          </motion.div>
-
-          <nav className="hidden xl:flex items-center space-x-6">
-            <Link
-              to="/"
-              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              {t("home")}
-            </Link>
-
-            <Link
-              to="/about"
-              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              {t("about")}
-            </Link>
-
-            <Link
-              to="/services"
-              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              {t("services")}
-            </Link>
-
-            <div
-              className="relative"
-              onMouseEnter={() => setIsShopOpen(true)}
-              onMouseLeave={() => {
-                setIsShopOpen(false)
-                setHoveredCategory(null)
-              }}
-            >
-              <button className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50">
-                <ShoppingBagIcon className="h-3 w-3 mr-1" />
-                {t("shop")}
-                <ChevronDownIcon className="ml-1 h-3 w-3" />
-              </button>
-
-              <AnimatePresence>
-                {isShopOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-50"
-                    style={{
-                      width: "800px",
-                      maxWidth: "calc(100vw - 2rem)",
-                    }}
-                  >
-                    <div className="flex">
-                      <div className="w-1/3 border-r border-gray-100 p-4">
-                        <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide mb-4 px-3">
-                          {t("categories")}
-                          {isOnShopPage && (
-                            <span className="text-xs text-blue-600 font-normal ml-2">{t("filtersOnly")}</span>
-                          )}
-                        </h3>
-                        <div className="space-y-1">
-                          {shopCategories.map((category) => (
-                            <div
-                              key={category.id}
-                              onMouseEnter={() => setHoveredCategory(category.name)}
-                              className="relative"
-                            >
-                              <button
-                                onClick={() => handleCategoryNavigation(category.slug)}
-                                className={`flex items-center justify-between w-full text-left px-3 py-3 rounded-lg text-sm font-medium transition-colors duration-150 ${
-                                  hoveredCategory === category.name
-                                    ? "bg-primary-50 text-primary-700"
-                                    : "text-gray-700 hover:bg-gray-50 hover:text-primary-600"
-                                }`}
-                              >
-                                {category.name}
-                                <ChevronDownIcon className="h-4 w-4 rotate-[-90deg]" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="mt-6 pt-4 border-t border-gray-100">
-                          <button
-                            onClick={handleViewAllProducts}
-                            className="block w-full text-center bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 font-medium text-sm transition-colors duration-200"
-                          >
-                            {isOnShopPage ? t("showAllProducts") : t("viewAllProducts")}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="w-2/3 p-4">
-                        {hoveredCategory ? (
-                          <motion.div
-                            key={hoveredCategory}
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <h4 className="font-bold text-primary-700 text-base mb-4 px-3">{hoveredCategory}</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              {shopCategories
-                                .find((cat) => cat.name === hoveredCategory)
-                                ?.subcategories.map((subcategory) => (
-                                  <button
-                                    key={subcategory.id}
-                                    onClick={() =>
-                                      handleCategoryNavigation(
-                                        shopCategories.find((cat) => cat.name === hoveredCategory)?.slug || "",
-                                        subcategory.slug,
-                                      )
-                                    }
-                                    className="block text-left text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 px-3 py-2 rounded-md transition-colors duration-150"
-                                  >
-                                    {subcategory.name}
-                                  </button>
-                                ))}
-                            </div>
-                          </motion.div>
-                        ) : (
-                          <div className="flex items-center justify-center h-full text-gray-500">
-                            <div className="text-center">
-                              <ShoppingBagIcon className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                              <p className="text-sm">{isOnShopPage ? t("hoverToFilter") : t("hoverToSee")}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
 
-            <Link
-              to="/business-directory"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
-            >
-              <Building2 className="h-3 w-3 mr-1" />
-              {t("businesses")}
-            </Link>
+            {/* Social Media Icons - 2x3 Grid - Hidden on mobile and tablet */}
+            <div className="hidden lg:flex flex-col gap-0.5 md:gap-1 flex-shrink-0">
+              <div className="flex gap-1 md:gap-2">
+                {socialMedia.slice(0, 3).map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                    title={social.name}
+                  >
+                    <img
+                      src={social.icon || "/placeholder.svg"}
+                      alt={social.name}
+                      className="h-5 md:h-7 lg:h-8 w-auto object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+              <div className="flex gap-1 md:gap-2">
+                {socialMedia.slice(3, 6).map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                    title={social.name}
+                  >
+                    <img
+                      src={social.icon || "/placeholder.svg"}
+                      alt={social.name}
+                      className="h-5 md:h-7 lg:h-8 w-auto object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
 
-            <Link
-              to="/notice"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              <BellIcon className="h-3 w-3 mr-1" />
-              {t("notices")}
-            </Link>
+            {/* Language Selector - Hidden on mobile and tablet */}
+            <div className="hidden lg:flex flex-shrink-0">
+              <LanguageSelector />
+            </div>
 
-            {/* Manual Notice Modal Trigger */}
+            {/* Auth Buttons - Visible on md and up */}
+            <div className="hidden md:flex gap-1 lg:gap-2 flex-shrink-0">
+              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1">
+                <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+                {t("login")}
+              </button>
+              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#1e6b3e] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap">
+                {t("register")}
+              </button>
+            </div>
+
+            {/* Mobile Menu Toggle */}
             <button
-              onClick={handleShowNotices}
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-              title="View Important Notices"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-1.5 text-gray-700 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
             >
-              <BellIcon className="h-3 w-3 mr-1" />
-              Important Notices
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
+          </div>
+        </div>
+      </div>
 
-            <Link
-              to="/teams"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium text-sm px-2 py-1 rounded-md hover:bg-primary-50"
-            >
-              <UsersIcon className="h-3 w-3 mr-1" />
-              {t("ourTeam")}
-            </Link>
-          </nav>
-
-          <div className="hidden xl:flex items-center space-x-3 flex-shrink-0">
-            {/* Language Selector */}
-            <LanguageSelector className="mr-2" />
-
-            <Link
-              to="/login"
-              className="flex items-center text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium px-3 py-2 rounded-md hover:bg-primary-50 text-sm"
-            >
-              <UserIcon className="h-3 w-3 mr-1" />
+      {/* Navigation Menu - Professional Green Strip (STICKY) */}
+      <nav className="sticky top-0 z-50 bg-[#1e6b3e] shadow-md">
+        <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8">
+          {/* Desktop Navigation */}
+          <ul className="hidden md:flex items-center justify-center gap-0.5 lg:gap-1 py-2 md:py-2.5 lg:py-3 flex-wrap">
+            {navItems.map((item) => (
+              <li key={item.key}>
+                <a
+                  href={item.href}
+                  className="text-white hover:bg-[#16572f] transition-colors duration-200 font-medium text-xs lg:text-sm px-1 md:px-2 lg:px-3 py-1 lg:py-1.5 rounded whitespace-nowrap"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          
+          {/* Mobile Auth Buttons - Only visible on mobile */}
+          <div className="md:hidden flex gap-1 flex-shrink-0 ml-auto py-2">
+            <button className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
               {t("login")}
-            </Link>
-
-            <Link
-              to="/register"
-              className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg text-sm whitespace-nowrap"
-            >
+            </button>
+            <button className="px-2 py-0.5 bg-white text-[#1e6b3e] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap">
               {t("register")}
-            </Link>
+            </button>
           </div>
 
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="xl:hidden p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100 transition-colors duration-200"
-          >
-            {isMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
-          </button>
-        </div>
-
-        <AnimatePresence>
+          {/* Mobile Navigation */}
           {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="xl:hidden border-t border-gray-200 py-6"
-            >
-              <div className="flex flex-col space-y-4">
-                <Link
-                  to="/"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
+            <div className="md:hidden py-2 space-y-1 border-t border-[#0f4620]">
+              {navItems.map((item) => (
+                <a
+                  key={item.key}
+                  href={item.href}
+                  className="text-white hover:bg-[#16572f] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  {t("home")}
-                </Link>
-                <Link
-                  to="/about"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  {t("about")}
-                </Link>
-
-                <Link
-                  to="/services"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  {t("services")}
-                </Link>
-
-                <div className="space-y-2">
-                  <button
-                    onClick={() => setIsMobileShopOpen(!isMobileShopOpen)}
-                    className="flex items-center justify-between w-full text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                  >
-                    <div className="flex items-center">
-                      <ShoppingBagIcon className="h-4 w-4 mr-2" />
-                      {t("shop")} {isOnShopPage && <span className="text-xs text-blue-600 ml-1">({t("filter")})</span>}
-                    </div>
-                    <ChevronDownIcon
-                      className={`h-4 w-4 transition-transform duration-200 ${isMobileShopOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {isMobileShopOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="ml-4 space-y-2 overflow-hidden"
-                      >
-                        <button
-                          onClick={handleMobileViewAllProducts}
-                          className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200 border border-primary-200"
-                        >
-                          {isOnShopPage ? t("showAllProducts") : t("viewAllProducts")}
-                        </button>
-
-                        {shopCategories.map((category) => (
-                          <div key={category.id} className="space-y-1">
-                            <button
-                              onClick={() =>
-                                setExpandedMobileCategory(
-                                  expandedMobileCategory === category.name ? null : category.name,
-                                )
-                              }
-                              className="flex items-center justify-between w-full text-gray-600 hover:text-primary-600 text-sm py-2 px-3 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                            >
-                              {category.name}
-                              <ChevronDownIcon
-                                className={`h-3 w-3 transition-transform duration-200 ${expandedMobileCategory === category.name ? "rotate-180" : ""}`}
-                              />
-                            </button>
-
-                            <AnimatePresence>
-                              {expandedMobileCategory === category.name && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: "auto" }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="ml-4 space-y-1 overflow-hidden"
-                                >
-                                  <button
-                                    onClick={() => handleMobileCategoryNavigation(category.slug)}
-                                    className="block w-full text-left text-primary-600 hover:text-primary-700 font-medium text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                                  >
-                                    {isOnShopPage
-                                      ? `${t("filter")} ${category.name}`
-                                      : `${t("viewAllProducts")} ${category.name}`}
-                                  </button>
-
-                                  {category.subcategories.map((subcategory) => (
-                                    <button
-                                      key={subcategory.id}
-                                      onClick={() => handleMobileCategoryNavigation(category.slug, subcategory.slug)}
-                                      className="block w-full text-left text-gray-500 hover:text-primary-600 text-xs py-1 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                                    >
-                                      {subcategory.name}
-                                    </button>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <Link
-                  to="/business-directory"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  {t("businesses")}
-                </Link>
-
-                <Link
-                  to="/notice"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  {t("notices")}
-                </Link>
-
-                {/* Manual Notice Modal Trigger for Mobile */}
-                <button
-                  onClick={() => {
-                    handleShowNotices()
-                    closeMobileMenu()
-                  }}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200 text-left"
-                >
-                  Important Notices
-                </button>
-
-                <Link
-                  to="/teams"
-                  onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                >
-                  {t("ourTeam")}
-                </Link>
-
-                <div className="flex flex-col space-y-3 pt-6 border-t border-gray-200">
-                  {/* Language Selector for Mobile */}
-                  <div className="flex justify-center">
-                    <LanguageSelector />
-                  </div>
-
-                  <Link
-                    to="/login"
-                    onClick={closeMobileMenu}
-                    className="text-gray-700 hover:text-primary-600 font-medium text-base py-2 px-2 rounded-md hover:bg-primary-50 transition-colors duration-200"
-                  >
-                    {t("login")}
-                  </Link>
-                  <motion.div whileTap={{ scale: 0.95 }}>
-                    <Link
-                      to="/register"
-                      onClick={closeMobileMenu}
-                      className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold text-center shadow-md hover:shadow-lg transition-all duration-200"
-                    >
-                      {t("register")}
-                    </Link>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
+                  {item.label}
+                </a>
+              ))}
+            </div>
           )}
-        </AnimatePresence>
-      </div>
-    </header>
+        </div>
+      </nav>
+    </>
   )
 }
 

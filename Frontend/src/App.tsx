@@ -106,10 +106,10 @@ function PlaceholderPage({ titleKey }: { titleKey: string }) {
 
 function AppContent() {
   const [showNoticeModal, setShowNoticeModal] = useState(false)
-  const [] = useState(true)
+  const [modalChecked, setModalChecked] = useState(false)
 
   useEffect(() => {
-    // Always show modal on initial website load if enabled and notice is selected
+    // Only check modal on initial app load (mount)
     const checkModal = () => {
       const shouldShow = noticeModalService.shouldShowModal()
       console.log('Should show modal:', shouldShow)
@@ -117,27 +117,28 @@ function AppContent() {
       
       if (shouldShow) {
         setShowNoticeModal(true)
+        noticeModalService.markAsShownInSession()
       }
+      setModalChecked(true)
     }
 
-    // Check immediately on component mount
-    checkModal()
+    // Only run this once when component first mounts
+    if (!modalChecked) {
+      checkModal()
+    }
 
-    // Also check after a short delay to ensure everything is loaded
-    const timer = setTimeout(checkModal, 1000)
-
-    // Listen for manual trigger from header
+    // Listen for manual trigger from header/admin
     const handleShowNoticeModal = () => {
+      // Reset session flag when manually triggered
       setShowNoticeModal(true)
     }
 
     window.addEventListener('showNoticeModal', handleShowNoticeModal)
     
     return () => {
-      clearTimeout(timer)
       window.removeEventListener('showNoticeModal', handleShowNoticeModal)
     }
-  }, [])
+  }, [modalChecked])
 
   const handleCloseNoticeModal = () => {
     setShowNoticeModal(false)
@@ -336,7 +337,7 @@ function AppContent() {
               </main>
               <Footer />
               
-              {/* Notice Modal - Always check if it should be shown */}
+              {/* Notice Modal - Show only once per session */}
               <NoticeModal 
                 isEnabled={showNoticeModal}
                 onClose={handleCloseNoticeModal}
