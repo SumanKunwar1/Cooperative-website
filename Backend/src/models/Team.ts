@@ -8,6 +8,8 @@ export interface ITeamMember extends Document {
   email?: string;
   phone?: string;
   joinDate?: string;
+  committeeType: string;
+  committeeRole?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,8 +22,7 @@ const TeamMemberSchema = new Schema({
   },
   position: {
     type: String,
-    required: true,
-    enum: ['Chairman', 'Vice Chairman', 'Secretary', 'Treasurer', 'Member']
+    required: true
   },
   image: {
     type: String,
@@ -41,6 +42,16 @@ const TeamMemberSchema = new Schema({
   },
   joinDate: {
     type: String
+  },
+  committeeType: {
+    type: String,
+    required: true,
+    enum: ['working', 'executive', 'audit', 'accounting', 'credit'],
+    default: 'working'
+  },
+  committeeRole: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

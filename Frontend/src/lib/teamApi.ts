@@ -10,14 +10,19 @@ export interface TeamMember {
   email?: string
   phone?: string
   joinDate?: string
+  committeeType: string
+  committeeRole?: string
   createdAt?: string
   updatedAt?: string
 }
 
 export interface TeamStatistics {
   totalMembers: number
-  executivePositions: number
-  generalMembers: number
+  workingCommittee: number
+  executiveTeam: number
+  auditCommittee: number
+  accountingCommittee: number
+  creditCommittee: number
 }
 
 class TeamAPI {
@@ -31,6 +36,20 @@ class TeamAPI {
       return await response.json()
     } catch (error) {
       console.error("Error fetching public team members:", error)
+      throw error
+    }
+  }
+
+  // Get team members by committee type
+  async getTeamMembersByCommittee(committeeType: string): Promise<TeamMember[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/team/public/committee/${committeeType}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      return await response.json()
+    } catch (error) {
+      console.error("Error fetching team members by committee:", error)
       throw error
     }
   }
@@ -73,9 +92,11 @@ class TeamAPI {
       formData.append("name", memberData.name)
       formData.append("position", memberData.position)
       formData.append("bio", memberData.bio)
+      formData.append("committeeType", memberData.committeeType)
       if (memberData.email) formData.append("email", memberData.email)
       if (memberData.phone) formData.append("phone", memberData.phone)
       if (memberData.joinDate) formData.append("joinDate", memberData.joinDate)
+      if (memberData.committeeRole) formData.append("committeeRole", memberData.committeeRole)
       if (imageFile) formData.append("image", imageFile)
 
       const response = await fetch(`${API_BASE_URL}/api/team`, {
@@ -103,6 +124,8 @@ class TeamAPI {
       if (memberData.email) formData.append("email", memberData.email)
       if (memberData.phone) formData.append("phone", memberData.phone)
       if (memberData.joinDate) formData.append("joinDate", memberData.joinDate)
+      if (memberData.committeeType) formData.append("committeeType", memberData.committeeType)
+      if (memberData.committeeRole) formData.append("committeeRole", memberData.committeeRole)
       if (imageFile) formData.append("image", imageFile)
 
       const response = await fetch(`${API_BASE_URL}/api/team/${id}`, {

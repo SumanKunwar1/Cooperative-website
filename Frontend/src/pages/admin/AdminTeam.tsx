@@ -3,169 +3,154 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Plus, Edit2, Trash2, Save, X, Upload, User, Users, Crown, Calendar } from "lucide-react"
-import Button from "../../components/ui/Button"
-import { teamAPI, type TeamMember, type TeamStatistics } from "../../lib/teamApi"
+import { Mail, Phone, Calendar, Plus, Edit, Trash2, Loader2 } from "lucide-react"
+import { teamAPI, type TeamMember } from "../../lib/teamApi"
 
-const AdminTeam: React.FC = () => {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
-  const [statistics, setStatistics] = useState<TeamStatistics>({
-    totalMembers: 0,
-    executivePositions: 0,
-    generalMembers: 0,
-  })
+const AdminTeams: React.FC = () => {
+  const [workingCommittee, setWorkingCommittee] = useState<TeamMember[]>([])
+  const [executiveTeam, setExecutiveTeam] = useState<TeamMember[]>([])
+  const [auditCommittee, setAuditCommittee] = useState<TeamMember[]>([])
+  const [accountingCommittee, setAccountingCommittee] = useState<TeamMember[]>([])
+  const [creditCommittee, setCreditCommittee] = useState<TeamMember[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
-  const [isAddingMember, setIsAddingMember] = useState(false)
-  const [newMember, setNewMember] = useState<Partial<TeamMember>>({
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>("")
+
+  // Form state
+  const [formData, setFormData] = useState({
     name: "",
     position: "",
-    image: "",
     bio: "",
     email: "",
     phone: "",
     joinDate: "",
+    committeeType: "working",
+    committeeRole: "",
+    image: ""
   })
-  const [imageFiles, setImageFiles] = useState<{ [key: string]: File }>({})
 
   useEffect(() => {
     fetchTeamMembers()
-    fetchStatistics()
   }, [])
 
   const fetchTeamMembers = async () => {
     try {
       setLoading(true)
       const members = await teamAPI.getAdminTeamMembers()
-      setTeamMembers(
-        members.map((member) => ({
-          ...member,
-          id: member._id || member.id || "",
-        })),
-      )
+      
+      setWorkingCommittee(members.filter(member => member.committeeType === 'working'))
+      setExecutiveTeam(members.filter(member => member.committeeType === 'executive'))
+      setAuditCommittee(members.filter(member => member.committeeType === 'audit'))
+      setAccountingCommittee(members.filter(member => member.committeeType === 'accounting'))
+      setCreditCommittee(members.filter(member => member.committeeType === 'credit'))
+      
     } catch (error) {
       console.error("Error fetching team members:", error)
-      alert("Error fetching team members. Please try again.")
     } finally {
       setLoading(false)
     }
   }
 
-  const fetchStatistics = async () => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+        setFormData(prev => ({
+          ...prev,
+          image: reader.result as string
+        }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      position: "",
+      bio: "",
+      email: "",
+      phone: "",
+      joinDate: "",
+      committeeType: "working",
+      committeeRole: "",
+      image: ""
+    })
+    setImageFile(null)
+    setImagePreview("")
+    setEditingMember(null)
+    setSaving(false)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    
     try {
-      const stats = await teamAPI.getTeamStatistics()
-      setStatistics(stats)
+      const memberData = {
+        name: formData.name,
+        position: formData.position,
+        bio: formData.bio,
+        email: formData.email,
+        phone: formData.phone,
+        joinDate: formData.joinDate,
+        committeeType: formData.committeeType,
+        committeeRole: formData.committeeRole,
+        image: formData.image
+      }
+
+      if (editingMember) {
+        await teamAPI.updateTeamMember(editingMember._id!, memberData, imageFile || undefined)
+      } else {
+        await teamAPI.createTeamMember(memberData, imageFile || undefined)
+      }
+      setShowModal(false)
+      resetForm()
+      await fetchTeamMembers()
     } catch (error) {
-      console.error("Error fetching statistics:", error)
+      console.error("Error saving team member:", error)
+      alert("Error saving team member. Please try again.")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleImageUpload = (file: File, memberId?: string) => {
-    if (memberId) {
-      setImageFiles((prev) => ({ ...prev, [memberId]: file }))
-      // Create preview URL for display
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string
-        if (editingMember && editingMember.id === memberId) {
-          setEditingMember((prev) => (prev ? { ...prev, image: imageUrl } : null))
-        }
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setImageFiles((prev) => ({ ...prev, new: file }))
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string
-        setNewMember((prev) => ({ ...prev, image: imageUrl }))
-      }
-      reader.readAsDataURL(file)
-    }
+  const handleEdit = (member: TeamMember) => {
+    setEditingMember(member)
+    setFormData({
+      name: member.name,
+      position: member.position,
+      bio: member.bio,
+      email: member.email || "",
+      phone: member.phone || "",
+      joinDate: member.joinDate || "",
+      committeeType: member.committeeType,
+      committeeRole: member.committeeRole || "",
+      image: member.image || ""
+    })
+    setImagePreview(member.image || "")
+    setShowModal(true)
   }
 
-  const handleSaveMember = async () => {
-    if (editingMember) {
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this team member?")) {
       try {
-        const imageFile = imageFiles[editingMember.id || ""]
-        const updatedMember = await teamAPI.updateTeamMember(
-          editingMember._id || editingMember.id || "",
-          editingMember,
-          imageFile,
-        )
-
-        setTeamMembers((prev) =>
-          prev.map((member) =>
-            (member._id || member.id) === (updatedMember._id || updatedMember.id)
-              ? { ...updatedMember, id: updatedMember._id || updatedMember.id }
-              : member,
-          ),
-        )
-        setEditingMember(null)
-        setImageFiles((prev) => {
-          const newFiles = { ...prev }
-          delete newFiles[editingMember.id || ""]
-          return newFiles
-        })
-        await fetchStatistics()
-        alert("Team member updated successfully!")
-      } catch (error) {
-        console.error("Error updating team member:", error)
-        alert("Error updating team member. Please try again.")
-      }
-    }
-  }
-
-  const handleAddMember = async () => {
-    if (newMember.name && newMember.position && newMember.bio) {
-      try {
-        const imageFile = imageFiles.new
-        const createdMember = await teamAPI.createTeamMember(
-          {
-            name: newMember.name,
-            position: newMember.position,
-            bio: newMember.bio,
-            email: newMember.email || "",
-            phone: newMember.phone || "",
-            joinDate: newMember.joinDate || "",
-            image: "",
-          },
-          imageFile,
-        )
-
-        setTeamMembers((prev) => [...prev, { ...createdMember, id: createdMember._id || createdMember.id }])
-        setNewMember({
-          name: "",
-          position: "",
-          image: "",
-          bio: "",
-          email: "",
-          phone: "",
-          joinDate: "",
-        })
-        setImageFiles((prev) => {
-          const newFiles = { ...prev }
-          delete newFiles.new
-          return newFiles
-        })
-        setIsAddingMember(false)
-        await fetchStatistics()
-        alert("Team member added successfully!")
-      } catch (error) {
-        console.error("Error adding team member:", error)
-        alert("Error adding team member. Please try again.")
-      }
-    } else {
-      alert("Please fill in all required fields (Name, Position, Bio)")
-    }
-  }
-
-  const handleDeleteMember = async (id: string, memberId: string) => {
-    if (window.confirm("Are you sure you want to delete this team member?")) {
-      try {
-        await teamAPI.deleteTeamMember(memberId)
-        setTeamMembers((prev) => prev.filter((member) => member.id !== id))
-        await fetchStatistics()
-        alert("Team member deleted successfully!")
+        await teamAPI.deleteTeamMember(id)
+        await fetchTeamMembers()
       } catch (error) {
         console.error("Error deleting team member:", error)
         alert("Error deleting team member. Please try again.")
@@ -173,326 +158,398 @@ const AdminTeam: React.FC = () => {
     }
   }
 
+  const getCommitteeTitle = (type: string) => {
+    const titles: { [key: string]: string } = {
+      working: "Working Committee",
+      executive: "Executive Team",
+      audit: "Audit Committee",
+      accounting: "Accounting Supervision Committee",
+      credit: "Credit Sub-Committee"
+    }
+    return titles[type] || type
+  }
+
+  const TeamMemberCard = ({ member, index }: { member: TeamMember; index: number }) => (
+    <motion.div
+      key={member._id || member.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="group relative bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+    >
+      <div className="relative h-64 overflow-hidden">
+        <img
+          src={member.image || "/placeholder.svg?height=256&width=300&query=professional headshot"}
+          alt={member.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => handleEdit(member)}
+            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleDelete(member._id!)}
+            className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className="p-4">
+        <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
+        <p className="text-blue-600 font-semibold mb-2 text-sm uppercase tracking-wide">{member.position}</p>
+        {member.committeeRole && (
+          <p className="text-green-600 font-medium mb-2 text-xs">{member.committeeRole}</p>
+        )}
+        <p className="text-gray-500 text-xs mb-2 capitalize">{getCommitteeTitle(member.committeeType)}</p>
+
+        <div className="space-y-1 mb-3">
+          {member.email && (
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Mail className="w-3 h-3" />
+              <span>{member.email}</span>
+            </div>
+          )}
+          {member.phone && (
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Phone className="w-3 h-3" />
+              <span>{member.phone}</span>
+            </div>
+          )}
+          {member.joinDate && (
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Calendar className="w-3 h-3" />
+              <span>Joined {member.joinDate}</span>
+            </div>
+          )}
+        </div>
+
+        <p className="text-gray-600 text-xs leading-relaxed line-clamp-3">{member.bio}</p>
+      </div>
+    </motion.div>
+  )
+
+  const CommitteeSection = ({ 
+    title, 
+    members, 
+    committeeType 
+  }: { 
+    title: string; 
+    members: TeamMember[]; 
+    committeeType: string 
+  }) => (
+    <div className="mb-12">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+        <button
+          onClick={() => {
+            resetForm()
+            setFormData(prev => ({ ...prev, committeeType }))
+            setShowModal(true)
+          }}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Add Member
+        </button>
+      </div>
+
+      {members.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          <p>No members in this committee yet.</p>
+          <button
+            onClick={() => {
+              resetForm()
+              setFormData(prev => ({ ...prev, committeeType }))
+              setShowModal(true)
+            }}
+            className="text-blue-600 hover:underline mt-2"
+          >
+            Add the first member
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {members.map((member, index) => (
+            <TeamMemberCard key={member._id || member.id} member={member} index={index} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading team members...</p>
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading team members...</p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">Team Management</h1>
-            <p className="text-muted-foreground text-lg">Manage Working Committee members and their information</p>
-          </div>
-          <Button
-            onClick={() => setIsAddingMember(true)}
-            className="flex items-center gap-2 bg-secondary hover:bg-secondary/90"
-          >
-            <Plus className="w-5 h-5" />
-            Add Member
-          </Button>
-        </div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Team Management</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Manage all committee members across different teams and positions
+          </p>
+        </motion.div>
 
-        {/* Add New Member Form */}
-        {isAddingMember && (
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-            <div className="bg-card rounded-xl shadow-lg border border-border p-8">
-              <h2 className="text-2xl font-bold text-card-foreground mb-6">Add New Team Member</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Name *</label>
-                  <input
-                    type="text"
-                    value={newMember.name || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                    placeholder="Enter member name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Position *</label>
-                  <select
-                    value={newMember.position || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, position: e.target.value }))}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                    required
-                  >
-                    <option value="">Select position</option>
-                    <option value="Chairman">Chairman</option>
-                    <option value="Vice Chairman">Vice Chairman</option>
-                    <option value="Secretary">Secretary</option>
-                    <option value="Treasurer">Treasurer</option>
-                    <option value="Member">Member</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Email</label>
-                  <input
-                    type="email"
-                    value={newMember.email || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                    placeholder="Enter email address"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Phone</label>
-                  <input
-                    type="text"
-                    value={newMember.phone || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, phone: e.target.value }))}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                    placeholder="Enter phone number"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Join Date</label>
-                  <input
-                    type="text"
-                    value={newMember.joinDate || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, joinDate: e.target.value }))}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                    placeholder="Enter join date"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Profile Image</label>
-                  <div className="flex items-center gap-4">
-                    {newMember.image && (
-                      <img
-                        src={newMember.image || "/placeholder.svg"}
-                        alt="Preview"
-                        className="w-24 h-24 rounded-lg object-cover border-2 border-border"
-                      />
-                    )}
-                    <label className="flex items-center gap-2 px-4 py-3 bg-muted hover:bg-muted/80 rounded-lg cursor-pointer transition-colors">
-                      <Upload className="w-4 h-4" />
-                      Upload Image
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) handleImageUpload(file)
-                        }}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-card-foreground mb-3">Bio *</label>
-                  <textarea
-                    value={newMember.bio || ""}
-                    onChange={(e) => setNewMember((prev) => ({ ...prev, bio: e.target.value }))}
-                    rows={4}
-                    className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors resize-none"
-                    placeholder="Enter member bio"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end gap-4 mt-8">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setIsAddingMember(false)
-                    setNewMember({
-                      name: "",
-                      position: "",
-                      image: "",
-                      bio: "",
-                      email: "",
-                      phone: "",
-                      joinDate: "",
-                    })
-                  }}
-                  className="px-6 py-3"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Cancel
-                </Button>
-                <Button onClick={handleAddMember} className="px-6 py-3 bg-secondary hover:bg-secondary/90">
-                  <Save className="w-4 h-4 mr-2" />
-                  Add Member
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+        {/* Working Committee Section */}
+        <CommitteeSection
+          title="Working Committee"
+          members={workingCommittee}
+          committeeType="working"
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {teamMembers.map((member) => (
+        {/* Executive Team Section */}
+        <CommitteeSection
+          title="Executive Team"
+          members={executiveTeam}
+          committeeType="executive"
+        />
+
+        {/* Audit Committee Section */}
+        <CommitteeSection
+          title="Audit Committee"
+          members={auditCommittee}
+          committeeType="audit"
+        />
+
+        {/* Accounting Supervision Committee Section */}
+        <CommitteeSection
+          title="Accounting Supervision Committee"
+          members={accountingCommittee}
+          committeeType="accounting"
+        />
+
+        {/* Credit Sub-Committee Section */}
+        <CommitteeSection
+          title="Credit Sub-Committee"
+          members={creditCommittee}
+          committeeType="credit"
+        />
+
+        {/* Add/Edit Member Modal */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
             <motion.div
-              key={member.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative group"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             >
-              <div className="bg-card rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-border overflow-hidden">
-                {editingMember?.id === member.id ? (
-                  // Edit Mode
-                  <div className="p-6 space-y-4">
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={editingMember!.image || "/placeholder.svg"}
-                        alt={editingMember!.name}
-                        className="w-24 h-24 rounded-lg object-cover border-2 border-border"
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  {editingMember ? "Edit Team Member" : "Add New Team Member"}
+                </h2>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter full name"
+                        disabled={saving}
                       />
-                      <label className="flex items-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg cursor-pointer transition-colors text-sm">
-                        <Upload className="w-4 h-4" />
-                        Change
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Position *
+                      </label>
+                      <input
+                        type="text"
+                        name="position"
+                        value={formData.position}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g., Chairman, General Manager"
+                        disabled={saving}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Committee Type *
+                      </label>
+                      <select
+                        name="committeeType"
+                        value={formData.committeeType}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={saving}
+                      >
+                        <option value="working">Working Committee</option>
+                        <option value="executive">Executive Team</option>
+                        <option value="audit">Audit Committee</option>
+                        <option value="accounting">Accounting Supervision Committee</option>
+                        <option value="credit">Credit Sub-Committee</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Committee Role
+                      </label>
+                      <input
+                        type="text"
+                        name="committeeRole"
+                        value={formData.committeeRole}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g., Convener, Member"
+                        disabled={saving}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="email@example.com"
+                        disabled={saving}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="+1 (555) 123-4567"
+                        disabled={saving}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Join Date
+                    </label>
+                    <input
+                      type="text"
+                      name="joinDate"
+                      value={formData.joinDate}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., 2081 Bhadra 30"
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Bio *
+                    </label>
+                    <textarea
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      required
+                      rows={4}
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter member's bio and responsibilities..."
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Profile Image
+                    </label>
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1">
                         <input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0]
-                            if (file) handleImageUpload(file, member.id)
-                          }}
-                          className="hidden"
+                          onChange={handleImageChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900"
+                          disabled={saving}
                         />
-                      </label>
-                    </div>
-                    {editingMember && (
-                      <>
-                        <input
-                          type="text"
-                          value={editingMember!.name || ""}
-                          onChange={(e) =>
-                            setEditingMember((prev) => (prev ? { ...prev, name: e.target.value } : prev))
-                          }
-                          className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                        />
-                        <select
-                          value={editingMember!.position || ""}
-                          onChange={(e) =>
-                            setEditingMember((prev) => (prev ? { ...prev, position: e.target.value } : prev))
-                          }
-                          className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                        >
-                          <option value="Chairman">Chairman</option>
-                          <option value="Vice Chairman">Vice Chairman</option>
-                          <option value="Secretary">Secretary</option>
-                          <option value="Treasurer">Treasurer</option>
-                          <option value="Member">Member</option>
-                        </select>
-                        <input
-                          type="email"
-                          value={editingMember!.email || ""}
-                          onChange={(e) =>
-                            setEditingMember((prev) => (prev ? { ...prev, email: e.target.value } : prev))
-                          }
-                          className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                          placeholder="Email"
-                        />
-                        <input
-                          type="text"
-                          value={editingMember!.phone || ""}
-                          onChange={(e) =>
-                            setEditingMember((prev) => (prev ? { ...prev, phone: e.target.value } : prev))
-                          }
-                          className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
-                          placeholder="Phone"
-                        />
-                        <textarea
-                          value={editingMember!.bio || ""}
-                          onChange={(e) => setEditingMember((prev) => (prev ? { ...prev, bio: e.target.value } : prev))}
-                          rows={3}
-                          className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors resize-none"
-                        />
-                      </>
-                    )}
-                    <div className="flex justify-end gap-3 pt-2">
-                      <Button variant="outline" size="sm" onClick={() => setEditingMember(null)}>
-                        <X className="w-4 h-4" />
-                      </Button>
-                      <Button size="sm" onClick={handleSaveMember} className="bg-secondary hover:bg-secondary/90">
-                        <Save className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  // View Mode
-                  <div>
-                    <div className="relative h-64 overflow-hidden">
-                      <img
-                        src={member.image || "/placeholder.svg?height=256&width=300&query=professional headshot"}
-                        alt={member.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-card-foreground mb-2 text-balance">{member.name}</h3>
-                      <p className="text-secondary font-semibold mb-4 text-sm uppercase tracking-wide">
-                        {member.position}
-                      </p>
-
-                      <div className="space-y-2 mb-4 text-sm">
-                        {member.email && <p className="text-muted-foreground">{member.email}</p>}
-                        {member.phone && <p className="text-muted-foreground">{member.phone}</p>}
-                        {member.joinDate && <p className="text-muted-foreground">Joined: {member.joinDate}</p>}
                       </div>
-
-                      <p className="text-muted-foreground text-sm leading-relaxed mb-6 text-pretty">{member.bio}</p>
-
-                      <div className="flex justify-center gap-3">
-                        <Button variant="outline" size="sm" onClick={() => setEditingMember(member)} className="flex-1">
-                          <Edit2 className="w-4 h-4 mr-2" />
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeleteMember(member.id || "", member._id || member.id || "")}
-                          className="text-destructive hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      {imagePreview && (
+                        <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-300">
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
                     </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Recommended size: 300x320 pixels
+                    </p>
                   </div>
-                )}
+
+                  <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowModal(false)
+                        resetForm()
+                      }}
+                      className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-700"
+                      disabled={saving}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={saving}
+                    >
+                      {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                      {editingMember ? "Update Member" : "Add Member"}
+                    </button>
+                  </div>
+                </form>
               </div>
             </motion.div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-card rounded-xl shadow-lg border border-border p-6 text-center hover:shadow-xl transition-shadow duration-300">
-            <User className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <div className="text-3xl font-bold text-card-foreground mb-2">{statistics.totalMembers}</div>
-            <div className="text-sm text-muted-foreground font-medium">Total Members</div>
           </div>
-          <div className="bg-card rounded-xl shadow-lg border border-border p-6 text-center hover:shadow-xl transition-shadow duration-300">
-            <Crown className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <div className="text-3xl font-bold text-card-foreground mb-2">{statistics.executivePositions}</div>
-            <div className="text-sm text-muted-foreground font-medium">Executive Positions</div>
-          </div>
-          <div className="bg-card rounded-xl shadow-lg border border-border p-6 text-center hover:shadow-xl transition-shadow duration-300">
-            <Users className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <div className="text-3xl font-bold text-card-foreground mb-2">{statistics.generalMembers}</div>
-            <div className="text-sm text-muted-foreground font-medium">General Members</div>
-          </div>
-          <div className="bg-card rounded-xl shadow-lg border border-border p-6 text-center hover:shadow-xl transition-shadow duration-300">
-            <Calendar className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <div className="text-3xl font-bold text-card-foreground mb-2">2081-2086</div>
-            <div className="text-sm text-muted-foreground font-medium">Current Term</div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
 }
 
-export default AdminTeam
+export default AdminTeams
