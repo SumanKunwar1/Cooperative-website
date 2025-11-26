@@ -49,7 +49,10 @@ const Header = () => {
     { label: t("shop"), href: "/shop", key: "shop" },
     { label: t("businesses"), href: "/business-directory", key: "businesses" },
     { label: t("notices"), href: "/notice", key: "notices" },
+    { label: t("report"), href: "/report-bulletin", key: "report" },
+    { label: t("download"), href: "/download", key: "download" },
     { label: t("ourTeam"), href: "/teams", key: "ourTeam" },
+    { label: t("project"), href: "/projects", key: "project" },
     { label: t("footer-gallery"), href: "/gallery", key: "footer-gallery" },
     { label: t("footer-contact-info"), href: "/contact", key: "footer-contact-info" },
   ]
@@ -57,7 +60,7 @@ const Header = () => {
   return (
     <>
       {/* Top Section - Logo, Social Icons, Flags, Auth (NOT STICKY) */}
-      <div className="bg-white border-b-2 border-[#1e6b3e]">
+      <div className="bg-white border-b-2 border-[#07730E]">
         <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4">
           <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 lg:gap-6">
             {/* Logo - Far Left */}
@@ -122,7 +125,7 @@ const Header = () => {
                 </svg>
                 {t("login")}
               </button>
-              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#1e6b3e] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap">
+              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap">
                 {t("register")}
               </button>
             </div>
@@ -139,7 +142,7 @@ const Header = () => {
       </div>
 
       {/* Navigation Menu - Professional Green Strip (STICKY) */}
-      <nav className="sticky top-0 z-50 bg-[#1e6b3e] shadow-md">
+      <nav className="sticky top-0 z-50 bg-[#07730E] shadow-md">
         <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8">
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center justify-center gap-0.5 lg:gap-1 py-2 md:py-2.5 lg:py-3 flex-wrap">
@@ -147,7 +150,7 @@ const Header = () => {
               <li key={item.key}>
                 <a
                   href={item.href}
-                  className="text-white hover:bg-[#16572f] transition-colors duration-200 font-medium text-xs lg:text-sm px-1 md:px-2 lg:px-3 py-1 lg:py-1.5 rounded whitespace-nowrap"
+                  className="text-white hover:bg-[#07730E] transition-colors duration-200 font-medium text-xs lg:text-sm px-1 md:px-2 lg:px-3 py-1 lg:py-1.5 rounded whitespace-nowrap"
                 >
                   {item.label}
                 </a>
@@ -163,7 +166,7 @@ const Header = () => {
               </svg>
               {t("login")}
             </button>
-            <button className="px-2 py-0.5 bg-white text-[#1e6b3e] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap">
+            <button className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap">
               {t("register")}
             </button>
           </div>
@@ -175,7 +178,7 @@ const Header = () => {
                 <a
                   key={item.key}
                   href={item.href}
-                  className="text-white hover:bg-[#16572f] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
+                  className="text-white hover:bg-[#07730E] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
