@@ -447,6 +447,25 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                     )
                   })}
                 </div>
+                <p className="text-gray-600 mr-4 flex justify-center mt-6">If you prefer to fill out the physical form, please download it using the button below and complete the required details.</p>
+
+                <div className="flex justify-center mt-4">
+            <button
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href =
+                  "https://drive.google.com/uc?export=download&id=10i7P7JUVA_jdDpkacJbS9PO2TrGhq9Fn";
+                link.download = "Khata_Kholne_Form.pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            >
+              Download Form
+        </button>
+      </div>
+
               </motion.div>
             )}
 
