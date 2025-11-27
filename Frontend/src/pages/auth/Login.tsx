@@ -143,7 +143,7 @@ const Login: React.FC = () => {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 rounded-full flex items-center justify-center mb-4">
             <span className="text-white font-bold text-2xl">C</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">{t("login-welcome-back")}</h2>
@@ -167,7 +167,7 @@ const Login: React.FC = () => {
                     onClick={() => handleUserTypeChange("individual")}
                     className={`flex items-center justify-center px-4 py-3 border rounded-lg transition-all ${
                       formData.userType === "individual"
-                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        ? "border-green-500 bg-green-50 text-green-700"
                         : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                   >
@@ -179,7 +179,7 @@ const Login: React.FC = () => {
                     onClick={() => handleUserTypeChange("business")}
                     className={`flex items-center justify-center px-4 py-3 border rounded-lg transition-all ${
                       formData.userType === "business"
-                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        ? "border-green-500 bg-green-50 text-green-700"
                         : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                   >
@@ -202,7 +202,7 @@ const Login: React.FC = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("enter-email")}
                   />
                   <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -222,7 +222,7 @@ const Login: React.FC = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("enter-password")}
                   />
                   <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -248,14 +248,14 @@ const Login: React.FC = () => {
                     type="checkbox"
                     checked={formData.rememberMe}
                     onChange={handleInputChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                   />
                   <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
                     {t("remember-me")}
                   </label>
                 </div>
 
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
+                <Link to="/forgot-password" className="text-sm text-green-600 hover:text-green-500">
                   {t("forgot-password")}
                 </Link>
               </div>
@@ -293,8 +293,8 @@ const Login: React.FC = () => {
         transition={{ delay: 0.3 }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
-        <div className="bg-blue-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-4 text-center">{t("access-financial-dashboard")}</h3>
+        <div className="bg-green-50 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-green-900 mb-4 text-center">{t("access-financial-dashboard")}</h3>
           <div className="space-y-3">
             {[
               t("check-account-balances"),
@@ -302,8 +302,8 @@ const Login: React.FC = () => {
               t("manage-investments"),
               t("access-business-directory"),
             ].map((feature, index) => (
-              <div key={index} className="flex items-center text-sm text-blue-800">
-                <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+              <div key={index} className="flex items-center text-sm text-green-800">
+                <div className="w-2 h-2 bg-green-600 rounded-full mr-3"></div>
                 {feature}
               </div>
             ))}

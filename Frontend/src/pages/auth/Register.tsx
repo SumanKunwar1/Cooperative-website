@@ -163,7 +163,7 @@ const Register: React.FC = () => {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 rounded-full flex items-center justify-center mb-4">
             <span className="text-white font-bold text-2xl">C</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">{t("join-constellation")}</h2>
@@ -195,11 +195,11 @@ const Register: React.FC = () => {
                     <div
                       className={`border-2 rounded-lg p-4 cursor-pointer text-center transition-colors ${
                         formData.membershipType === "individual"
-                          ? "border-blue-500 bg-blue-50"
+                          ? "border-green-500 bg-green-50"
                           : "border-gray-300 hover:border-gray-400"
                       }`}
                     >
-                      <User className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                      <User className="w-6 h-6 mx-auto mb-2 text-green-600" />
                       <span className="text-sm font-medium">{t("individual")}</span>
                     </div>
                   </label>
@@ -215,11 +215,11 @@ const Register: React.FC = () => {
                     <div
                       className={`border-2 rounded-lg p-4 cursor-pointer text-center transition-colors ${
                         formData.membershipType === "business"
-                          ? "border-blue-500 bg-blue-50"
+                          ? "border-green-500 bg-green-50"
                           : "border-gray-300 hover:border-gray-400"
                       }`}
                     >
-                      <User className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                      <User className="w-6 h-6 mx-auto mb-2 text-green-600" />
                       <span className="text-sm font-medium">{t("business")}</span>
                     </div>
                   </label>
@@ -239,7 +239,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.businessName}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("enter-full-name")}
                   />
                 </div>
@@ -259,7 +259,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("enter-email")}
                   />
                   <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -279,7 +279,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("enter-phone")}
                   />
                   <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -299,7 +299,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("create-strong-password")}
                     minLength={6}
                   />
@@ -331,7 +331,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t("confirm-your-password")}
                   />
                   <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
@@ -357,15 +357,15 @@ const Register: React.FC = () => {
                   type="checkbox"
                   checked={formData.agreeToTerms}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                 />
                 <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
                   {t("agree-to-terms")}{" "}
-                  <Link to="/terms" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/terms" className="text-green-600 hover:text-green-500">
                     {t("terms-of-service")}
                   </Link>{" "}
                   {t("and")}{" "}
-                  <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/privacy" className="text-green-600 hover:text-green-500">
                     {t("privacy-policy")}
                   </Link>
                 </label>
