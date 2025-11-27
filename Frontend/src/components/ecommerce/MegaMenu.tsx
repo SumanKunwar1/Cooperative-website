@@ -15,7 +15,7 @@ const MegaMenu: React.FC = () => {
     >
       <Link
         to="/shop"
-        className="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200"
+        className="flex items-center text-sm font-medium text-gray-700 hover:text-green-600 transition-colors duration-200"
       >
         Shop
         <ChevronDown className="w-4 h-4 ml-1" />
@@ -37,7 +37,7 @@ const MegaMenu: React.FC = () => {
                   <div key={category.id} className="space-y-4">
                     <Link
                       to={`/shop/category/${category.slug}`}
-                      className="block text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                      className="block text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors"
                     >
                       {category.name}
                     </Link>
@@ -46,7 +46,7 @@ const MegaMenu: React.FC = () => {
                         <li key={subcategory.id}>
                           <Link
                             to={`/shop/category/${category.slug}/${subcategory.slug}`}
-                            className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                            className="text-sm text-gray-600 hover:text-green-600 transition-colors"
                           >
                             {subcategory.name}
                           </Link>
@@ -65,7 +65,7 @@ const MegaMenu: React.FC = () => {
                   </div>
                   <Link
                     to="/shop/featured"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                   >
                     View All Featured
                   </Link>

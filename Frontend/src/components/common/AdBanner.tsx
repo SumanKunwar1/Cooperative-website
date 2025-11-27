@@ -14,7 +14,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ ad, onClose, className = '' }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative bg-gradient-to-r from-blue-50 to-white rounded-lg overflow-hidden shadow-md border border-blue-100 ${className}`}
+      className={`relative bg-gradient-to-r from-green-50 to-white rounded-lg overflow-hidden shadow-md border border-green-100 ${className}`}
     >
       {onClose && (
         <button

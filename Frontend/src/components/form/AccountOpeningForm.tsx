@@ -219,7 +219,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
       <label className="block text-sm font-medium text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
         <input
           type="file"
           accept={accept}
@@ -253,7 +253,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <User className="w-6 h-6 mr-2 text-blue-600" />
+              <User className="w-6 h-6 mr-2 text-green-600" />
               {t("personal-information")}
             </h3>
 
@@ -266,7 +266,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-first-name")}
                 />
                 {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
@@ -278,7 +278,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.middleName}
                   onChange={(e) => handleInputChange("middleName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-middle-name")}
                 />
               </div>
@@ -291,7 +291,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-last-name")}
                 />
                 {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
@@ -307,7 +307,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 {errors.dateOfBirth && <p className="text-red-500 text-xs mt-1">{errors.dateOfBirth}</p>}
               </div>
@@ -319,7 +319,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.gender}
                   onChange={(e) => handleInputChange("gender", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-gender")}</option>
                   <option value="Male">{t("male")}</option>
@@ -334,7 +334,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.maritalStatus}
                   onChange={(e) => handleInputChange("maritalStatus", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-status")}</option>
                   <option value="Single">{t("single")}</option>
@@ -354,7 +354,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.nationality}
                   onChange={(e) => handleInputChange("nationality", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-nationality")}
                 />
               </div>
@@ -365,7 +365,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.religion}
                   onChange={(e) => handleInputChange("religion", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-religion")}
                 />
               </div>
@@ -377,7 +377,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <MapPin className="w-6 h-6 mr-2 text-blue-600" />
+              <MapPin className="w-6 h-6 mr-2 text-green-600" />
               {t("contact-information")}
             </h3>
 
@@ -390,7 +390,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-email")}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -404,7 +404,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="tel"
                   value={formData.primaryPhone}
                   onChange={(e) => handleInputChange("primaryPhone", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-primary-phone")}
                 />
                 {errors.primaryPhone && <p className="text-red-500 text-xs mt-1">{errors.primaryPhone}</p>}
@@ -417,7 +417,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 type="tel"
                 value={formData.alternatePhone}
                 onChange={(e) => handleInputChange("alternatePhone", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-alternate-phone")}
               />
             </div>
@@ -430,7 +430,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 value={formData.permanentAddress}
                 onChange={(e) => handleInputChange("permanentAddress", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-permanent-address")}
               />
               {errors.permanentAddress && <p className="text-red-500 text-xs mt-1">{errors.permanentAddress}</p>}
@@ -442,7 +442,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 value={formData.temporaryAddress}
                 onChange={(e) => handleInputChange("temporaryAddress", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-temporary-address")}
               />
             </div>
@@ -456,7 +456,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.district}
                   onChange={(e) => handleInputChange("district", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-district")}
                 />
                 {errors.district && <p className="text-red-500 text-xs mt-1">{errors.district}</p>}
@@ -468,7 +468,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.municipality}
                   onChange={(e) => handleInputChange("municipality", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-municipality")}
                 />
               </div>
@@ -479,7 +479,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="number"
                   value={formData.wardNo}
                   onChange={(e) => handleInputChange("wardNo", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-ward")}
                 />
               </div>
@@ -491,7 +491,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
+              <CreditCard className="w-6 h-6 mr-2 text-green-600" />
               {t("identification-documents")}
             </h3>
 
@@ -504,7 +504,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.citizenshipNo}
                   onChange={(e) => handleInputChange("citizenshipNo", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-citizenship")}
                 />
                 {errors.citizenshipNo && <p className="text-red-500 text-xs mt-1">{errors.citizenshipNo}</p>}
@@ -516,7 +516,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.passportNo}
                   onChange={(e) => handleInputChange("passportNo", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-passport")}
                 />
               </div>
@@ -528,7 +528,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 type="text"
                 value={formData.panNo}
                 onChange={(e) => handleInputChange("panNo", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-pan")}
               />
             </div>
@@ -547,7 +547,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <Building2 className="w-6 h-6 mr-2 text-blue-600" />
+              <Building2 className="w-6 h-6 mr-2 text-green-600" />
               {t("employment-information")}
             </h3>
 
@@ -559,7 +559,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.occupation}
                   onChange={(e) => handleInputChange("occupation", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-occupation")}</option>
                   <option value="Government Employee">{t("government-employee")}</option>
@@ -580,7 +580,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.employerName}
                   onChange={(e) => handleInputChange("employerName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-employer")}
                 />
               </div>
@@ -595,7 +595,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="number"
                   value={formData.monthlyIncome}
                   onChange={(e) => handleInputChange("monthlyIncome", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-monthly-income")}
                 />
                 {errors.monthlyIncome && <p className="text-red-500 text-xs mt-1">{errors.monthlyIncome}</p>}
@@ -606,7 +606,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.incomeSource}
                   onChange={(e) => handleInputChange("incomeSource", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-income-source")}</option>
                   <option value="Salary">{t("salary")}</option>
@@ -629,7 +629,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <Users className="w-6 h-6 mr-2 text-blue-600" />
+              <Users className="w-6 h-6 mr-2 text-green-600" />
               {t("family-information")}
             </h3>
 
@@ -640,7 +640,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.fatherName}
                   onChange={(e) => handleInputChange("fatherName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-fathers-name")}
                 />
               </div>
@@ -651,7 +651,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.motherName}
                   onChange={(e) => handleInputChange("motherName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-mothers-name")}
                 />
               </div>
@@ -663,7 +663,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 type="text"
                 value={formData.spouseName}
                 onChange={(e) => handleInputChange("spouseName", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-spouses-name")}
               />
             </div>
@@ -677,7 +677,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                     type="text"
                     value={formData.emergencyContactName}
                     onChange={(e) => handleInputChange("emergencyContactName", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder={t("enter-contact-name")}
                   />
                 </div>
@@ -688,7 +688,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                     type="tel"
                     value={formData.emergencyContactPhone}
                     onChange={(e) => handleInputChange("emergencyContactPhone", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder={t("enter-contact-phone")}
                   />
                 </div>
@@ -698,7 +698,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   <select
                     value={formData.emergencyContactRelation}
                     onChange={(e) => handleInputChange("emergencyContactRelation", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
                     <option value="">{t("select-relationship")}</option>
                     <option value="Father">{t("father")}</option>
@@ -718,7 +718,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
+              <CreditCard className="w-6 h-6 mr-2 text-green-600" />
               {t("account-details")}
             </h3>
 
@@ -729,7 +729,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               <select
                 value={formData.accountType}
                 onChange={(e) => handleInputChange("accountType", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">{t("select-account-type")}</option>
                 {savingSchemes.map((scheme) => (
@@ -750,7 +750,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="number"
                   value={formData.initialDeposit}
                   onChange={(e) => handleInputChange("initialDeposit", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-initial-deposit")}
                 />
                 {errors.initialDeposit && <p className="text-red-500 text-xs mt-1">{errors.initialDeposit}</p>}
@@ -761,7 +761,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.depositFrequency}
                   onChange={(e) => handleInputChange("depositFrequency", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-frequency")}</option>
                   <option value="Daily">{t("daily")}</option>
@@ -777,7 +777,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <Users className="w-6 h-6 mr-2 text-blue-600" />
+              <Users className="w-6 h-6 mr-2 text-green-600" />
               {t("nominee-references")}
             </h3>
 
@@ -788,7 +788,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="text"
                   value={formData.nomineeName}
                   onChange={(e) => handleInputChange("nomineeName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-nominee-name")}
                 />
               </div>
@@ -798,7 +798,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 <select
                   value={formData.nomineeRelation}
                   onChange={(e) => handleInputChange("nomineeRelation", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-relationship")}</option>
                   <option value="Father">{t("father")}</option>
@@ -819,7 +819,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                   type="tel"
                   value={formData.nomineePhone}
                   onChange={(e) => handleInputChange("nomineePhone", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-nominee-phone")}
                 />
               </div>
@@ -831,7 +831,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                 value={formData.nomineeAddress}
                 onChange={(e) => handleInputChange("nomineeAddress", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-nominee-address")}
               />
             </div>
@@ -848,7 +848,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="text"
                       value={formData.reference1Name}
                       onChange={(e) => handleInputChange("reference1Name", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-name")}
                     />
                   </div>
@@ -859,7 +859,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="tel"
                       value={formData.reference1Phone}
                       onChange={(e) => handleInputChange("reference1Phone", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-phone")}
                     />
                   </div>
@@ -870,7 +870,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="text"
                       value={formData.reference1Address}
                       onChange={(e) => handleInputChange("reference1Address", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-address")}
                     />
                   </div>
@@ -883,7 +883,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="text"
                       value={formData.reference2Name}
                       onChange={(e) => handleInputChange("reference2Name", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-name")}
                     />
                   </div>
@@ -894,7 +894,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="tel"
                       value={formData.reference2Phone}
                       onChange={(e) => handleInputChange("reference2Phone", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-phone")}
                     />
                   </div>
@@ -905,7 +905,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
                       type="text"
                       value={formData.reference2Address}
                       onChange={(e) => handleInputChange("reference2Address", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder={t("enter-reference-address")}
                     />
                   </div>
@@ -923,8 +923,8 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               {t("review-submit")}
             </h3>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h4 className="font-semibold text-blue-900 mb-4">{t("application-summary")}</h4>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <h4 className="font-semibold text-green-900 mb-4">{t("application-summary")}</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="font-medium">{t("name")}:</span>
@@ -999,7 +999,7 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <button onClick={onBack} className="flex items-center text-blue-600 hover:text-blue-700 mb-4">
+          <button onClick={onBack} className="flex items-center text-green-600 hover:text-green-700 mb-4">
             <ArrowLeft className="w-5 h-5 mr-2" />
             {t("back-to-services")}
           </button>
@@ -1015,14 +1015,14 @@ const AccountOpeningForm: React.FC<AccountOpeningFormProps> = ({ onBack, selecte
               <div key={step} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    index + 1 <= currentStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                    index + 1 <= currentStep ? "bg-green-600 text-white" : "bg-gray-200 text-gray-600"
                   }`}
                 >
                   {index + 1}
                 </div>
                 <span className="ml-2 text-xs text-gray-600 hidden sm:block">{step}</span>
                 {index < steps.length - 1 && (
-                  <div className={`w-8 h-0.5 mx-2 ${index + 1 < currentStep ? "bg-blue-600" : "bg-gray-200"}`} />
+                  <div className={`w-8 h-0.5 mx-2 ${index + 1 < currentStep ? "bg-green-600" : "bg-gray-200"}`} />
                 )}
               </div>
             ))}

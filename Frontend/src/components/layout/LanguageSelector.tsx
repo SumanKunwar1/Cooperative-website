@@ -31,7 +31,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ className = "" }) =
         onClick={() => changeLanguage("np")}
         className={`${btnBase} ${
           currentLanguage === "np"
-            ? "ring-2 ring-blue-500 shadow-md scale-110"
+            ? "ring-2 ring-green-500 shadow-md scale-110"
             : "opacity-90 hover:opacity-100 hover:scale-105"
         }`}
         whileHover={{ scale: currentLanguage === "np" ? 1.12 : 1.06 }}
@@ -53,7 +53,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ className = "" }) =
         onClick={() => changeLanguage("en")}
         className={`${btnBase} ${
           currentLanguage === "en"
-            ? "ring-2 ring-blue-500 shadow-md scale-110"
+            ? "ring-2 ring-green-500 shadow-md scale-110"
             : "opacity-90 hover:opacity-100 hover:scale-105"
         }`}
         whileHover={{ scale: currentLanguage === "en" ? 1.12 : 1.06 }}

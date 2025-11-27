@@ -61,7 +61,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
 
         {/* Badges */}
         <div className="absolute top-2 left-2 flex flex-col space-y-1">
-          {product.featured && <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">Featured</span>}
+          {product.featured && <span className="bg-green-500 text-white text-xs px-2 py-1 rounded">Featured</span>}
           {discountPercentage > 0 && (
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">-{discountPercentage}%</span>
           )}
@@ -85,7 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
             }}
             className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
           >
-            <Eye className="w-4 h-4 text-gray-600 hover:text-blue-500" />
+            <Eye className="w-4 h-4 text-gray-600 hover:text-green-500" />
           </button>
         </div>
 
@@ -107,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
         </div>
 
         <h3
-          className="font-semibold text-gray-900 mb-2 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+          className="font-semibold text-gray-900 mb-2 line-clamp-2 cursor-pointer hover:text-green-600 transition-colors"
           onClick={handleViewDetails}
         >
           {product.name}
@@ -117,7 +117,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
 
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
-            <span className="text-lg font-bold text-blue-600">NPR {product.price.toLocaleString()}</span>
+            <span className="text-lg font-bold text-green-600">NPR {product.price.toLocaleString()}</span>
             {product.originalPrice && (
               <span className="text-sm text-gray-500 line-through">NPR {product.originalPrice.toLocaleString()}</span>
             )}

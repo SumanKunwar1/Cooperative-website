@@ -152,7 +152,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
       <label className="block text-sm font-medium text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
         <input
           type="file"
           accept={accept}
@@ -186,7 +186,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <User className="w-6 h-6 mr-2 text-blue-600" />
+              <User className="w-6 h-6 mr-2 text-green-600" />
               {t("personal-information")}
             </h3>
 
@@ -199,7 +199,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-first-name")}
                 />
                 {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
@@ -213,7 +213,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-last-name")}
                 />
                 {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
@@ -229,7 +229,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 {errors.dateOfBirth && <p className="text-red-500 text-xs mt-1">{errors.dateOfBirth}</p>}
               </div>
@@ -241,7 +241,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 <select
                   value={formData.gender}
                   onChange={(e) => handleInputChange("gender", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-gender")}</option>
                   <option value="Male">{t("male")}</option>
@@ -258,7 +258,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <MapPin className="w-6 h-6 mr-2 text-blue-600" />
+              <MapPin className="w-6 h-6 mr-2 text-green-600" />
               {t("contact-information")}
             </h3>
 
@@ -271,7 +271,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-email")}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -285,7 +285,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="tel"
                   value={formData.primaryPhone}
                   onChange={(e) => handleInputChange("primaryPhone", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-primary-phone")}
                 />
                 {errors.primaryPhone && <p className="text-red-500 text-xs mt-1">{errors.primaryPhone}</p>}
@@ -300,7 +300,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 value={formData.permanentAddress}
                 onChange={(e) => handleInputChange("permanentAddress", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-permanent-address")}
               />
               {errors.permanentAddress && <p className="text-red-500 text-xs mt-1">{errors.permanentAddress}</p>}
@@ -312,7 +312,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <CreditCard className="w-6 h-6 mr-2 text-blue-600" />
+              <CreditCard className="w-6 h-6 mr-2 text-green-600" />
               {t("identification-documents")}
             </h3>
 
@@ -324,7 +324,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 type="text"
                 value={formData.citizenshipNo}
                 onChange={(e) => handleInputChange("citizenshipNo", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("enter-citizenship")}
               />
               {errors.citizenshipNo && <p className="text-red-500 text-xs mt-1">{errors.citizenshipNo}</p>}
@@ -342,7 +342,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <Building2 className="w-6 h-6 mr-2 text-blue-600" />
+              <Building2 className="w-6 h-6 mr-2 text-green-600" />
               {t("employment-information")}
             </h3>
 
@@ -354,7 +354,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 <select
                   value={formData.occupation}
                   onChange={(e) => handleInputChange("occupation", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-occupation")}</option>
                   <option value="Government Employee">{t("government-employee")}</option>
@@ -375,7 +375,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="number"
                   value={formData.monthlyIncome}
                   onChange={(e) => handleInputChange("monthlyIncome", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-monthly-income")}
                 />
                 {errors.monthlyIncome && <p className="text-red-500 text-xs mt-1">{errors.monthlyIncome}</p>}
@@ -390,7 +390,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-900 flex items-center">
-              <DollarSign className="w-6 h-6 mr-2 text-blue-600" />
+              <DollarSign className="w-6 h-6 mr-2 text-green-600" />
               {t("loan-information")}
             </h3>
 
@@ -402,7 +402,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 <select
                   value={formData.loanType}
                   onChange={(e) => handleInputChange("loanType", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">{t("select-loan-type")}</option>
                   {loanTypes.map((type) => (
@@ -422,7 +422,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                   type="number"
                   value={formData.loanAmount}
                   onChange={(e) => handleInputChange("loanAmount", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t("enter-loan-amount")}
                 />
                 {errors.loanAmount && <p className="text-red-500 text-xs mt-1">{errors.loanAmount}</p>}
@@ -437,7 +437,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
                 value={formData.loanPurpose}
                 onChange={(e) => handleInputChange("loanPurpose", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={t("describe-loan-purpose")}
               />
               {errors.loanPurpose && <p className="text-red-500 text-xs mt-1">{errors.loanPurpose}</p>}
@@ -450,7 +450,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
               <select
                 value={formData.loanTerm}
                 onChange={(e) => handleInputChange("loanTerm", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">{t("select-loan-term")}</option>
                 <option value="1 Month">{t("1-month")}</option>
@@ -473,8 +473,8 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
               {t("review-submit")}
             </h3>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h4 className="font-semibold text-blue-900 mb-4">{t("loan-application-summary")}</h4>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <h4 className="font-semibold text-green-900 mb-4">{t("loan-application-summary")}</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="font-medium">{t("name")}:</span>
@@ -532,7 +532,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <button onClick={onBack} className="flex items-center text-blue-600 hover:text-blue-700 mb-4">
+          <button onClick={onBack} className="flex items-center text-green-600 hover:text-green-700 mb-4">
             <ArrowLeft className="w-5 h-5 mr-2" />
             {t("back-to-services")}
           </button>
@@ -548,14 +548,14 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ onBack, selec
               <div key={step} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    index + 1 <= currentStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                    index + 1 <= currentStep ? "bg-green-600 text-white" : "bg-gray-200 text-gray-600"
                   }`}
                 >
                   {index + 1}
                 </div>
                 <span className="ml-2 text-xs text-gray-600 hidden sm:block">{step}</span>
                 {index < steps.length - 1 && (
-                  <div className={`w-8 h-0.5 mx-2 ${index + 1 < currentStep ? "bg-blue-600" : "bg-gray-200"}`} />
+                  <div className={`w-8 h-0.5 mx-2 ${index + 1 < currentStep ? "bg-green-600" : "bg-gray-200"}`} />
                 )}
               </div>
             ))}
