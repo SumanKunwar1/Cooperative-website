@@ -20,6 +20,9 @@ import BusinessDirectory from "./pages/BusinessDirectory"
 import BusinessDetails from "./pages/BusinessDetails"
 import Shareholders from "./pages/Shareholders"
 import Notice from "./pages/Notice"
+import ReportsBulletin from "./pages/ReportsBulletin"
+import Downloads from "./pages/Downloads"
+import Projects from "./pages/Projects"
 
 //footer
 import Team from "./pages/footer/Team"
@@ -316,7 +319,9 @@ function AppContent() {
                   {/* Business Directory Routes */}
                   <Route path="/business-directory" element={<BusinessDirectory />} />
                   <Route path="/business-directory/:businessName" element={<BusinessDetails />} />
-
+                  <Route path="/reports-bulletin" element={<ReportsBulletin />} />
+                  <Route path="/downloads" element={<Downloads />} />
+                  <Route path="/projects" element={<Projects />} />
                   <Route path="/shareholders" element={<Shareholders />} />
                   <Route path="/notice" element={<Notice />} />
 
