@@ -96,7 +96,7 @@ const About: React.FC = () => {
       />
 
       {/* Hero Section with Company Image */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-green-600 to-green-700 text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -159,7 +159,7 @@ const About: React.FC = () => {
                 className="text-center"
               >
                 <Card className="h-full hover:shadow-lg transition-all duration-300">
-                  <div className="text-3xl lg:text-4xl font-bold text-blue-600 mb-2">{stat.value}</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-2">{stat.value}</div>
                   <div className="text-gray-900 font-semibold mb-1">{stat.label}</div>
                   <div className="text-sm text-gray-600">{stat.description}</div>
                 </Card>
@@ -190,7 +190,7 @@ const About: React.FC = () => {
                 <h3 className="text-xl font-semibold mb-4 text-gray-900">{t("contact-info-title")}</h3>
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <MapPin className="w-5 h-5 text-blue-600 mr-3 mt-0.5" />
+                    <MapPin className="w-5 h-5 text-green-600 mr-3 mt-0.5" />
                     <span className="text-gray-700">
                       {t("contact-address-1")}
                       <br />
@@ -200,7 +200,7 @@ const About: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center">
-                    <Globe className="w-5 h-5 text-blue-600 mr-3" />
+                    <Globe className="w-5 h-5 text-green-600 mr-3" />
                     <span className="text-gray-700">
                       {t("ministry-name")}
                     </span>
@@ -264,7 +264,7 @@ const About: React.FC = () => {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-6 py-3 rounded-md font-medium transition-all duration-300 ${
-                    activeTab === tab ? "bg-blue-600 text-white shadow-md" : "text-gray-600 hover:text-blue-600"
+                    activeTab === tab ? "bg-green-600 text-white shadow-md" : "text-gray-600 hover:text-green-600"
                   }`}
                 >
                   {t(`tab-${tab}`)}
@@ -283,8 +283,8 @@ const About: React.FC = () => {
           >
             {activeTab === "mission" && (
               <Card className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Target className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Target className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("mission-title")}</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
@@ -320,9 +320,9 @@ const About: React.FC = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="flex items-start p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-300"
+                      className="flex items-start p-4 bg-gray-50 rounded-lg hover:bg-green-50 transition-colors duration-300"
                     >
-                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                       <span className="text-gray-700">{purpose}</span>
                     </motion.div>
                   ))}
@@ -357,8 +357,8 @@ const About: React.FC = () => {
                 whileHover={{ y: -5 }}
               >
                 <Card className="text-center h-full hover:shadow-xl transition-all duration-300">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <value.icon className="w-8 h-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <value.icon className="w-8 h-8 text-green-600" />
                   </div>
                   <h4 className="text-xl font-semibold mb-4">{value.title}</h4>
                   <p className="text-gray-600 leading-relaxed">{value.description}</p>
@@ -384,7 +384,7 @@ const About: React.FC = () => {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-0.5 w-1 bg-blue-200 h-full"></div>
+            <div className="absolute left-1/2 transform -translate-x-0.5 w-1 bg-green-200 h-full"></div>
 
             {milestones.map((milestone, index) => (
               <motion.div
@@ -400,17 +400,17 @@ const About: React.FC = () => {
                     <Card className="hover:shadow-lg transition-all duration-300">
                       <div className="flex items-center mb-3">
                         <div
-                          className={`w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center ${
+                          className={`w-10 h-10 bg-green-100 rounded-full flex items-center justify-center ${
                             index % 2 === 0 ? "ml-auto" : ""
                           }`}
                         >
-                          <milestone.icon className="w-5 h-5 text-blue-600" />
+                          <milestone.icon className="w-5 h-5 text-green-600" />
                         </div>
                         {index % 2 === 0 && (
-                          <span className="text-2xl font-bold text-blue-600 mr-4">{milestone.year}</span>
+                          <span className="text-2xl font-bold text-green-600 mr-4">{milestone.year}</span>
                         )}
                         {index % 2 !== 0 && (
-                          <span className="text-2xl font-bold text-blue-600 ml-4">{milestone.year}</span>
+                          <span className="text-2xl font-bold text-green-600 ml-4">{milestone.year}</span>
                         )}
                       </div>
                       <p className="text-gray-700">{milestone.event}</p>
@@ -420,7 +420,7 @@ const About: React.FC = () => {
 
                 {/* Timeline dot */}
                 <motion.div
-                  className="w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow-lg"
+                  className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-lg"
                   whileHover={{ scale: 1.2 }}
                 ></motion.div>
                 <div className="flex-1"></div>
@@ -446,9 +446,9 @@ const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="space-y-6">
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-blue-900 mb-4">{t("financial-literacy-title")}</h4>
-                  <p className="text-blue-800">
+                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6">
+                  <h4 className="text-xl font-semibold text-green-900 mb-4">{t("financial-literacy-title")}</h4>
+                  <p className="text-green-800">
                     {t("financial-literacy-desc")}
                   </p>
                 </div>

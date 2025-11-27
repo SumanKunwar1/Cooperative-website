@@ -60,7 +60,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
         t("feature-interest-merged"),
         t("feature-flexible-withdrawal"),
       ],
-      color: "blue",
+      color: "green",
     },
     {
       id: "special",
@@ -239,14 +239,13 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
 
   const getColorClasses = (color: string) => {
     const colors = {
-      blue: "from-blue-500 to-blue-600 bg-blue-100 text-blue-600 border-blue-200",
       green: "from-green-500 to-green-600 bg-green-100 text-green-600 border-green-200",
       purple: "from-purple-500 to-purple-600 bg-purple-100 text-purple-600 border-purple-200",
       orange: "from-orange-500 to-orange-600 bg-orange-100 text-orange-600 border-orange-200",
       red: "from-red-500 to-red-600 bg-red-100 text-red-600 border-red-200",
       indigo: "from-indigo-500 to-indigo-600 bg-indigo-100 text-indigo-600 border-indigo-200",
     }
-    return colors[color as keyof typeof colors] || colors.blue
+    return colors[color as keyof typeof colors] || colors.green
   }
 
   const handleOpenAccountClick = (scheme?: string) => {
@@ -269,7 +268,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-green-600 to-green-700 text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -305,8 +304,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                   onClick={() => setActiveCategory(category.id)}
                   className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                     activeCategory === category.id
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-blue-600 hover:bg-white"
+                      ? "bg-green-600 text-white shadow-lg"
+                      : "text-gray-600 hover:text-green-600 hover:bg-white"
                   }`}
                 >
                   <category.icon className="w-5 h-5 mr-2" />
@@ -391,7 +390,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                           <div className="border-t pt-4">
                             <button
                               onClick={() => toggleScheme(scheme.id)}
-                              className="flex items-center justify-between w-full text-left font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                              className="flex items-center justify-between w-full text-left font-medium text-gray-900 hover:text-green-600 transition-colors"
                             >
                               <span>{t("view-details")}</span>
                               {expandedScheme === scheme.id ? (
@@ -460,7 +459,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 link.click();
                 document.body.removeChild(link);
               }}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
             >
               Download Form
         </button>
@@ -491,8 +490,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                           onClick={() => setSelectedLoanTerm(term)}
                           className={`px-4 py-2 rounded-md font-medium transition-all duration-300 ${
                             selectedLoanTerm === term
-                              ? "bg-blue-600 text-white shadow-md"
-                              : "text-gray-600 hover:text-blue-600"
+                              ? "bg-green-600 text-white shadow-md"
+                              : "text-gray-600 hover:text-green-600"
                           }`}
                         >
                           {term}
@@ -513,8 +512,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                     >
                       <Card className="h-full hover:shadow-xl transition-all duration-300">
                         <div className="text-center mb-6">
-                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <loan.icon className="w-8 h-8 text-blue-600" />
+                          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <loan.icon className="w-8 h-8 text-green-600" />
                           </div>
                           <h3 className="text-xl font-bold text-gray-900 mb-2">{loan.type}</h3>
                           <p className="text-gray-600 text-sm">{loan.description}</p>
@@ -522,11 +521,11 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
 
                         {/* Interest Rate Display */}
                         <div className="text-center mb-6">
-                          <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4">
+                          <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4">
                             <div className="text-3xl font-bold mb-1">
                               {loan.rates[selectedLoanTerm as keyof typeof loan.rates]}
                             </div>
-                            <div className="text-blue-100 text-sm">
+                            <div className="text-green-100 text-sm">
                               {t("annual-interest")} ({selectedLoanTerm})
                             </div>
                           </div>
@@ -622,8 +621,8 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                       whileHover={{ scale: 1.02 }}
                     >
                       <Card className="h-full text-center hover:shadow-xl transition-all duration-300">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                          <facility.icon className="w-8 h-8 text-blue-600" />
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <facility.icon className="w-8 h-8 text-green-600" />
                         </div>
                         <h3 className="text-xl font-semibold mb-4">{facility.title}</h3>
                         <p className="text-gray-600 text-sm mb-6">{facility.description}</p>
@@ -646,7 +645,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       </section>
 
       {/* Special Features Highlight */}
-      <section className="py-16 bg-gradient-to-r from-blue-50 to-blue-100">
+      <section className="py-16 bg-gradient-to-r from-green-50 to-green-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -690,7 +689,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                 className="text-center"
               >
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-blue-600" />
+                  <feature.icon className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
@@ -701,7 +700,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <section className="py-16 bg-gradient-to-r from-green-600 to-green-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("ready-to-start")}</h2>
@@ -710,7 +709,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
               <Link to="/register">
                 <Button
                   size="lg"
-                  className="bg-white text-blue-700 hover:bg-blue-600 hover:text-white font-semibold shadow-lg transition-all duration-300"
+                  className="bg-white text-green-700 hover:bg-green-600 hover:text-white font-semibold shadow-lg transition-all duration-300"
                 >
                   {t("become-member")}
                 </Button>
@@ -718,7 +717,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-700 bg-transparent font-semibold transition-all duration-300"
+                className="border-2 border-white text-white hover:bg-white hover:text-green-700 bg-transparent font-semibold transition-all duration-300"
               >
                 {t("contact-us")}
               </Button>

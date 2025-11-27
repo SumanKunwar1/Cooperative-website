@@ -493,7 +493,7 @@ const BusinessDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
       </div>
     )
   }
@@ -519,7 +519,7 @@ const BusinessDashboard: React.FC = () => {
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                   {user.businessName.charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -559,7 +559,7 @@ const BusinessDashboard: React.FC = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 ${
                         activeTab === tab.id
-                          ? "bg-blue-600 text-white shadow-sm"
+                          ? "bg-green-600 text-white shadow-sm"
                           : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                       }`}
                     >
@@ -584,15 +584,15 @@ const BusinessDashboard: React.FC = () => {
               {activeTab === "overview" && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="p-6 border-l-4 border-l-blue-600">
+                    <Card className="p-6 border-l-4 border-l-green-600">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-600 font-medium">Business Status</p>
                           <p className="text-3xl font-bold text-gray-900 mt-1">{business ? "Active" : "Not Set"}</p>
                           <p className="text-xs text-green-600 mt-1">{business ? "Listed" : "Create your listing"}</p>
                         </div>
-                        <div className="p-3 bg-blue-100 rounded-lg">
-                          <Building2 className="w-6 h-6 text-blue-600" />
+                        <div className="p-3 bg-green-100 rounded-lg">
+                          <Building2 className="w-6 h-6 text-green-600" />
                         </div>
                       </div>
                     </Card>
@@ -634,7 +634,7 @@ const BusinessDashboard: React.FC = () => {
                               booking.status === "pending"
                                 ? "bg-yellow-100"
                                 : booking.status === "confirmed"
-                                  ? "bg-blue-100"
+                                  ? "bg-green-100"
                                   : booking.status === "completed"
                                     ? "bg-green-100"
                                     : "bg-red-100"
@@ -643,7 +643,7 @@ const BusinessDashboard: React.FC = () => {
                             {booking.status === "pending" ? (
                               <AlertCircle className="w-5 h-5 text-yellow-600" />
                             ) : booking.status === "confirmed" ? (
-                              <CheckCircle className="w-5 h-5 text-blue-600" />
+                              <CheckCircle className="w-5 h-5 text-green-600" />
                             ) : booking.status === "completed" ? (
                               <CheckCircle className="w-5 h-5 text-green-600" />
                             ) : (
@@ -662,7 +662,7 @@ const BusinessDashboard: React.FC = () => {
                                 booking.status === "pending"
                                   ? "bg-yellow-100 text-yellow-800"
                                   : booking.status === "confirmed"
-                                    ? "bg-blue-100 text-blue-800"
+                                    ? "bg-green-100 text-green-800"
                                     : booking.status === "completed"
                                       ? "bg-green-100 text-green-800"
                                       : "bg-red-100 text-red-800"
@@ -726,7 +726,7 @@ const BusinessDashboard: React.FC = () => {
                             <h3 className="text-xl font-bold text-gray-900 mb-1">
                               {business.name || business.businessName}
                             </h3>
-                            <p className="text-blue-600 font-medium">{business.subcategory}</p>
+                            <p className="text-green-600 font-medium">{business.subcategory}</p>
                           </div>
                           {business.isVerified && (
                             <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
@@ -759,7 +759,7 @@ const BusinessDashboard: React.FC = () => {
 
                         <div className="flex flex-wrap gap-2 mb-4">
                           {business.services.slice(0, 4).map((service, index) => (
-                            <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                            <span key={index} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-full">
                               {service}
                             </span>
                           ))}
@@ -827,7 +827,7 @@ const BusinessDashboard: React.FC = () => {
                           placeholder="Search bookings..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                       <div className="relative">
@@ -835,7 +835,7 @@ const BusinessDashboard: React.FC = () => {
                         <select
                           value={filterStatus}
                           onChange={(e) => setFilterStatus(e.target.value)}
-                          className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="all">All Status</option>
                           <option value="pending">Pending</option>
@@ -860,7 +860,7 @@ const BusinessDashboard: React.FC = () => {
                                   booking.status === "pending"
                                     ? "bg-yellow-100 text-yellow-800"
                                     : booking.status === "confirmed"
-                                      ? "bg-blue-100 text-blue-800"
+                                      ? "bg-green-100 text-green-800"
                                       : booking.status === "completed"
                                         ? "bg-green-100 text-green-800"
                                         : "bg-red-100 text-red-800"
@@ -924,7 +924,7 @@ const BusinessDashboard: React.FC = () => {
                               <Button
                                 size="sm"
                                 onClick={() => handleBookingStatusUpdate(booking.id, "completed")}
-                                className="bg-blue-600 hover:bg-blue-700"
+                                className="bg-green-600 hover:bg-green-700"
                               >
                                 <CheckCircle className="w-4 h-4 mr-1" />
                                 Mark Complete
@@ -965,7 +965,7 @@ const BusinessDashboard: React.FC = () => {
                         <input
                           type="text"
                           defaultValue={user.businessName}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                       <div>
@@ -973,7 +973,7 @@ const BusinessDashboard: React.FC = () => {
                         <input
                           type="email"
                           defaultValue={user.email}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                       <div>
@@ -981,7 +981,7 @@ const BusinessDashboard: React.FC = () => {
                         <input
                           type="tel"
                           defaultValue={user.phone}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                       <div>
@@ -989,7 +989,7 @@ const BusinessDashboard: React.FC = () => {
                         <input
                           type="text"
                           defaultValue={user.membershipType}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     </div>
@@ -1030,7 +1030,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.name}
                     onChange={(e) => handleFormChange("name", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1039,7 +1039,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.category}
                     onChange={(e) => handleFormChange("category", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Category</option>
                     <option value="Technology">Technology</option>
@@ -1061,7 +1061,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.subcategory}
                     onChange={(e) => handleFormChange("subcategory", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1071,7 +1071,7 @@ const BusinessDashboard: React.FC = () => {
                     rows={2}
                     value={businessForm.description}
                     onChange={(e) => handleFormChange("description", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1081,7 +1081,7 @@ const BusinessDashboard: React.FC = () => {
                     rows={4}
                     value={businessForm.fullDescription}
                     onChange={(e) => handleFormChange("fullDescription", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1091,7 +1091,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.location}
                     onChange={(e) => handleFormChange("location", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1101,7 +1101,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.address}
                     onChange={(e) => handleFormChange("address", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1111,7 +1111,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.phone}
                     onChange={(e) => handleFormChange("phone", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1121,7 +1121,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.email}
                     onChange={(e) => handleFormChange("email", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1130,7 +1130,7 @@ const BusinessDashboard: React.FC = () => {
                     type="url"
                     value={businessForm.website}
                     onChange={(e) => handleFormChange("website", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1157,7 +1157,7 @@ const BusinessDashboard: React.FC = () => {
                       />
                       <label
                         htmlFor="mainImage"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-flex items-center"
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors inline-flex items-center"
                       >
                         <Upload className="w-4 h-4 mr-2" />
                         {uploadingImage ? "Uploading..." : "Upload Image"}
@@ -1198,7 +1198,7 @@ const BusinessDashboard: React.FC = () => {
                   />
                   <label
                     htmlFor="galleryImage"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-flex items-center"
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     {uploadingGallery ? "Uploading..." : "Add Gallery Image"}
@@ -1210,7 +1210,7 @@ const BusinessDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => addArrayField("services")}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
                     >
                       + Add Service
                     </button>
@@ -1222,7 +1222,7 @@ const BusinessDashboard: React.FC = () => {
                           type="text"
                           value={service}
                           onChange={(e) => handleArrayFieldChange("services", index, e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                         <button
                           type="button"
@@ -1244,7 +1244,7 @@ const BusinessDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={addPricingField}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
                     >
                       + Add Pricing
                     </button>
@@ -1258,7 +1258,7 @@ const BusinessDashboard: React.FC = () => {
                             type="text"
                             value={item.service}
                             onChange={(e) => handlePricingChange(index, "service", e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           />
                         </div>
                         <div>
@@ -1267,7 +1267,7 @@ const BusinessDashboard: React.FC = () => {
                             type="text"
                             value={item.price}
                             onChange={(e) => handlePricingChange(index, "price", e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           />
                         </div>
                         <div className="flex items-end space-x-2">
@@ -1277,7 +1277,7 @@ const BusinessDashboard: React.FC = () => {
                               type="text"
                               value={item.description}
                               onChange={(e) => handlePricingChange(index, "description", e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             />
                           </div>
                           <button
@@ -1305,7 +1305,7 @@ const BusinessDashboard: React.FC = () => {
                           type="text"
                           value={hours}
                           onChange={(e) => handleOpeningHoursChange(day, e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     ))}
@@ -1357,7 +1357,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.name}
                     onChange={(e) => handleFormChange("name", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1366,7 +1366,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.category}
                     onChange={(e) => handleFormChange("category", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Category</option>
                     <option value="Technology">Technology</option>
@@ -1388,7 +1388,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.subcategory}
                     onChange={(e) => handleFormChange("subcategory", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1398,7 +1398,7 @@ const BusinessDashboard: React.FC = () => {
                     rows={2}
                     value={businessForm.description}
                     onChange={(e) => handleFormChange("description", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1408,7 +1408,7 @@ const BusinessDashboard: React.FC = () => {
                     rows={4}
                     value={businessForm.fullDescription}
                     onChange={(e) => handleFormChange("fullDescription", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1418,7 +1418,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.location}
                     onChange={(e) => handleFormChange("location", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1428,7 +1428,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.address}
                     onChange={(e) => handleFormChange("address", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1438,7 +1438,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.phone}
                     onChange={(e) => handleFormChange("phone", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div>
@@ -1448,7 +1448,7 @@ const BusinessDashboard: React.FC = () => {
                     required
                     value={businessForm.email}
                     onChange={(e) => handleFormChange("email", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1457,7 +1457,7 @@ const BusinessDashboard: React.FC = () => {
                     type="url"
                     value={businessForm.website}
                     onChange={(e) => handleFormChange("website", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1484,7 +1484,7 @@ const BusinessDashboard: React.FC = () => {
                       />
                       <label
                         htmlFor="editMainImage"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-flex items-center"
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors inline-flex items-center"
                       >
                         <Upload className="w-4 h-4 mr-2" />
                         {uploadingImage ? "Uploading..." : "Upload Image"}
@@ -1525,7 +1525,7 @@ const BusinessDashboard: React.FC = () => {
                   />
                   <label
                     htmlFor="editGalleryImage"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors inline-flex items-center"
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     {uploadingGallery ? "Uploading..." : "Add Gallery Image"}
@@ -1537,7 +1537,7 @@ const BusinessDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => addArrayField("services")}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
                     >
                       + Add Service
                     </button>
@@ -1549,7 +1549,7 @@ const BusinessDashboard: React.FC = () => {
                           type="text"
                           value={service}
                           onChange={(e) => handleArrayFieldChange("services", index, e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                         <button
                           type="button"
@@ -1571,7 +1571,7 @@ const BusinessDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={addPricingField}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
                     >
                       + Add Pricing
                     </button>
@@ -1585,7 +1585,7 @@ const BusinessDashboard: React.FC = () => {
                             type="text"
                             value={item.service}
                             onChange={(e) => handlePricingChange(index, "service", e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           />
                         </div>
                         <div>
@@ -1594,7 +1594,7 @@ const BusinessDashboard: React.FC = () => {
                             type="text"
                             value={item.price}
                             onChange={(e) => handlePricingChange(index, "price", e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           />
                         </div>
                         <div className="flex items-end space-x-2">
@@ -1604,7 +1604,7 @@ const BusinessDashboard: React.FC = () => {
                               type="text"
                               value={item.description}
                               onChange={(e) => handlePricingChange(index, "description", e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             />
                           </div>
                           <button
@@ -1632,7 +1632,7 @@ const BusinessDashboard: React.FC = () => {
                           type="text"
                           value={hours}
                           onChange={(e) => handleOpeningHoursChange(day, e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     ))}

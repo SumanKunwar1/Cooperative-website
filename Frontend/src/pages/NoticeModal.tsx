@@ -64,7 +64,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case "announcement":
-        return "bg-blue-100 text-blue-800"
+        return "bg-green-100 text-green-800"
       case "news":
         return "bg-green-100 text-green-800"
       case "circular":
@@ -94,7 +94,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           </div>
           <p className="text-center text-gray-600">Loading notice...</p>
         </div>
@@ -110,7 +110,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={fetchSelectedNotice}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               Try Again
             </button>
@@ -131,19 +131,19 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-green-600 to-green-800 text-white">
           <div className="flex items-center space-x-3">
             <BellIcon className="h-6 w-6" />
             <div>
               <h3 className="text-lg font-semibold">Important Notice</h3>
-              <p className="text-blue-100 text-sm">
+              <p className="text-green-100 text-sm">
                 Stay updated with our latest announcement
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:text-blue-200 p-2 transition-colors"
+            className="text-white hover:text-green-200 p-2 transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -180,11 +180,11 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
           </div>
 
           {notice.documentUrl && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <span className="text-blue-600 text-lg">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <span className="text-green-600 text-lg">
                       {notice.documentType === "pdf"
                         ? "📄"
                         : notice.documentType === "doc" ||
@@ -194,17 +194,17 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-blue-900">
+                    <p className="text-sm font-medium text-green-900">
                       Document attached
                     </p>
-                    <p className="text-xs text-blue-700">
+                    <p className="text-xs text-green-700">
                       {notice.documentType?.toUpperCase()} file
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => window.open(notice.documentUrl, "_blank")}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                 >
                   View Document
                 </button>
@@ -220,7 +220,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
             Close
           </button>

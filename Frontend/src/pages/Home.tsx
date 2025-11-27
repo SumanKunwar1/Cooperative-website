@@ -307,7 +307,7 @@ const Home: React.FC = () => {
                           {notice.createdAt ? new Date(notice.createdAt).toLocaleDateString() : notice.date}
                         </p>
                         {notice.documentUrl && (
-                          <div className="flex items-center gap-1 text-blue-600 hover:text-blue-800">
+                          <div className="flex items-center gap-1 text-green-600 hover:text-green-800">
                             <span className="text-lg">{getDocumentIcon(notice.documentType)}</span>
                             <span className="text-xs font-medium">View Document</span>
                           </div>
@@ -423,7 +423,7 @@ const Home: React.FC = () => {
                           </svg>
                           {business.location}
                         </div>
-                        <span className="text-xs text-blue-600 font-medium">View Details →</span>
+                        <span className="text-xs text-green-600 font-medium">View Details →</span>
                       </div>
                     </Card>
                   </Link>
@@ -437,7 +437,7 @@ const Home: React.FC = () => {
       {/* Contact Section */}
       <ContactSection />
 
-      <section className="py-16 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
+      <section className="py-16 bg-gradient-to-r from-green-600 via-organge-600 to-gold-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
@@ -463,7 +463,7 @@ const Home: React.FC = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-blue-600 bg-transparent shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  className="border-2 border-white text-white hover:bg-white hover:text-green-600 bg-transparent shadow-2xl transform hover:scale-105 transition-all duration-300"
                 >
                   Contact Us
                 </Button>

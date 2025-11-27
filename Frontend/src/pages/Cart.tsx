@@ -109,7 +109,7 @@ const Cart: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-            <Link to="/shop" className="flex items-center text-blue-600 hover:text-blue-700 transition-colors">
+            <Link to="/shop" className="flex items-center text-green-600 hover:text-green-700 transition-colors">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Continue Shopping
             </Link>
@@ -141,7 +141,7 @@ const Cart: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <h3 className="text-lg font-semibold text-gray-900 truncate">{item.name}</h3>
                         <div className="flex items-center space-x-2 mt-1">
-                          <span className="text-xl font-bold text-blue-600">NPR {item.price.toLocaleString()}</span>
+                          <span className="text-xl font-bold text-green-600">NPR {item.price.toLocaleString()}</span>
                           {item.originalPrice && (
                             <span className="text-sm text-gray-500 line-through">
                               NPR {item.originalPrice.toLocaleString()}
@@ -213,7 +213,7 @@ const Cart: React.FC = () => {
                   <div className="border-t border-gray-200 pt-3">
                     <div className="flex justify-between">
                       <span className="text-lg font-semibold text-gray-900">Total</span>
-                      <span className="text-lg font-bold text-blue-600">NPR {total.toLocaleString()}</span>
+                      <span className="text-lg font-bold text-green-600">NPR {total.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@ const Cart: React.FC = () => {
                 </Button>
 
                 <div className="text-center">
-                  <Link to="/shop" className="text-blue-600 hover:text-blue-700 text-sm transition-colors">
+                  <Link to="/shop" className="text-green-600 hover:text-green-700 text-sm transition-colors">
                     Continue Shopping
                   </Link>
                 </div>

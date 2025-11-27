@@ -5,16 +5,28 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6', // Main logo blue
-          600: '#2563eb', // Darker blue for hover states
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e', // Medium green
+          600: '#07730E', // Your main brand color
+          700: '#065c0b', // Darker green
+          800: '#054909', // Even darker
+          900: '#043607', // Darkest green
+        },
+        green: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#07730E', // Your main brand color
+          700: '#065c0b',
+          800: '#054909',
+          900: '#043607',
         },
         gold: {
           50: '#fffbeb',
@@ -35,4 +47,4 @@ export default {
     },
   },
   plugins: [],
-};
+}

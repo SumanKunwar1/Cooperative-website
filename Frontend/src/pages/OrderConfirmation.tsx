@@ -55,14 +55,14 @@ const OrderConfirmation: React.FC = () => {
           {/* Order Summary */}
           <Card>
             <div className="flex items-center mb-4">
-              <Package className="w-5 h-5 text-blue-600 mr-2" />
+              <Package className="w-5 h-5 text-green-600 mr-2" />
               <h3 className="text-lg font-semibold text-gray-900">Order Summary</h3>
             </div>
 
             <div className="space-y-3 mb-4">
               <div className="flex justify-between">
                 <span className="font-medium text-gray-900">Order Number:</span>
-                <span className="text-blue-600 font-mono">{orderNum}</span>
+                <span className="text-green-600 font-mono">{orderNum}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-gray-900">Order Date:</span>
@@ -102,7 +102,7 @@ const OrderConfirmation: React.FC = () => {
                 </div>
                 <div className="flex justify-between font-semibold text-lg pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-blue-600">NPR {order.total.toLocaleString()}</span>
+                  <span className="text-green-600">NPR {order.total.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -111,18 +111,18 @@ const OrderConfirmation: React.FC = () => {
           {/* Delivery Information */}
           <Card>
             <div className="flex items-center mb-4">
-              <Truck className="w-5 h-5 text-blue-600 mr-2" />
+              <Truck className="w-5 h-5 text-green-600 mr-2" />
               <h3 className="text-lg font-semibold text-gray-900">Delivery Information</h3>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <Calendar className="w-4 h-4 text-blue-600 mr-2" />
-                  <span className="font-medium text-blue-900">Estimated Delivery</span>
+                  <Calendar className="w-4 h-4 text-green-600 mr-2" />
+                  <span className="font-medium text-green-900">Estimated Delivery</span>
                 </div>
-                <p className="text-blue-800 font-semibold">{estimatedDelivery}</p>
-                <p className="text-blue-700 text-sm mt-1">3-5 business days</p>
+                <p className="text-green-800 font-semibold">{estimatedDelivery}</p>
+                <p className="text-green-700 text-sm mt-1">3-5 business days</p>
               </div>
 
               <div>
@@ -140,7 +140,7 @@ const OrderConfirmation: React.FC = () => {
                 <p className="text-sm text-gray-600 mb-2">
                   You'll receive a tracking number via email once your order ships.
                 </p>
-                <div className="flex items-center text-sm text-blue-600">
+                <div className="flex items-center text-sm text-green-600">
                   <Mail className="w-4 h-4 mr-1" />
                   <span>Confirmation sent to your email</span>
                 </div>
@@ -171,7 +171,7 @@ const OrderConfirmation: React.FC = () => {
                       item.completed
                         ? "bg-green-100 text-green-600"
                         : item.current
-                          ? "bg-blue-100 text-blue-600"
+                          ? "bg-green-100 text-green-600"
                           : "bg-gray-100 text-gray-400"
                     }`}
                   >
@@ -229,16 +229,16 @@ const OrderConfirmation: React.FC = () => {
           transition={{ delay: 0.8 }}
           className="mt-12 text-center"
         >
-          <Card className="bg-blue-50 border-blue-200">
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Need Help?</h3>
-            <p className="text-blue-800 mb-4">
+          <Card className="bg-green-50 border-green-200">
+            <h3 className="text-lg font-semibold text-green-900 mb-2">Need Help?</h3>
+            <p className="text-green-800 mb-4">
               If you have any questions about your order, our customer support team is here to help.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-100 bg-transparent">
+              <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-100 bg-transparent">
                 Contact Support
               </Button>
-              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-100 bg-transparent">
+              <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-100 bg-transparent">
                 Track Your Order
               </Button>
             </div>

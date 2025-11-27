@@ -231,7 +231,7 @@ const CustomerDashboard: React.FC = () => {
       case "delivered":
         return "text-emerald-700 bg-emerald-50 border-emerald-200"
       case "shipped":
-        return "text-blue-700 bg-blue-50 border-blue-200"
+        return "text-green-700 bg-green-50 border-green-200"
       case "processing":
         return "text-amber-700 bg-amber-50 border-amber-200"
       case "cancelled":
@@ -263,7 +263,7 @@ const CustomerDashboard: React.FC = () => {
     return (
       <div className="min-h-screen pt-24 bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading your dashboard...</p>
         </div>
       </div>
@@ -278,8 +278,8 @@ const CustomerDashboard: React.FC = () => {
         <div className="w-64 bg-white shadow-lg min-h-screen">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center">
-                <UserIcon className="text-blue-600" size={24} />
+              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center">
+                <UserIcon className="text-green-600" size={24} />
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">{user.businessName}</h3>
@@ -296,7 +296,7 @@ const CustomerDashboard: React.FC = () => {
                     onClick={() => setActiveTab(item.id)}
                     className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
                       activeTab === item.id
-                        ? "bg-blue-600/10 text-blue-600 border border-blue-600/20"
+                        ? "bg-green-600/10 text-green-600 border border-green-600/20"
                         : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
@@ -305,7 +305,7 @@ const CustomerDashboard: React.FC = () => {
                       <span className="font-medium">{item.label}</span>
                     </div>
                     {item.badge !== undefined && item.badge > 0 && (
-                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full min-w-[20px] text-center">
+                      <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full min-w-[20px] text-center">
                         {item.badge}
                       </span>
                     )}
@@ -354,8 +354,8 @@ const CustomerDashboard: React.FC = () => {
                           {recentOrders.filter((o) => o.status !== "in-cart").length}
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Package className="text-blue-600" size={24} />
+                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <Package className="text-green-600" size={24} />
                       </div>
                     </div>
                   </div>
@@ -455,7 +455,7 @@ const CustomerDashboard: React.FC = () => {
                       <p className="text-gray-500">Add some products to get started!</p>
                       <button
                         onClick={() => navigate("/shop")}
-                        className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                       >
                         Continue Shopping
                       </button>
@@ -480,7 +480,7 @@ const CustomerDashboard: React.FC = () => {
                                   </span>
                                   <button
                                     onClick={() => navigate("/cart")}
-                                    className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                                    className="flex items-center gap-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
                                   >
                                     <Eye size={16} />
                                     View Cart
@@ -507,7 +507,7 @@ const CustomerDashboard: React.FC = () => {
                         </div>
                         <button
                           onClick={() => navigate("/checkout")}
-                          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
                         >
                           Proceed to Checkout
                         </button>
@@ -562,7 +562,7 @@ const CustomerDashboard: React.FC = () => {
                                       Write Review
                                     </button>
                                   ) : (
-                                    <button className="flex items-center gap-2 px-3 py-1 bg-blue-600/20 text-blue-600 rounded hover:bg-blue-600/30 text-sm">
+                                    <button className="flex items-center gap-2 px-3 py-1 bg-green-600/20 text-green-600 rounded hover:bg-green-600/30 text-sm">
                                       <Eye size={16} />
                                       View Details
                                     </button>
@@ -601,7 +601,7 @@ const CustomerDashboard: React.FC = () => {
                       {wishlistItems.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-blue-600/30 transition-colors"
+                          className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-green-600/30 transition-colors"
                         >
                           <img
                             src={item.image || "/placeholder.svg?height=80&width=80"}
@@ -610,7 +610,7 @@ const CustomerDashboard: React.FC = () => {
                           />
                           <div className="flex-1">
                             <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
-                            <p className="text-blue-600 font-bold text-lg">NPR {item.price.toLocaleString()}</p>
+                            <p className="text-green-600 font-bold text-lg">NPR {item.price.toLocaleString()}</p>
                             <p className={`text-sm font-medium ${item.inStock ? "text-green-600" : "text-red-600"}`}>
                               {item.inStock ? "In Stock" : "Out of Stock"}
                             </p>
@@ -618,7 +618,7 @@ const CustomerDashboard: React.FC = () => {
                           <div className="flex gap-2">
                             <button
                               disabled={!item.inStock}
-                              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                             >
                               Add to Cart
                             </button>
@@ -645,8 +645,8 @@ const CustomerDashboard: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center">
-                        <UserIcon className="text-blue-600" size={32} />
+                      <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center">
+                        <UserIcon className="text-green-600" size={32} />
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900">{user.businessName}</h3>
@@ -656,7 +656,7 @@ const CustomerDashboard: React.FC = () => {
                     {!isEditingProfile ? (
                       <button
                         onClick={() => setIsEditingProfile(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-600 rounded-lg hover:bg-blue-600/30 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600/20 text-green-600 rounded-lg hover:bg-green-600/30 transition-colors"
                       >
                         <Edit size={16} />
                         Edit Profile
@@ -665,7 +665,7 @@ const CustomerDashboard: React.FC = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={handleProfileUpdate}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                         >
                           <Save size={16} />
                           Save Changes
@@ -692,7 +692,7 @@ const CustomerDashboard: React.FC = () => {
                             type="text"
                             value={profileData.businessName || ""}
                             onChange={(e) => setProfileData((prev) => ({ ...prev, businessName: e.target.value }))}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                           />
                         ) : (
                           <div className="px-4 py-3 bg-gray-50 rounded-lg">
@@ -719,7 +719,7 @@ const CustomerDashboard: React.FC = () => {
                             type="tel"
                             value={profileData.phone || ""}
                             onChange={(e) => setProfileData((prev) => ({ ...prev, phone: e.target.value }))}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                           />
                         ) : (
                           <div className="px-4 py-3 bg-gray-50 rounded-lg">
@@ -826,7 +826,7 @@ const CustomerDashboard: React.FC = () => {
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input type="checkbox" className="sr-only peer" defaultChecked />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                         </label>
                       </div>
 
@@ -837,7 +837,7 @@ const CustomerDashboard: React.FC = () => {
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input type="checkbox" className="sr-only peer" />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                         </label>
                       </div>
 
@@ -848,7 +848,7 @@ const CustomerDashboard: React.FC = () => {
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input type="checkbox" className="sr-only peer" defaultChecked />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                         </label>
                       </div>
                     </div>
@@ -858,7 +858,7 @@ const CustomerDashboard: React.FC = () => {
                   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">Security</h2>
                     <div className="space-y-4">
-                      <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-600/30 transition-colors">
+                      <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-green-600/30 transition-colors">
                         <div className="text-left">
                           <h3 className="font-medium text-gray-900">Change Password</h3>
                           <p className="text-sm text-gray-600">Update your account password</p>
@@ -866,7 +866,7 @@ const CustomerDashboard: React.FC = () => {
                         <ChevronRight size={20} className="text-gray-400" />
                       </button>
 
-                      <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-600/30 transition-colors">
+                      <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-green-600/30 transition-colors">
                         <div className="text-left">
                           <h3 className="font-medium text-gray-900">Two-Factor Authentication</h3>
                           <p className="text-sm text-gray-600">Add an extra layer of security</p>
@@ -944,7 +944,7 @@ const CustomerDashboard: React.FC = () => {
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder="Share your experience with this product..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent resize-none"
                 rows={4}
               />
             </div>
@@ -953,7 +953,7 @@ const CustomerDashboard: React.FC = () => {
               <button
                 onClick={handleSubmitReview}
                 disabled={reviewRating === 0}
-                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
                 Submit Review
               </button>

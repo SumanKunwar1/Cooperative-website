@@ -115,7 +115,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading businesses...</p>
         </div>
       </div>
@@ -130,7 +130,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
           <p className="text-gray-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             Try Again
           </button>
@@ -151,11 +151,11 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Business Directory</h1>
-              <p className="text-xl md:text-2xl mb-8 text-blue-100">
+              <p className="text-xl md:text-2xl mb-8 text-green-100">
                 Discover trusted businesses in our cooperative network
               </p>
               <div className="max-w-2xl mx-auto">
@@ -165,7 +165,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                     placeholder="Search businesses, services, or categories..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-6 py-4 text-gray-900 rounded-lg text-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    className="w-full px-6 py-4 text-gray-900 rounded-lg text-lg focus:outline-none focus:ring-4 focus:ring-green-300"
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,16 +184,16 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
         </div>
 
         {/* Register Your Business Section */}
-        <div className="bg-white border-b-2 border-blue-100">
+        <div className="bg-white border-b-2 border-green-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 text-center">
-              <h2 className="text-2xl font-bold text-blue-900 mb-3">Register Your Business</h2>
-              <p className="text-blue-700 mb-4">
+            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 text-center">
+              <h2 className="text-2xl font-bold text-green-900 mb-3">Register Your Business</h2>
+              <p className="text-green-700 mb-4">
                 Join our cooperative network and connect with thousands of potential customers
               </p>
               <Link
                 to="/register"
-                className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+                className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200"
               >
                 Register Now
               </Link>
@@ -211,7 +211,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
@@ -225,7 +225,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
                     <option value="name">Name (A-Z)</option>
                     <option value="rating">Highest Rated</option>
@@ -290,7 +290,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <h3 className="text-xl font-bold text-gray-900 mb-1">{business.name}</h3>
-                          <p className="text-sm text-blue-600 font-medium">{business.subcategory}</p>
+                          <p className="text-sm text-green-600 font-medium">{business.subcategory}</p>
                         </div>
                         <div className="flex items-center gap-1">
                           <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -323,7 +323,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
 
                       <div className="flex flex-wrap gap-2 mb-6">
                         {business.services.slice(0, 3).map((service, index) => (
-                          <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                          <span key={index} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-full">
                             {service}
                           </span>
                         ))}
@@ -337,7 +337,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                       <Link
                         to={`/business-directory/${createBusinessSlug(business.name)}`}
                         state={{ business }}
-                        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-center block"
+                        className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 text-center block"
                       >
                         View Details & Book
                       </Link>
@@ -363,7 +363,7 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                       onClick={() => setCurrentPage(page)}
                       className={`px-4 py-2 rounded-lg ${
                         currentPage === page
-                          ? "bg-blue-600 text-white"
+                          ? "bg-green-600 text-white"
                           : "border border-gray-300 text-gray-600 hover:bg-gray-50"
                       }`}
                     >
@@ -385,22 +385,22 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Want to List Your Business?</h2>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl mb-8 text-green-100">
               Join our cooperative network and connect with thousands of potential customers
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/business-registration"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
+                className="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
               >
                 Register Your Business
               </Link>
               <Link
                 to="/contact"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200"
+                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors duration-200"
               >
                 Contact Us: 01-4254939
               </Link>

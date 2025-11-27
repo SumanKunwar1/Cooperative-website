@@ -9,25 +9,8 @@ export interface MediaItem {
 
 export interface HeroContent {
   _id?: string
-  title: {
-    line1: string
-    line2: string
-    line3: string
-  }
-  description: string
   backgroundMedia: MediaItem[]
   currentMediaIndex: number
-  searchPlaceholder: string
-  statistics: {
-    businesses: { count: string; label: string }
-    members: { count: string; label: string }
-    services: { count: string; label: string }
-    loans: { count: string; label: string }
-  }
-  ctaButtons: {
-    primary: { text: string; action: string }
-    secondary: { text: string; action: string }
-  }
   isActive: boolean
   createdAt?: string
   updatedAt?: string

@@ -105,10 +105,10 @@ const Shareholders: React.FC = () => {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+        <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Shareholders</h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-green-100 max-w-3xl mx-auto">
               Meet the dedicated leaders who guide our cooperative towards financial excellence and community growth
             </p>
           </div>
@@ -122,7 +122,7 @@ const Shareholders: React.FC = () => {
                 <div
                   key={shareholder.id}
                   className={`bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                    hoveredCard === shareholder.id ? "ring-4 ring-blue-500 ring-opacity-50" : ""
+                    hoveredCard === shareholder.id ? "ring-4 ring-green-500 ring-opacity-50" : ""
                   }`}
                   onMouseEnter={() => setHoveredCard(shareholder.id)}
                   onMouseLeave={() => setHoveredCard(null)}
@@ -140,30 +140,30 @@ const Shareholders: React.FC = () => {
                   {/* Card Content */}
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{shareholder.name}</h3>
-                    <p className="text-blue-600 font-semibold mb-3">{shareholder.position}</p>
+                    <p className="text-green-600 font-semibold mb-3">{shareholder.position}</p>
                     <p className="text-gray-600 text-sm mb-4">{shareholder.companyName}</p>
 
                     {/* Contact Information */}
                     <div className="space-y-2">
                       <div className="flex items-center text-sm text-gray-600">
-                        <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
                         <a
                           href={`mailto:${shareholder.email}`}
-                          className="hover:text-blue-600 transition-colors duration-200"
+                          className="hover:text-green-600 transition-colors duration-200"
                         >
                           {shareholder.email}
                         </a>
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
-                        <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                         </svg>
                         <a
                           href={`tel:${shareholder.phoneNumber}`}
-                          className="hover:text-blue-600 transition-colors duration-200"
+                          className="hover:text-green-600 transition-colors duration-200"
                         >
                           {shareholder.phoneNumber}
                         </a>
@@ -177,16 +177,16 @@ const Shareholders: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-blue-800 py-16">
+        <section className="bg-gradient-to-r from-green-600 to-green-800 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Join Our Community?</h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
               Become a shareholder and be part of our growing cooperative family. Enjoy exclusive benefits and
               contribute to our community's financial growth.
             </p>
             <Link
               to="/register"
-              className="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-8 py-4 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path

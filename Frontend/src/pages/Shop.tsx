@@ -160,7 +160,7 @@ const Shop: React.FC = () => {
         description="Shop from our member businesses. Discover quality products from local entrepreneurs in fashion, electronics, lifestyle, and more."
       />
 
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-12">
+      <section className="bg-gradient-to-r from-green-600 to-green-700 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Member Business Shop</h1>
@@ -172,7 +172,7 @@ const Shop: React.FC = () => {
                   : "Support local businesses and discover quality products from our cooperative members"}
             </p>
             {(activeCategory !== frozenUrl.category || activeSubcategory !== frozenUrl.subcategory) && (
-              <div className="mt-2 text-blue-200 text-sm">
+              <div className="mt-2 text-green-200 text-sm">
                 Currently viewing:{" "}
                 {currentActiveCategory && currentActiveSubcategory
                   ? `${currentActiveSubcategory.name} in ${currentActiveCategory.name}`
@@ -203,7 +203,7 @@ const Shop: React.FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search products..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
               </div>
@@ -213,7 +213,7 @@ const Shop: React.FC = () => {
                 <select
                   value={activeCategory}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="">All Categories</option>
                   {shopCategories.map((category) => (
@@ -230,7 +230,7 @@ const Shop: React.FC = () => {
                   <select
                     value={activeSubcategory}
                     onChange={(e) => handleSubcategoryChange(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">All Subcategories</option>
                     {currentActiveCategory?.subcategories.map((sub) => (
@@ -272,7 +272,7 @@ const Shop: React.FC = () => {
                 <span className="text-gray-600">
                   {filteredProducts.length} products found
                   {currentActiveCategory && (
-                    <span className="text-blue-600 ml-2">
+                    <span className="text-green-600 ml-2">
                       in{" "}
                       {currentActiveSubcategory
                         ? `${currentActiveSubcategory.name} - ${currentActiveCategory.name}`
@@ -288,7 +288,7 @@ const Shop: React.FC = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm"
                   >
                     <option value="featured">Featured</option>
                     <option value="name-asc">Name: A to Z</option>

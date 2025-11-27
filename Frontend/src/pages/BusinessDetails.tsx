@@ -118,7 +118,7 @@ const BusinessDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading business details...</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ const BusinessDetails: React.FC = () => {
           <p className="text-gray-600 mb-6">{error || "The business you're looking for doesn't exist."}</p>
           <Link
             to="/business-directory"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200"
           >
             Back to Directory
           </Link>
@@ -156,11 +156,11 @@ const BusinessDetails: React.FC = () => {
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <nav className="flex items-center space-x-2 text-sm">
-              <Link to="/" className="text-blue-600 hover:text-blue-800">
+              <Link to="/" className="text-green-600 hover:text-green-800">
                 Home
               </Link>
               <span className="text-gray-400">/</span>
-              <Link to="/business-directory" className="text-blue-600 hover:text-blue-800">
+              <Link to="/business-directory" className="text-green-600 hover:text-green-800">
                 Business Directory
               </Link>
               <span className="text-gray-400">/</span>
@@ -199,7 +199,7 @@ const BusinessDetails: React.FC = () => {
                   )}
                 </div>
 
-                <p className="text-lg text-blue-600 font-medium mb-4">{business.subcategory}</p>
+                <p className="text-lg text-green-600 font-medium mb-4">{business.subcategory}</p>
 
                 <div className="flex items-center gap-4 mb-6">
                   <div className="flex items-center gap-1">
@@ -240,7 +240,7 @@ const BusinessDetails: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => setShowBookingModal(true)}
-                    className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+                    className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -268,7 +268,7 @@ const BusinessDetails: React.FC = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? "border-blue-500 text-blue-600"
+                      ? "border-green-500 text-green-600"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
                 >
@@ -292,8 +292,8 @@ const BusinessDetails: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Services Offered</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                   {(business.services || []).slice(0, 6).map((service, index) => (
-                    <div key={index} className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-                      <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div key={index} className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
+                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
                           d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -346,7 +346,7 @@ const BusinessDetails: React.FC = () => {
                           href={`https://${business.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800"
+                          className="text-green-600 hover:text-green-800"
                         >
                           {business.website}
                         </a>
@@ -373,7 +373,7 @@ const BusinessDetails: React.FC = () => {
                           <h4 className="font-medium text-gray-900 mb-3">{service}</h4>
                           <button
                             onClick={() => setShowBookingModal(true)}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                            className="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
                           >
                             Book Now
                           </button>
@@ -398,14 +398,14 @@ const BusinessDetails: React.FC = () => {
                             >
                               <div className="text-center">
                                 <h4 className="text-xl font-bold text-gray-900 mb-2 capitalize">{tier} Plan</h4>
-                                <div className="text-3xl font-bold text-blue-600 mb-4">
+                                <div className="text-3xl font-bold text-green-600 mb-4">
                                   {typeof price === "string" || typeof price === "number"
                                     ? `$${String(price)}`
                                     : "Contact for pricing"}
                                 </div>
                                 <button
                                   onClick={() => setShowBookingModal(true)}
-                                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                                  className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
                                 >
                                   Choose {tier}
                                 </button>
@@ -419,10 +419,10 @@ const BusinessDetails: React.FC = () => {
                             <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
                               <div className="text-center">
                                 <h4 className="text-xl font-bold text-gray-900 mb-2">Standard Pricing</h4>
-                                <div className="text-3xl font-bold text-blue-600 mb-4">${String(business.pricing)}</div>
+                                <div className="text-3xl font-bold text-green-600 mb-4">${String(business.pricing)}</div>
                                 <button
                                   onClick={() => setShowBookingModal(true)}
-                                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                                  className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
                                 >
                                   Book Now
                                 </button>
@@ -442,7 +442,7 @@ const BusinessDetails: React.FC = () => {
                     <p className="text-gray-600 mb-4">Service and pricing information will be available soon.</p>
                     <button
                       onClick={() => setShowBookingModal(true)}
-                      className="bg-blue-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                      className="bg-green-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
                     >
                       Contact for Details
                     </button>
@@ -490,7 +490,7 @@ const BusinessDetails: React.FC = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -504,7 +504,7 @@ const BusinessDetails: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -518,7 +518,7 @@ const BusinessDetails: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <svg className="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -586,7 +586,7 @@ const BusinessDetails: React.FC = () => {
                       required
                       value={bookingForm.name}
                       onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
 
@@ -597,7 +597,7 @@ const BusinessDetails: React.FC = () => {
                       required
                       value={bookingForm.email}
                       onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
 
@@ -608,7 +608,7 @@ const BusinessDetails: React.FC = () => {
                       required
                       value={bookingForm.phone}
                       onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                   </div>
 
@@ -618,7 +618,7 @@ const BusinessDetails: React.FC = () => {
                       required
                       value={bookingForm.service}
                       onChange={(e) => setBookingForm({ ...bookingForm, service: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     >
                       <option value="">Select a service</option>
                       {(business.services || []).map((service, index) => (
@@ -637,7 +637,7 @@ const BusinessDetails: React.FC = () => {
                         required
                         value={bookingForm.preferredDate}
                         onChange={(e) => setBookingForm({ ...bookingForm, preferredDate: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
 
@@ -648,7 +648,7 @@ const BusinessDetails: React.FC = () => {
                         required
                         value={bookingForm.preferredTime}
                         onChange={(e) => setBookingForm({ ...bookingForm, preferredTime: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
                   </div>
@@ -659,7 +659,7 @@ const BusinessDetails: React.FC = () => {
                       rows={3}
                       value={bookingForm.message}
                       onChange={(e) => setBookingForm({ ...bookingForm, message: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Any specific requirements or questions..."
                     />
                   </div>
@@ -674,7 +674,7 @@ const BusinessDetails: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+                      className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
                     >
                       Submit Booking
                     </button>

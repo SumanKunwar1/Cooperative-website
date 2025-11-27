@@ -254,7 +254,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate("/shop")}
-          className="flex items-center text-blue-600 hover:text-blue-700 mb-6 transition-colors"
+          className="flex items-center text-green-600 hover:text-green-700 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Shop
@@ -276,7 +276,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`aspect-square bg-white rounded-lg overflow-hidden border-2 transition-colors ${
-                    selectedImage === index ? "border-blue-500" : "border-gray-200 hover:border-gray-300"
+                    selectedImage === index ? "border-green-500" : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <img
@@ -302,9 +302,9 @@ Whether you're looking for functionality, style, or both, this product delivers 
               </div>
 
               {/* Seller Info Card */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                     <Store className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
@@ -327,7 +327,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
               </div>
 
               <div className="flex items-center space-x-4 mb-4">
-                <span className="text-3xl font-bold text-blue-600">NPR {product.price.toLocaleString()}</span>
+                <span className="text-3xl font-bold text-green-600">NPR {product.price.toLocaleString()}</span>
                 {product.originalPrice && (
                   <span className="text-xl text-gray-500 line-through">
                     NPR {product.originalPrice.toLocaleString()}
@@ -373,7 +373,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                 <Button
                   onClick={handleBuyNow}
                   disabled={!product.inStock}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold"
                 >
                   <CreditCard className="w-5 h-5 mr-2" />
                   Buy Now
@@ -382,7 +382,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                   onClick={handleAddToCart}
                   disabled={!product.inStock}
                   variant="outline"
-                  className="flex-1 border-blue-600 text-blue-600 hover:bg-blue-50 py-3 text-lg font-semibold bg-transparent"
+                  className="flex-1 border-green-600 text-green-600 hover:bg-green-50 py-3 text-lg font-semibold bg-transparent"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Add to Cart
@@ -402,17 +402,17 @@ Whether you're looking for functionality, style, or both, this product delivers 
             {/* Features */}
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200">
               <div className="text-center">
-                <Truck className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                <Truck className="w-8 h-8 mx-auto mb-2 text-green-600" />
                 <p className="text-sm font-medium text-gray-900">Free Shipping</p>
                 <p className="text-xs text-gray-600">On orders over NPR 1000</p>
               </div>
               <div className="text-center">
-                <Shield className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                <Shield className="w-8 h-8 mx-auto mb-2 text-green-600" />
                 <p className="text-sm font-medium text-gray-900">Secure Payment</p>
                 <p className="text-xs text-gray-600">100% secure checkout</p>
               </div>
               <div className="text-center">
-                <RotateCcw className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                <RotateCcw className="w-8 h-8 mx-auto mb-2 text-green-600" />
                 <p className="text-sm font-medium text-gray-900">Easy Returns</p>
                 <p className="text-xs text-gray-600">30-day return policy</p>
               </div>
@@ -435,7 +435,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                     onClick={() => setActiveTab(tab.id)}
                     className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                       activeTab === tab.id
-                        ? "border-blue-500 text-blue-600"
+                        ? "border-green-500 text-green-600"
                         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                     }`}
                   >
@@ -458,7 +458,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                       </p>
                       <button
                         onClick={() => setShowFullDescription(!showFullDescription)}
-                        className="text-blue-600 hover:text-blue-700 font-medium mt-2"
+                        className="text-green-600 hover:text-green-700 font-medium mt-2"
                       >
                         {showFullDescription ? "Show Less" : "Read More"}
                       </button>
@@ -519,7 +519,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                       <div key={review.id} className="border-b border-gray-200 pb-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
                               {review.userName.charAt(0)}
                             </div>
                             <div>
@@ -547,7 +547,7 @@ Whether you're looking for functionality, style, or both, this product delivers 
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Shipping Information</h3>
                     <div className="space-y-4">
                       <div className="flex items-start space-x-3">
-                        <Truck className="w-5 h-5 text-blue-600 mt-0.5" />
+                        <Truck className="w-5 h-5 text-green-600 mt-0.5" />
                         <div>
                           <h4 className="font-medium text-gray-900">Standard Delivery</h4>
                           <p className="text-gray-600">
@@ -557,14 +557,14 @@ Whether you're looking for functionality, style, or both, this product delivers 
                         </div>
                       </div>
                       <div className="flex items-start space-x-3">
-                        <RotateCcw className="w-5 h-5 text-blue-600 mt-0.5" />
+                        <RotateCcw className="w-5 h-5 text-green-600 mt-0.5" />
                         <div>
                           <h4 className="font-medium text-gray-900">Returns</h4>
                           <p className="text-gray-600">{product.shippingInfo.returnPolicy}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-3">
-                        <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                        <Shield className="w-5 h-5 text-green-600 mt-0.5" />
                         <div>
                           <h4 className="font-medium text-gray-900">Warranty</h4>
                           <p className="text-gray-600">1 year manufacturer warranty included</p>

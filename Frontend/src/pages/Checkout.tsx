@@ -153,7 +153,7 @@ const Checkout: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Redirecting to login...</p>
         </div>
       </div>
@@ -171,7 +171,7 @@ const Checkout: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
             <button
               onClick={() => navigate("/cart")}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+              className="flex items-center text-green-600 hover:text-green-700 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Cart
@@ -186,18 +186,18 @@ const Checkout: React.FC = () => {
               <div key={step.id} className="flex items-center">
                 <div
                   className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                    currentStep >= step.id ? "bg-blue-600 border-blue-600 text-white" : "border-gray-300 text-gray-400"
+                    currentStep >= step.id ? "bg-green-600 border-green-600 text-white" : "border-gray-300 text-gray-400"
                   }`}
                 >
                   <step.icon className="w-5 h-5" />
                 </div>
                 <span
-                  className={`ml-2 text-sm font-medium ${currentStep >= step.id ? "text-blue-600" : "text-gray-400"}`}
+                  className={`ml-2 text-sm font-medium ${currentStep >= step.id ? "text-green-600" : "text-gray-400"}`}
                 >
                   {step.name}
                 </span>
                 {index < steps.length - 1 && (
-                  <div className={`w-16 h-0.5 mx-4 ${currentStep > step.id ? "bg-blue-600" : "bg-gray-300"}`} />
+                  <div className={`w-16 h-0.5 mx-4 ${currentStep > step.id ? "bg-green-600" : "bg-gray-300"}`} />
                 )}
               </div>
             ))}
@@ -228,7 +228,7 @@ const Checkout: React.FC = () => {
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleInputChange}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                             placeholder="Enter first name"
                             required
                           />
@@ -242,7 +242,7 @@ const Checkout: React.FC = () => {
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter last name"
                           required
                         />
@@ -257,7 +257,7 @@ const Checkout: React.FC = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                             placeholder="Enter email"
                             required
                           />
@@ -273,7 +273,7 @@ const Checkout: React.FC = () => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                             placeholder="+977-98XXXXXXXX"
                             required
                           />
@@ -289,7 +289,7 @@ const Checkout: React.FC = () => {
                             name="address"
                             value={formData.address}
                             onChange={handleInputChange}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                             placeholder="Enter full address"
                             required
                           />
@@ -303,7 +303,7 @@ const Checkout: React.FC = () => {
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter city"
                           required
                         />
@@ -316,7 +316,7 @@ const Checkout: React.FC = () => {
                           name="postalCode"
                           value={formData.postalCode}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter postal code"
                           required
                         />
@@ -338,12 +338,12 @@ const Checkout: React.FC = () => {
                           onClick={() => handlePaymentMethodChange("card")}
                           className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                             formData.paymentMethod === "card"
-                              ? "border-blue-500 bg-blue-50"
+                              ? "border-green-500 bg-green-50"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
                           <div className="flex items-center justify-center mb-2">
-                            <CreditCard className="w-8 h-8 text-blue-600" />
+                            <CreditCard className="w-8 h-8 text-green-600" />
                           </div>
                           <h4 className="text-center font-medium text-gray-900">Card Payment</h4>
                           <p className="text-center text-sm text-gray-600 mt-1">Pay with credit/debit card</p>
@@ -394,7 +394,7 @@ const Checkout: React.FC = () => {
                               name="cardNumber"
                               value={formData.cardNumber}
                               onChange={handleInputChange}
-                              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                               placeholder="1234 5678 9012 3456"
                               required
                             />
@@ -409,7 +409,7 @@ const Checkout: React.FC = () => {
                               name="expiryDate"
                               value={formData.expiryDate}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                               placeholder="MM/YY"
                               required
                             />
@@ -424,7 +424,7 @@ const Checkout: React.FC = () => {
                                 name="cvv"
                                 value={formData.cvv}
                                 onChange={handleInputChange}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                                 placeholder="123"
                                 required
                               />
@@ -439,7 +439,7 @@ const Checkout: React.FC = () => {
                             name="cardName"
                             value={formData.cardName}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                             placeholder="Name on card"
                             required
                           />
@@ -451,7 +451,7 @@ const Checkout: React.FC = () => {
                             name="saveInfo"
                             checked={formData.saveInfo}
                             onChange={handleInputChange}
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                           />
                           <label className="ml-2 block text-sm text-gray-700">
                             Save payment information for future purchases
@@ -644,7 +644,7 @@ const Checkout: React.FC = () => {
 
                 <div className="flex justify-between font-semibold text-lg pt-4 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-blue-600">NPR {orderSummary.total.toLocaleString()}</span>
+                  <span className="text-green-600">NPR {orderSummary.total.toLocaleString()}</span>
                 </div>
               </Card>
             </motion.div>
