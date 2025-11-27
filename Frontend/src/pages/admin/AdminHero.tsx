@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
 import { Save, Upload, Trash2, Eye, EyeOff, ImageIcon, Video, Plus } from "lucide-react"
 import { heroAPI, type HeroContent } from "../../lib/heroApi"
 
@@ -10,7 +9,7 @@ const AdminHeroSection: React.FC = () => {
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null)
   const [heroVersions, setHeroVersions] = useState<HeroContent[]>([])
   const [selectedVersionId, setSelectedVersionId] = useState<string>("")
-  const [activeTab, setActiveTab] = useState<"content" | "media" | "stats" | "cta">("content")
+  const [activeTab, setActiveTab] = useState<"media">("media")
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(true)
   const [previewMode, setPreviewMode] = useState(false)
@@ -126,24 +125,8 @@ const AdminHeroSection: React.FC = () => {
   const createNewVersion = async () => {
     try {
       const newContent = await heroAPI.createHeroContent({
-        title: {
-          line1: "Your journey to",
-          line2: "financial prosperity",
-          line3: "starts here",
-        },
-        description:
-          "Connect with local businesses, discover financial services, and join a community that supports your economic growth and prosperity.",
-        searchPlaceholder: "Search businesses, services, opportunities...",
-        statistics: {
-          businesses: { count: "500+", label: "Businesses" },
-          members: { count: "10K+", label: "Members" },
-          services: { count: "50+", label: "Services" },
-          loans: { count: "$2M+", label: "Loans Funded" },
-        },
-        ctaButtons: {
-          primary: { text: "Join Our Community", action: "/join" },
-          secondary: { text: "Explore Services", action: "/services" },
-        },
+        backgroundMedia: [],
+        currentMediaIndex: 0,
         isActive: false,
       })
 
@@ -187,20 +170,6 @@ const AdminHeroSection: React.FC = () => {
           }
         : null,
     )
-  }
-
-  const updateNestedContent = (parent: string, field: string, value: any) => {
-    setHeroContent((prev) => {
-      if (!prev) return null
-      const parentObj = prev[parent as keyof HeroContent] as Record<string, any>
-      return {
-        ...prev,
-        [parent]: {
-          ...parentObj,
-          [field]: value,
-        },
-      }
-    })
   }
 
   if (isFetching) {
@@ -252,7 +221,7 @@ const AdminHeroSection: React.FC = () => {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Hero Section Management</h1>
-              <p className="text-gray-600 mt-1">Manage your homepage hero section content and media</p>
+              <p className="text-gray-600 mt-1">Manage your homepage hero section media</p>
             </div>
             <div className="flex gap-3">
               <button
@@ -291,7 +260,7 @@ const AdminHeroSection: React.FC = () => {
               >
                 {heroVersions.map((version) => (
                   <option key={version._id} value={version._id}>
-                    {version.title.line1} {version.title.line2} {version.isActive ? "(Active)" : ""}
+                    Hero Version {version._id?.slice(-6)} {version.isActive ? "(Active)" : ""}
                   </option>
                 ))}
               </select>
@@ -307,265 +276,84 @@ const AdminHeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Sidebar Navigation */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <nav className="space-y-2">
-                {[
-                  { id: "content", label: "Content & Text", icon: "📝" },
-                  { id: "media", label: "Background Media", icon: "🎬" },
-                  { id: "stats", label: "Statistics", icon: "📊" },
-                  { id: "cta", label: "Call-to-Action", icon: "🔗" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                      activeTab === tab.id
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
-                        : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <span className="mr-3">{tab.icon}</span>
-                    {tab.label}
-                  </button>
-                ))}
-              </nav>
+        {/* Main Content Area */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* Media Tab */}
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900">Background Media</h2>
+              <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer flex items-center gap-2">
+                <Upload className="w-4 h-4" />
+                Upload Media
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={(e) => handleMediaUpload(e.target.files)}
+                  className="hidden"
+                />
+              </label>
             </div>
-          </div>
 
-          {/* Main Content Area */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              {/* Content Tab */}
-              {activeTab === "content" && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900">Content & Text</h2>
+            {uploadProgress !== null && (
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            )}
 
-                  {/* Title Lines */}
-                  <div className="space-y-4">
-                    <label className="block text-sm font-medium text-gray-700">Title Lines</label>
-                    {["line1", "line2", "line3"].map((line, index) => (
-                      <input
-                        key={line}
-                        type="text"
-                        value={heroContent.title[line as keyof typeof heroContent.title]}
-                        onChange={(e) => updateNestedContent("title", line, e.target.value)}
-                        placeholder={`Title Line ${index + 1}`}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            {/* Media Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {heroContent.backgroundMedia.map((media, index) => (
+                <div key={index} className="relative group">
+                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                    {media.type === "image" ? (
+                      <img
+                        src={media.url || "/placeholder.svg"}
+                        alt={media.alt}
+                        className="w-full h-full object-cover"
                       />
-                    ))}
+                    ) : (
+                      <video src={media.url} className="w-full h-full object-cover" muted />
+                    )}
                   </div>
 
-                  {/* Description */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <textarea
-                      value={heroContent.description}
-                      onChange={(e) => updateContent("description", e.target.value)}
-                      rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Enter hero section description..."
-                    />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => updateContent("currentMediaIndex", index)}
+                      className={`px-3 py-1 rounded text-sm ${
+                        heroContent.currentMediaIndex === index
+                          ? "bg-blue-600 text-white"
+                          : "bg-white text-gray-700"
+                      }`}
+                    >
+                      {heroContent.currentMediaIndex === index ? "Active" : "Set Active"}
+                    </button>
+                    <button
+                      onClick={() => removeMedia(index)}
+                      className="p-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
 
-                  {/* Search Placeholder */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Search Placeholder Text</label>
-                    <input
-                      type="text"
-                      value={heroContent.searchPlaceholder}
-                      onChange={(e) => updateContent("searchPlaceholder", e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Search placeholder text..."
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Media Tab */}
-              {activeTab === "media" && (
-                <div className="space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold text-gray-900">Background Media</h2>
-                    <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer flex items-center gap-2">
-                      <Upload className="w-4 h-4" />
-                      Upload Media
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*,video/*"
-                        onChange={(e) => handleMediaUpload(e.target.files)}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  {uploadProgress !== null && (
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${uploadProgress}%` }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Media Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {heroContent.backgroundMedia.map((media, index) => (
-                      <div key={index} className="relative group">
-                        <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                          {media.type === "image" ? (
-                            <img
-                              src={media.url || "/placeholder.svg"}
-                              alt={media.alt}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <video src={media.url} className="w-full h-full object-cover" muted />
-                          )}
-                        </div>
-
-                        <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => updateContent("currentMediaIndex", index)}
-                            className={`px-3 py-1 rounded text-sm ${
-                              heroContent.currentMediaIndex === index
-                                ? "bg-blue-600 text-white"
-                                : "bg-white text-gray-700"
-                            }`}
-                          >
-                            {heroContent.currentMediaIndex === index ? "Active" : "Set Active"}
-                          </button>
-                          <button
-                            onClick={() => removeMedia(index)}
-                            className="p-2 bg-red-600 text-white rounded hover:bg-red-700"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        <div className="absolute top-2 left-2">
-                          <span className="px-2 py-1 bg-black bg-opacity-70 text-white text-xs rounded">
-                            {media.type === "image" ? <ImageIcon className="w-3 h-3" /> : <Video className="w-3 h-3" />}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {heroContent.backgroundMedia.length === 0 && (
-                    <div className="text-center py-12 text-gray-500">
-                      <Upload className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p>No media uploaded yet. Upload images or videos to get started.</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Statistics Tab */}
-              {activeTab === "stats" && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900">Statistics</h2>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.entries(heroContent.statistics).map(([key, stat]) => (
-                      <div key={key} className="space-y-3">
-                        <label className="block text-sm font-medium text-gray-700 capitalize">{key}</label>
-                        <div className="space-y-2">
-                          <input
-                            type="text"
-                            value={stat.count}
-                            onChange={(e) => updateNestedContent("statistics", key, { ...stat, count: e.target.value })}
-                            placeholder="Count (e.g., 500+)"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                          />
-                          <input
-                            type="text"
-                            value={stat.label}
-                            onChange={(e) => updateNestedContent("statistics", key, { ...stat, label: e.target.value })}
-                            placeholder="Label (e.g., Businesses)"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                          />
-                        </div>
-                      </div>
-                    ))}
+                  <div className="absolute top-2 left-2">
+                    <span className="px-2 py-1 bg-black bg-opacity-70 text-white text-xs rounded">
+                      {media.type === "image" ? <ImageIcon className="w-3 h-3" /> : <Video className="w-3 h-3" />}
+                    </span>
                   </div>
                 </div>
-              )}
-
-              {/* CTA Tab */}
-              {activeTab === "cta" && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900">Call-to-Action Buttons</h2>
-
-                  <div className="space-y-6">
-                    {/* Primary CTA */}
-                    <div className="p-4 border border-gray-200 rounded-lg">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Primary Button</h3>
-                      <div className="space-y-3">
-                        <input
-                          type="text"
-                          value={heroContent.ctaButtons.primary.text}
-                          onChange={(e) =>
-                            updateNestedContent("ctaButtons", "primary", {
-                              ...heroContent.ctaButtons.primary,
-                              text: e.target.value,
-                            })
-                          }
-                          placeholder="Button text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                        <input
-                          type="text"
-                          value={heroContent.ctaButtons.primary.action}
-                          onChange={(e) =>
-                            updateNestedContent("ctaButtons", "primary", {
-                              ...heroContent.ctaButtons.primary,
-                              action: e.target.value,
-                            })
-                          }
-                          placeholder="Button action/link"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Secondary CTA */}
-                    <div className="p-4 border border-gray-200 rounded-lg">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Secondary Button</h3>
-                      <div className="space-y-3">
-                        <input
-                          type="text"
-                          value={heroContent.ctaButtons.secondary.text}
-                          onChange={(e) =>
-                            updateNestedContent("ctaButtons", "secondary", {
-                              ...heroContent.ctaButtons.secondary,
-                              text: e.target.value,
-                            })
-                          }
-                          placeholder="Button text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                        <input
-                          type="text"
-                          value={heroContent.ctaButtons.secondary.action}
-                          onChange={(e) =>
-                            updateNestedContent("ctaButtons", "secondary", {
-                              ...heroContent.ctaButtons.secondary,
-                              action: e.target.value,
-                            })
-                          }
-                          placeholder="Button action/link"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              ))}
             </div>
+
+            {heroContent.backgroundMedia.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <Upload className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No media uploaded yet. Upload images or videos to get started.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -574,88 +362,65 @@ const AdminHeroSection: React.FC = () => {
 }
 
 const HeroPreview: React.FC<{ content: HeroContent }> = ({ content }) => {
-  const currentMedia = content.backgroundMedia[content.currentMediaIndex]
+  const [currentIndex, setCurrentIndex] = useState(content.currentMediaIndex)
+  const slides = content.backgroundMedia
+
+  useEffect(() => {
+    if (slides.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [slides.length])
 
   return (
-    <section className="relative bg-white overflow-hidden min-h-screen">
-      {currentMedia && (
-        <div className="absolute inset-0 z-0">
-          <div className="h-full w-full object-cover">
-            {currentMedia.type === "video" ? (
-              <video className="w-full h-full object-cover opacity-80" autoPlay loop muted src={currentMedia.url} />
-            ) : (
-              <img
-                className="w-full h-full object-cover opacity-80"
-                src={currentMedia.url || "/placeholder.svg"}
-                alt={currentMedia.alt}
-              />
-            )}
-          </div>
-          <div className="absolute inset-0 bg-black opacity-50"></div>
+    <section className="relative overflow-hidden w-full h-screen">
+      {/* Slides */}
+      <div className="absolute inset-0 w-full h-full">
+        {slides.map((media, idx) => {
+          const isActive = idx === currentIndex
+          return (
+            <div
+              key={idx}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
+                isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+              }`}
+              aria-hidden={!isActive}
+            >
+              {media.type === "video" ? (
+                <video
+                  className="w-full h-full object-cover"
+                  src={media.url}
+                  autoPlay={isActive}
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img className="w-full h-full object-cover" src={media.url} alt={media.alt} />
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Pager dots */}
+      {slides.length > 1 && (
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-20 flex gap-2">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`w-3 h-3 rounded-full transition-[transform,background-color] duration-200 ${
+                idx === currentIndex ? "scale-125 bg-white/90" : "bg-white/40"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
         </div>
       )}
-
-      <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-        <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-          <div className="sm:text-center lg:text-left">
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-4xl tracking-tight font-bold text-white sm:text-5xl md:text-6xl"
-            >
-              <span className="block">{content.title.line1}</span>
-              <span className="block text-blue-500">{content.title.line2}</span>
-              <span className="block">{content.title.line3}</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0"
-            >
-              {content.description}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto lg:mx-0"
-            >
-              {Object.entries(content.statistics).map(([key, stat]) => (
-                <div key={key} className="text-center">
-                  <div className="text-2xl font-semibold text-white">{stat.count}</div>
-                  <div className="text-sm text-gray-300">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="mt-8 flex flex-col sm:flex-row gap-4 max-w-xl mx-auto lg:mx-0"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex-1 px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300"
-              >
-                {content.ctaButtons.primary.text}
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex-1 px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-all duration-300"
-              >
-                {content.ctaButtons.secondary.text}
-              </motion.button>
-            </motion.div>
-          </div>
-        </main>
-      </div>
     </section>
   )
 }

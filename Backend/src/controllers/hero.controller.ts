@@ -46,14 +46,7 @@ export const getHeroContentById = async (req: Request, res: Response) => {
 // Create new hero content
 export const createHeroContent = async (req: Request, res: Response) => {
   try {
-    const {
-      title,
-      description,
-      searchPlaceholder,
-      statistics,
-      ctaButtons,
-      isActive
-    } = req.body;
+    const { isActive } = req.body;
 
     // If setting as active, deactivate all others
     if (isActive) {
@@ -61,25 +54,9 @@ export const createHeroContent = async (req: Request, res: Response) => {
     }
 
     const heroContent = new HeroContent({
-      title: title || {
-        line1: "Your journey to",
-        line2: "financial prosperity",
-        line3: "starts here"
-      },
-      description: description || "Connect with local businesses, discover financial services, and join a community that supports your economic growth and prosperity.",
-      searchPlaceholder: searchPlaceholder || "Search businesses, services, opportunities...",
-      statistics: statistics || {
-        businesses: { count: "500+", label: "Businesses" },
-        members: { count: "10K+", label: "Members" },
-        services: { count: "50+", label: "Services" },
-        loans: { count: "$2M+", label: "Loans Funded" }
-      },
-      ctaButtons: ctaButtons || {
-        primary: { text: "Join Our Community", action: "/join" },
-        secondary: { text: "Explore Services", action: "/services" }
-      },
+      backgroundMedia: [],
+      currentMediaIndex: 0,
       isActive: isActive || false,
-      backgroundMedia: []
     });
 
     await heroContent.save();
@@ -93,15 +70,7 @@ export const createHeroContent = async (req: Request, res: Response) => {
 export const updateHeroContent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const {
-      title,
-      description,
-      searchPlaceholder,
-      statistics,
-      ctaButtons,
-      isActive,
-      currentMediaIndex
-    } = req.body;
+    const { isActive, currentMediaIndex } = req.body;
 
     const heroContent = await HeroContent.findById(id);
     if (!heroContent) {
@@ -113,11 +82,6 @@ export const updateHeroContent = async (req: Request, res: Response) => {
       await HeroContent.updateMany({ _id: { $ne: id } }, { isActive: false });
     }
 
-    if (title) heroContent.title = title;
-    if (description) heroContent.description = description;
-    if (searchPlaceholder) heroContent.searchPlaceholder = searchPlaceholder;
-    if (statistics) heroContent.statistics = statistics;
-    if (ctaButtons) heroContent.ctaButtons = ctaButtons;
     if (isActive !== undefined) heroContent.isActive = isActive;
     if (currentMediaIndex !== undefined) heroContent.currentMediaIndex = currentMediaIndex;
 

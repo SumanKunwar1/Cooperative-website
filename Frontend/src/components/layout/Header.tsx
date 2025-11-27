@@ -119,16 +119,28 @@ const Header = () => {
 
             {/* Auth Buttons - Visible on md and up */}
             <div className="hidden md:flex gap-1 lg:gap-2 flex-shrink-0">
-              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1">
-                <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                </svg>
-                {t("login")}
-              </button>
-              <button className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap">
-                {t("register")}
-              </button>
-            </div>
+  <a
+    href="/login"
+    className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1"
+  >
+    <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+        clipRule="evenodd"
+      />
+    </svg>
+    {t("login")}
+  </a>
+
+  <a
+    href="/register"
+    className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap"
+  >
+    {t("register")}
+  </a>
+</div>
+
 
             {/* Mobile Menu Toggle */}
             <button
@@ -160,16 +172,28 @@ const Header = () => {
           
           {/* Mobile Auth Buttons - Only visible on mobile */}
           <div className="md:hidden flex gap-1 flex-shrink-0 ml-auto py-2">
-            <button className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-              {t("login")}
-            </button>
-            <button className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap">
-              {t("register")}
-            </button>
-          </div>
+  <a
+    href="/login"
+    className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5"
+  >
+    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+        clipRule="evenodd"
+      />
+    </svg>
+    {t("login")}
+  </a>
+
+  <a
+    href="/register"
+    className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap"
+  >
+    {t("register")}
+  </a>
+</div>
+
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
