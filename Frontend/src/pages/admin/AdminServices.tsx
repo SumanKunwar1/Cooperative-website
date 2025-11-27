@@ -81,7 +81,7 @@ const AdminServices: React.FC = () => {
         "Interest merged with principal every 6 months",
         "Flexible withdrawal as per need",
       ],
-      color: "blue",
+      color: "green",
     },
     {
       id: "special",
@@ -214,7 +214,7 @@ const AdminServices: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900">Services Management</h1>
           <p className="text-gray-600 mt-2">Manage saving schemes, loan services, and additional facilities</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)} icon={Plus} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => setShowAddModal(true)} icon={Plus} className="bg-green-600 hover:bg-green-700">
           Add New Service
         </Button>
       </div>
@@ -230,7 +230,7 @@ const AdminServices: React.FC = () => {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center px-4 py-2 rounded-md font-medium transition-all duration-200 ${
-              activeTab === tab.id ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-blue-600"
+              activeTab === tab.id ? "bg-white text-green-600 shadow-sm" : "text-gray-600 hover:text-green-600"
             }`}
           >
             <tab.icon className="w-4 h-4 mr-2" />
@@ -248,7 +248,7 @@ const AdminServices: React.FC = () => {
             placeholder="Search services..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
         <Button variant="outline" icon={Filter}>
@@ -274,8 +274,8 @@ const AdminServices: React.FC = () => {
                   <Card key={scheme.id} className="hover:shadow-lg transition-shadow">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                          <IconComponent className="w-6 h-6 text-blue-600" />
+                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                          <IconComponent className="w-6 h-6 text-green-600" />
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900">{scheme.title}</h3>
@@ -529,7 +529,7 @@ const ServiceForm: React.FC<{
     "Award",
   ]
 
-  const colorOptions = ["blue", "green", "purple", "red", "yellow", "indigo", "pink", "gray"]
+  const colorOptions = ["green", "green", "purple", "red", "yellow", "indigo", "pink", "gray"]
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -539,7 +539,7 @@ const ServiceForm: React.FC<{
           type="text"
           value={formData.title || formData.type || ""}
           onChange={(e) => setFormData({ ...formData, [type === "loans" ? "type" : "title"]: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
           required
         />
       </div>
@@ -549,7 +549,7 @@ const ServiceForm: React.FC<{
         <textarea
           value={formData.description || ""}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
           rows={3}
         />
       </div>
@@ -559,7 +559,7 @@ const ServiceForm: React.FC<{
         <select
           value={formData.icon || ""}
           onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
         >
           <option value="">Select Icon</option>
           {iconOptions.map((icon) => (
@@ -579,7 +579,7 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={formData.interestRate || ""}
                 onChange={(e) => setFormData({ ...formData, interestRate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="e.g., 5%"
               />
             </div>
@@ -589,7 +589,7 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={formData.minDeposit || ""}
                 onChange={(e) => setFormData({ ...formData, minDeposit: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="e.g., Rs. 200"
               />
             </div>
@@ -602,7 +602,7 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={formData.minBalance || ""}
                 onChange={(e) => setFormData({ ...formData, minBalance: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="e.g., Rs. 500"
               />
             </div>
@@ -612,7 +612,7 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={formData.maxWithdrawal || ""}
                 onChange={(e) => setFormData({ ...formData, maxWithdrawal: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="e.g., Rs. 200,000"
               />
             </div>
@@ -625,7 +625,7 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={formData.targetGroup || ""}
                 onChange={(e) => setFormData({ ...formData, targetGroup: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="e.g., Housewives, Businesspersons"
               />
             </div>
@@ -634,7 +634,7 @@ const ServiceForm: React.FC<{
               <select
                 value={formData.color || ""}
                 onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
               >
                 <option value="">Select Color</option>
                 {colorOptions.map((color) => (
@@ -664,7 +664,7 @@ const ServiceForm: React.FC<{
                       newRates[e.target.value] = rate as string
                       setFormData({ ...formData, rates: newRates })
                     }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                     placeholder="Term (e.g., 1 Month)"
                   />
                   <input
@@ -676,7 +676,7 @@ const ServiceForm: React.FC<{
                         rates: { ...formData.rates, [term]: e.target.value },
                       })
                     }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                     placeholder="Rate (e.g., 14%)"
                   />
                   <Button
@@ -695,14 +695,14 @@ const ServiceForm: React.FC<{
                 type="text"
                 value={newRateType}
                 onChange={(e) => setNewRateType(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="New term (e.g., 2 Years)"
               />
               <input
                 type="text"
                 value={newRateValue}
                 onChange={(e) => setNewRateValue(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 placeholder="Rate (e.g., 18%)"
               />
               <Button type="button" size="sm" onClick={addRate}>
@@ -727,7 +727,7 @@ const ServiceForm: React.FC<{
                     updatedFeatures[index] = e.target.value
                     setFormData({ ...formData, features: updatedFeatures })
                   }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
                 />
                 <Button
                   type="button"
@@ -745,7 +745,7 @@ const ServiceForm: React.FC<{
               type="text"
               value={newFeature}
               onChange={(e) => setNewFeature(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
               placeholder="Add new feature..."
               onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())}
             />
@@ -760,7 +760,7 @@ const ServiceForm: React.FC<{
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+        <Button type="submit" className="bg-green-600 hover:bg-green-700">
           {initialData ? "Update" : "Create"}
         </Button>
       </div>

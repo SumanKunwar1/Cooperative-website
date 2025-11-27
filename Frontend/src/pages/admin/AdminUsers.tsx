@@ -237,7 +237,7 @@ const AdminUsers: React.FC = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              user.type === "business" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                              user.type === "business" ? "bg-green-100 text-green-800" : "bg-green-100 text-green-800"
                             }`}
                           >
                             {user.type}

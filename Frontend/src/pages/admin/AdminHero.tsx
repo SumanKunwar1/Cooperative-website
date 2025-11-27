@@ -176,7 +176,7 @@ const AdminHeroSection: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
           <p className="mt-4 text-gray-600">Loading hero content...</p>
         </div>
       </div>
@@ -188,7 +188,7 @@ const AdminHeroSection: React.FC = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 mb-4">No hero content found</p>
-          <button onClick={createNewVersion} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <button onClick={createNewVersion} className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
             Create New Hero Content
           </button>
         </div>
@@ -241,7 +241,7 @@ const AdminHeroSection: React.FC = () => {
               <button
                 onClick={saveHeroContent}
                 disabled={isLoading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 {isLoading ? "Saving..." : "Save Changes"}
@@ -256,7 +256,7 @@ const AdminHeroSection: React.FC = () => {
               <select
                 value={selectedVersionId}
                 onChange={(e) => switchVersion(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
               >
                 {heroVersions.map((version) => (
                   <option key={version._id} value={version._id}>
@@ -282,7 +282,7 @@ const AdminHeroSection: React.FC = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold text-gray-900">Background Media</h2>
-              <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer flex items-center gap-2">
+              <label className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer flex items-center gap-2">
                 <Upload className="w-4 h-4" />
                 Upload Media
                 <input
@@ -298,7 +298,7 @@ const AdminHeroSection: React.FC = () => {
             {uploadProgress !== null && (
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
@@ -325,7 +325,7 @@ const AdminHeroSection: React.FC = () => {
                       onClick={() => updateContent("currentMediaIndex", index)}
                       className={`px-3 py-1 rounded text-sm ${
                         heroContent.currentMediaIndex === index
-                          ? "bg-blue-600 text-white"
+                          ? "bg-green-600 text-white"
                           : "bg-white text-gray-700"
                       }`}
                     >

@@ -124,7 +124,7 @@ const AdminShareholders: React.FC = () => {
     return (
       <div className="p-6 flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading shareholders...</p>
         </div>
       </div>
@@ -149,7 +149,7 @@ const AdminShareholders: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900">Shareholders Management</h1>
           <p className="text-gray-600 mt-2">Manage board members and shareholders information</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)} icon={Plus} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => setShowAddModal(true)} icon={Plus} className="bg-green-600 hover:bg-green-700">
           Add New Shareholder
         </Button>
       </div>
@@ -163,7 +163,7 @@ const AdminShareholders: React.FC = () => {
             placeholder="Search shareholders..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
         <Button variant="outline" icon={Filter}>
@@ -175,8 +175,8 @@ const AdminShareholders: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card className="p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-              <User className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+              <User className="w-6 h-6 text-green-600" />
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Shareholders</p>
@@ -252,17 +252,17 @@ const AdminShareholders: React.FC = () => {
               {/* Card Content */}
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">{shareholder.name}</h3>
-                <p className="text-blue-600 font-semibold text-sm mb-2">{shareholder.position}</p>
+                <p className="text-green-600 font-semibold text-sm mb-2">{shareholder.position}</p>
                 <p className="text-gray-600 text-xs mb-3 font-medium">{shareholder.companyName}</p>
 
                 {/* Contact Information */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-xs text-gray-600">
-                    <Mail className="w-3 h-3 mr-2 text-blue-500" />
+                    <Mail className="w-3 h-3 mr-2 text-green-500" />
                     <span className="truncate">{shareholder.email}</span>
                   </div>
                   <div className="flex items-center text-xs text-gray-600">
-                    <Phone className="w-3 h-3 mr-2 text-blue-500" />
+                    <Phone className="w-3 h-3 mr-2 text-green-500" />
                     <span>{shareholder.phoneNumber}</span>
                   </div>
                 </div>
@@ -324,15 +324,15 @@ const AdminShareholders: React.FC = () => {
                 className="w-32 h-32 object-cover rounded-full mx-auto mb-4"
               />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{viewingShareholder.name}</h2>
-              <p className="text-blue-600 font-semibold mb-2">{viewingShareholder.position}</p>
+              <p className="text-green-600 font-semibold mb-2">{viewingShareholder.position}</p>
               <p className="text-gray-600 text-sm mb-4">{viewingShareholder.companyName}</p>
               <div className="space-y-3 text-left">
                 <div className="flex items-center">
-                  <Mail className="w-4 h-4 mr-3 text-blue-500" />
+                  <Mail className="w-4 h-4 mr-3 text-green-500" />
                   <span className="text-gray-700">{viewingShareholder.email}</span>
                 </div>
                 <div className="flex items-center">
-                  <Phone className="w-4 h-4 mr-3 text-blue-500" />
+                  <Phone className="w-4 h-4 mr-3 text-green-500" />
                   <span className="text-gray-700">{viewingShareholder.phoneNumber}</span>
                 </div>
               </div>
@@ -390,7 +390,7 @@ const ShareholderForm: React.FC<{
             alt="Profile"
             className="w-full h-full object-cover rounded-full border-4 border-gray-200"
           />
-          <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 cursor-pointer hover:bg-blue-700">
+          <label className="absolute bottom-0 right-0 bg-green-600 text-white rounded-full p-1 cursor-pointer hover:bg-green-700">
             <Upload className="w-4 h-4" />
             <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
           </label>
@@ -404,7 +404,7 @@ const ShareholderForm: React.FC<{
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             required
           />
         </div>
@@ -414,7 +414,7 @@ const ShareholderForm: React.FC<{
           <select
             value={formData.position}
             onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             required
           >
             <option value="">Select Position</option>
@@ -433,7 +433,7 @@ const ShareholderForm: React.FC<{
           type="text"
           value={formData.companyName}
           onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
           required
         />
       </div>
@@ -445,7 +445,7 @@ const ShareholderForm: React.FC<{
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             required
           />
         </div>
@@ -456,7 +456,7 @@ const ShareholderForm: React.FC<{
             type="tel"
             value={formData.phoneNumber}
             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             required
           />
         </div>
@@ -466,7 +466,7 @@ const ShareholderForm: React.FC<{
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+        <Button type="submit" className="bg-green-600 hover:bg-green-700">
           {initialData ? "Update" : "Create"}
         </Button>
       </div>

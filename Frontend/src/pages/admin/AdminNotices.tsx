@@ -281,7 +281,7 @@ const AdminNotices: React.FC = () => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case "announcement":
-        return "bg-blue-100 text-blue-800"
+        return "bg-green-100 text-green-800"
       case "news":
         return "bg-green-100 text-green-800"
       case "circular":
@@ -334,7 +334,7 @@ const AdminNotices: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Notice Management</h2>
           <button
             onClick={handleCreateNotice}
-            className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
+            className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Create Notice
@@ -353,7 +353,7 @@ const AdminNotices: React.FC = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-green-600">
               {notices.filter((n) => n.status === "published").length}
             </div>
             <div className="text-sm text-gray-600">Published</div>
@@ -395,7 +395,7 @@ const AdminNotices: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={handlePreviewModalNotice}
-                    className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                    className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                   >
                     <PlayIcon className="h-4 w-4 mr-1" />
                     Preview Modal
@@ -441,8 +441,8 @@ const AdminNotices: React.FC = () => {
               </div>
               <button
                 onClick={() => handleModalSettingsChange({ enabled: !modalSettings.enabled })}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  modalSettings.enabled ? 'bg-blue-600' : 'bg-gray-200'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                  modalSettings.enabled ? 'bg-green-600' : 'bg-gray-200'
                 }`}
               >
                 <span
@@ -462,8 +462,8 @@ const AdminNotices: React.FC = () => {
               </div>
               <button
                 onClick={() => handleModalSettingsChange({ autoShow: !modalSettings.autoShow })}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  modalSettings.autoShow ? 'bg-blue-600' : 'bg-gray-200'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                  modalSettings.autoShow ? 'bg-green-600' : 'bg-gray-200'
                 }`}
               >
                 <span
@@ -481,7 +481,7 @@ const AdminNotices: React.FC = () => {
               <select
                 value={modalSettings.showInterval}
                 onChange={(e) => handleModalSettingsChange({ showInterval: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
                 <option value="0">Every time website opens</option>
                 <option value="1">Every day</option>
@@ -492,10 +492,10 @@ const AdminNotices: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+          <div className="mt-4 p-4 bg-green-50 rounded-lg">
             <div className="flex items-center">
-              <BellIcon className="h-5 w-5 text-blue-600 mr-2" />
-              <p className="text-sm text-blue-700">
+              <BellIcon className="h-5 w-5 text-green-600 mr-2" />
+              <p className="text-sm text-green-700">
                 {modalSettings.enabled && currentModalNotice
                   ? `Modal is enabled and will show "${currentModalNotice.title}" ${modalSettings.showInterval === 0 ? 'every time the website opens' : modalSettings.autoShow ? 'automatically' : 'manually'}.`
                   : modalSettings.enabled 
@@ -517,7 +517,7 @@ const AdminNotices: React.FC = () => {
                   placeholder="Search notices by title or content..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -525,7 +525,7 @@ const AdminNotices: React.FC = () => {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value as "all" | "announcement" | "news" | "circular")}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[140px]"
+                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent min-w-[140px]"
               >
                 <option value="all">All Types</option>
                 <option value="announcement">Announcement</option>
@@ -535,7 +535,7 @@ const AdminNotices: React.FC = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as "all" | "published" | "draft" | "archived")}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[140px]"
+                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent min-w-[140px]"
               >
                 <option value="all">All Status</option>
                 <option value="published">Published</option>
@@ -548,7 +548,7 @@ const AdminNotices: React.FC = () => {
 
         {loading && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading notices...</p>
           </div>
         )}
@@ -591,7 +591,7 @@ const AdminNotices: React.FC = () => {
                       <span>Created: {new Date(notice.createdAt).toLocaleDateString()}</span>
                       {notice.date && <span>Published: {new Date(notice.date).toLocaleDateString()}</span>}
                       {notice.documentUrl && (
-                        <span className="flex items-center gap-1 text-blue-600">
+                        <span className="flex items-center gap-1 text-green-600">
                           {getDocumentIcon(notice.documentType)}
                           <span>Document attached</span>
                         </span>
@@ -607,7 +607,7 @@ const AdminNotices: React.FC = () => {
                       onChange={(e) =>
                         handleStatusChange(notice.id, e.target.value as "published" | "draft" | "archived")
                       }
-                      className={`w-full text-xs font-semibold rounded-lg px-3 py-2 border-0 ${getStatusColor(notice.status)} focus:ring-2 focus:ring-blue-500`}
+                      className={`w-full text-xs font-semibold rounded-lg px-3 py-2 border-0 ${getStatusColor(notice.status)} focus:ring-2 focus:ring-green-500`}
                     >
                       <option value="draft">Draft</option>
                       <option value="published">Published</option>
@@ -659,7 +659,7 @@ const AdminNotices: React.FC = () => {
                       </button>
                       <button
                         onClick={() => handleEditNotice(notice)}
-                        className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                         title="Edit Notice"
                       >
                         <PencilIcon className="h-4 w-4" />
@@ -691,7 +691,7 @@ const AdminNotices: React.FC = () => {
             {!searchTerm && filterType === "all" && filterStatus === "all" && (
               <button
                 onClick={handleCreateNotice}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
                 Create Your First Notice
@@ -721,7 +721,7 @@ const AdminNotices: React.FC = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter notice title"
                 />
               </div>
@@ -732,7 +732,7 @@ const AdminNotices: React.FC = () => {
                   rows={6}
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter notice content"
                 />
               </div>
@@ -745,7 +745,7 @@ const AdminNotices: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, type: e.target.value as "announcement" | "news" | "circular" })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="announcement">Announcement</option>
                     <option value="news">News</option>
@@ -760,7 +760,7 @@ const AdminNotices: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value as "published" | "draft" | "archived" })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
@@ -775,7 +775,7 @@ const AdminNotices: React.FC = () => {
                   type="text"
                   value={formData.author}
                   onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter author name"
                 />
               </div>
@@ -789,7 +789,7 @@ const AdminNotices: React.FC = () => {
                         <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
                         <div className="mt-2">
                           <label htmlFor="file-upload" className="cursor-pointer">
-                            <span className="text-blue-600 hover:text-blue-500 font-medium">
+                            <span className="text-green-600 hover:text-green-500 font-medium">
                               Click to upload a document
                             </span>
                             <input
@@ -826,7 +826,7 @@ const AdminNotices: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => window.open(filePreview, "_blank")}
-                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                              className="text-green-600 hover:text-green-800 text-sm font-medium"
                             >
                               Preview
                             </button>
@@ -872,7 +872,7 @@ const AdminNotices: React.FC = () => {
                   id="important"
                   checked={formData.important}
                   onChange={(e) => setFormData({ ...formData, important: e.target.checked })}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                 />
                 <label htmlFor="important" className="ml-2 text-sm text-gray-700">
                   Mark as important notice
@@ -892,7 +892,7 @@ const AdminNotices: React.FC = () => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : editingNotice ? "Update Notice" : "Create Notice"}
                 </button>
@@ -942,15 +942,15 @@ const AdminNotices: React.FC = () => {
               </div>
 
               {viewingNotice.documentUrl && (
-                <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="bg-green-50 p-4 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {getDocumentIcon(viewingNotice.documentType)}
-                      <span className="text-sm font-medium text-blue-900">Document attached</span>
+                      <span className="text-sm font-medium text-green-900">Document attached</span>
                     </div>
                     <button
                       onClick={() => window.open(viewingNotice.documentUrl, "_blank")}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-green-600 hover:text-green-800 text-sm font-medium"
                     >
                       View Document
                     </button>

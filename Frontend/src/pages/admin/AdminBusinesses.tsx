@@ -505,14 +505,14 @@ const BusinessForm: React.FC<BusinessFormProps> = ({
               {Object.entries(formData.pricing).map(([tier, price]) => (
                 <span
                   key={tier}
-                  className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                  className="inline-flex items-center px-2 py-1 bg-green-100 text-green-700 text-sm rounded-full"
                 >
                   <CurrencyDollarIcon className="h-3 w-3 mr-1" />
                   {tier}: {price}
                   <button
                     type="button"
                     onClick={() => onRemovePricing(tier)}
-                    className="ml-1 text-blue-500 hover:text-blue-700"
+                    className="ml-1 text-green-500 hover:text-green-700"
                     disabled={isLoading}
                   >
                     <XMarkIcon className="h-3 w-3" />
@@ -1123,7 +1123,7 @@ const AdminBusinesses: React.FC = () => {
           <div className="flex space-x-2">
             <button
               onClick={() => handleViewClick(business)}
-              className="p-1 text-blue-600 hover:text-blue-800"
+              className="p-1 text-green-600 hover:text-green-800"
               title="View Details"
             >
               <EyeIcon className="h-5 w-5" />
@@ -1263,7 +1263,7 @@ const AdminBusinesses: React.FC = () => {
                       href={selectedBusiness.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
+                      className="text-green-600 hover:underline"
                     >
                       {selectedBusiness.website}
                     </a>
@@ -1293,9 +1293,9 @@ const AdminBusinesses: React.FC = () => {
                     <h4 className="font-medium text-gray-700 mb-1">Pricing</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {Object.entries(selectedBusiness.pricing).map(([tier, price]) => (
-                        <div key={tier} className="bg-blue-50 p-3 rounded-lg">
-                          <div className="font-medium text-blue-800 capitalize">{tier}</div>
-                          <div className="text-blue-600">{price}</div>
+                        <div key={tier} className="bg-green-50 p-3 rounded-lg">
+                          <div className="font-medium text-green-800 capitalize">{tier}</div>
+                          <div className="text-green-600">{price}</div>
                         </div>
                       ))}
                     </div>

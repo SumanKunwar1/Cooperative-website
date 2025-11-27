@@ -414,12 +414,12 @@ const AdminProducts: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Value</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-2xl font-bold text-green-600">
                   NPR {products.reduce((sum, p) => sum + (p.price * p.stock), 0).toLocaleString()}
                 </p>
               </div>
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 font-bold">₹</span>
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <span className="text-green-600 font-bold">₹</span>
               </div>
             </div>
           </div>
@@ -523,7 +523,7 @@ const AdminProducts: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                         {product.category}
                       </span>
                       {product.subcategory && (
@@ -562,7 +562,7 @@ const AdminProducts: React.FC = () => {
                       <div className="flex items-center justify-end space-x-2">
                         <button 
                           onClick={() => handleViewProduct(product)}
-                          className="text-blue-600 hover:text-blue-900 p-1 rounded-md hover:bg-blue-50"
+                          className="text-green-600 hover:text-green-900 p-1 rounded-md hover:bg-green-50"
                           title="View Product"
                         >
                           <EyeIcon className="h-4 w-4" />

@@ -57,7 +57,7 @@ const AdminLoanApplications: React.FC = () => {
       case "under-review":
         return "text-yellow-600 bg-yellow-100"
       default:
-        return "text-blue-600 bg-blue-100"
+        return "text-green-600 bg-green-100"
     }
   }
 
@@ -294,7 +294,7 @@ Generated on: ${new Date().toLocaleString()}
                         </button>
                         <button
                           onClick={() => exportApplicationAsZip(application)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-green-600 hover:text-green-900"
                           title="Download as ZIP"
                         >
                           <DocumentArrowDownIcon className="h-5 w-5" />
@@ -336,7 +336,7 @@ Generated on: ${new Date().toLocaleString()}
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={() => setShowTextView(!showTextView)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                     >
                       {showTextView ? "Card View" : "Text View"}
                     </button>

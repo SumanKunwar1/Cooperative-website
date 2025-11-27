@@ -186,7 +186,7 @@ const AdminTeams: React.FC = () => {
         <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => handleEdit(member)}
-            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors"
           >
             <Edit className="w-4 h-4" />
           </button>
@@ -201,7 +201,7 @@ const AdminTeams: React.FC = () => {
 
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
-        <p className="text-blue-600 font-semibold mb-2 text-sm uppercase tracking-wide">{member.position}</p>
+        <p className="text-green-600 font-semibold mb-2 text-sm uppercase tracking-wide">{member.position}</p>
         {member.committeeRole && (
           <p className="text-green-600 font-medium mb-2 text-xs">{member.committeeRole}</p>
         )}
@@ -251,7 +251,7 @@ const AdminTeams: React.FC = () => {
             setFormData(prev => ({ ...prev, committeeType }))
             setShowModal(true)
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Add Member
@@ -267,7 +267,7 @@ const AdminTeams: React.FC = () => {
               setFormData(prev => ({ ...prev, committeeType }))
               setShowModal(true)
             }}
-            className="text-blue-600 hover:underline mt-2"
+            className="text-green-600 hover:underline mt-2"
           >
             Add the first member
           </button>
@@ -287,7 +287,7 @@ const AdminTeams: React.FC = () => {
       <div className="min-h-screen bg-gray-50 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading team members...</p>
           </div>
         </div>
@@ -369,7 +369,7 @@ const AdminTeams: React.FC = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Enter full name"
                         disabled={saving}
                       />
@@ -385,7 +385,7 @@ const AdminTeams: React.FC = () => {
                         value={formData.position}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="e.g., Chairman, General Manager"
                         disabled={saving}
                       />
@@ -402,7 +402,7 @@ const AdminTeams: React.FC = () => {
                         value={formData.committeeType}
                         onChange={handleInputChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         disabled={saving}
                       >
                         <option value="working">Working Committee</option>
@@ -422,7 +422,7 @@ const AdminTeams: React.FC = () => {
                         name="committeeRole"
                         value={formData.committeeRole}
                         onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="e.g., Convener, Member"
                         disabled={saving}
                       />
@@ -439,7 +439,7 @@ const AdminTeams: React.FC = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="email@example.com"
                         disabled={saving}
                       />
@@ -454,7 +454,7 @@ const AdminTeams: React.FC = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="+1 (555) 123-4567"
                         disabled={saving}
                       />
@@ -470,7 +470,7 @@ const AdminTeams: React.FC = () => {
                       name="joinDate"
                       value={formData.joinDate}
                       onChange={handleInputChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="e.g., 2081 Bhadra 30"
                       disabled={saving}
                     />
@@ -486,7 +486,7 @@ const AdminTeams: React.FC = () => {
                       onChange={handleInputChange}
                       required
                       rows={4}
-                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="Enter member's bio and responsibilities..."
                       disabled={saving}
                     />
@@ -535,7 +535,7 @@ const AdminTeams: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={saving}
                     >
                       {saving && <Loader2 className="w-4 h-4 animate-spin" />}

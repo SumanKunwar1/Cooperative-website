@@ -432,7 +432,7 @@ const AdminAbout: React.FC = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-              <BookOpenIcon className="h-6 w-6 mr-2 text-blue-600" />
+              <BookOpenIcon className="h-6 w-6 mr-2 text-green-600" />
               Our Story Since 2010
             </h2>
             <Button
@@ -452,7 +452,7 @@ const AdminAbout: React.FC = () => {
                   type="text"
                   value={storySection.title}
                   onChange={(e) => setStorySection((prev) => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               ) : (
                 <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{storySection.title}</p>
@@ -466,7 +466,7 @@ const AdminAbout: React.FC = () => {
                   value={storySection.content}
                   onChange={(e) => setStorySection((prev) => ({ ...prev, content: e.target.value }))}
                   rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               ) : (
                 <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{storySection.content}</p>
@@ -503,7 +503,7 @@ const AdminAbout: React.FC = () => {
                     const file = e.target.files?.[0]
                     if (file) addImageToSection("story", storySection.id, file)
                   }}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                 />
               )}
             </div>
@@ -705,7 +705,7 @@ const AdminAbout: React.FC = () => {
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${
                           principle.type === "mission"
-                            ? "bg-blue-100 text-blue-800"
+                            ? "bg-green-100 text-green-800"
                             : principle.type === "vision"
                               ? "bg-purple-100 text-purple-800"
                               : "bg-green-100 text-green-800"

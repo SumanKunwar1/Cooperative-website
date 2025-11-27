@@ -54,7 +54,7 @@ const AdminAccountApplications: React.FC = () => {
       case "under-review":
         return "text-yellow-600 bg-yellow-100"
       default:
-        return "text-blue-600 bg-blue-100"
+        return "text-green-600 bg-green-100"
     }
   }
 
@@ -348,7 +348,7 @@ Nominee Photo: ${application.nomineePhoto ? "Available" : "Not Uploaded"}
                         <button
                           onClick={() => exportApplicationAsZip(application)}
                           disabled={exportLoading}
-                          className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                          className="text-green-600 hover:text-green-900 disabled:opacity-50"
                           title="Export as ZIP"
                         >
                           <DocumentArrowDownIcon className="h-5 w-5" />
@@ -398,7 +398,7 @@ Nominee Photo: ${application.nomineePhoto ? "Available" : "Not Uploaded"}
                     <button
                       onClick={() => exportApplicationAsZip(selectedApplication)}
                       disabled={exportLoading}
-                      className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+                      className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 text-sm font-medium"
                     >
                       <DocumentArrowDownIcon className="h-4 w-4 inline mr-1" />
                       {exportLoading ? "Exporting..." : "Export ZIP"}

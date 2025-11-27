@@ -41,7 +41,7 @@ interface Order {
 
 const statusTabs = [
   { key: "pending", label: "Pending", icon: Package, color: "yellow" },
-  { key: "processing", label: "Processing", icon: Edit, color: "blue" },
+  { key: "processing", label: "Processing", icon: Edit, color: "green" },
   { key: "shipped", label: "Shipped", icon: Truck, color: "purple" },
   { key: "delivered", label: "Delivered", icon: CheckCircle, color: "green" },
   { key: "cancelled", label: "Cancelled", icon: XCircle, color: "red" },
@@ -101,7 +101,7 @@ const AdminOrders = () => {
       case "pending":
         return "bg-yellow-100 text-yellow-800 border-yellow-200"
       case "processing":
-        return "bg-blue-100 text-blue-800 border-blue-200"
+        return "bg-green-100 text-green-800 border-green-200"
       case "shipped":
         return "bg-purple-100 text-purple-800 border-purple-200"
       case "delivered":
@@ -137,7 +137,7 @@ const AdminOrders = () => {
       case "pending":
         return "border-yellow-500 text-yellow-600"
       case "processing":
-        return "border-blue-500 text-blue-600"
+        return "border-green-500 text-green-600"
       case "shipped":
         return "border-purple-500 text-purple-600"
       case "delivered":
@@ -221,7 +221,7 @@ const AdminOrders = () => {
     return (
       <AdminDashboard currentSection="orders">
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
         </div>
       </AdminDashboard>
     )
@@ -416,7 +416,7 @@ const AdminOrders = () => {
                               value={pendingStatusChange || selectedOrder.status}
                               onChange={(e) => setPendingStatusChange(e.target.value)}
                               disabled={isUpdating || getAllowedStatuses(selectedOrder.status).length === 0}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                             >
                               <option value={selectedOrder.status}>
                                 {selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)} (Current)
@@ -431,13 +431,13 @@ const AdminOrders = () => {
 
                           {/* Show confirmation buttons when a new status is selected */}
                           {pendingStatusChange && pendingStatusChange !== selectedOrder.status && (
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                               <div className="flex items-center justify-between">
                                 <div>
-                                  <p className="text-sm font-medium text-blue-800">
+                                  <p className="text-sm font-medium text-green-800">
                                     Change status from "{selectedOrder.status}" to "{pendingStatusChange}"?
                                   </p>
-                                  <p className="text-xs text-blue-600 mt-1">
+                                  <p className="text-xs text-green-600 mt-1">
                                     This action cannot be undone and will notify the customer.
                                   </p>
                                 </div>
@@ -445,7 +445,7 @@ const AdminOrders = () => {
                                   <button
                                     onClick={() => confirmStatusUpdate(selectedOrder.id, pendingStatusChange)}
                                     disabled={isUpdating}
-                                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                                    className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                                   >
                                     {isUpdating ? (
                                       <>

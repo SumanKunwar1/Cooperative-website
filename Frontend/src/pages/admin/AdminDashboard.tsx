@@ -209,10 +209,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ children, currentSectio
                   <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={() => navigate("/admin/users")}
-                      className="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+                      className="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors duration-200"
                     >
-                      <UsersIcon className="h-8 w-8 text-blue-600 mb-2" />
-                      <span className="text-sm font-medium text-blue-900">Manage Users</span>
+                      <UsersIcon className="h-8 w-8 text-green-600 mb-2" />
+                      <span className="text-sm font-medium text-green-900">Manage Users</span>
                     </button>
                     <button
                       onClick={() => navigate("/admin/businesses")}
