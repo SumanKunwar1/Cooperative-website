@@ -119,28 +119,27 @@ const Header = () => {
 
             {/* Auth Buttons - Visible on md and up */}
             <div className="hidden md:flex gap-1 lg:gap-2 flex-shrink-0">
-  <a
-    href="/login"
-    className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1"
-  >
-    <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-      <path
-        fillRule="evenodd"
-        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-        clipRule="evenodd"
-      />
-    </svg>
-    {t("login")}
-  </a>
+              <a
+                href="/login"
+                className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1"
+              >
+                <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {t("login")}
+              </a>
 
-  <a
-    href="/register"
-    className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap"
-  >
-    {t("register")}
-  </a>
-</div>
-
+              <a
+                href="/register"
+                className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap"
+              >
+                {t("register")}
+              </a>
+            </div>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -156,44 +155,43 @@ const Header = () => {
       {/* Navigation Menu - Professional Green Strip (STICKY) */}
       <nav className="sticky top-0 z-50 bg-[#07730E] shadow-md">
         <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8">
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center justify-center gap-0.5 lg:gap-1 py-2 md:py-2.5 lg:py-3 flex-wrap">
+          {/* Desktop Navigation - Equally Distributed */}
+          <ul className="hidden md:flex items-center justify-between gap-0 py-2 md:py-2.5 lg:py-3">
             {navItems.map((item) => (
-              <li key={item.key}>
+              <li key={item.key} className="flex-1 text-center">
                 <a
                   href={item.href}
-                  className="text-white hover:bg-[#07730E] transition-colors duration-200 font-medium text-xs lg:text-sm px-1 md:px-2 lg:px-3 py-1 lg:py-1.5 rounded whitespace-nowrap"
+                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs lg:text-sm px-0.5 md:px-1 lg:px-2 py-1 lg:py-1.5 rounded block whitespace-nowrap overflow-hidden text-ellipsis"
                 >
                   {item.label}
                 </a>
               </li>
             ))}
           </ul>
-          
+
           {/* Mobile Auth Buttons - Only visible on mobile */}
           <div className="md:hidden flex gap-1 flex-shrink-0 ml-auto py-2">
-  <a
-    href="/login"
-    className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5"
-  >
-    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-      <path
-        fillRule="evenodd"
-        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-        clipRule="evenodd"
-      />
-    </svg>
-    {t("login")}
-  </a>
+            <a
+              href="/login"
+              className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5"
+            >
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {t("login")}
+            </a>
 
-  <a
-    href="/register"
-    className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap"
-  >
-    {t("register")}
-  </a>
-</div>
-
+            <a
+              href="/register"
+              className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap"
+            >
+              {t("register")}
+            </a>
+          </div>
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
@@ -202,7 +200,7 @@ const Header = () => {
                 <a
                   key={item.key}
                   href={item.href}
-                  className="text-white hover:bg-[#07730E] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
+                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
