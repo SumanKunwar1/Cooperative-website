@@ -110,11 +110,13 @@ function PlaceholderPage({ titleKey }: { titleKey: string }) {
 
 function AppContent() {
   const [showNoticeModal, setShowNoticeModal] = useState(false)
-  const [modalChecked, setModalChecked] = useState(false)
+  const [hasCheckedModal, setHasCheckedModal] = useState(false)
 
   useEffect(() => {
-    // Only check modal on initial app load (mount)
-    const checkModal = () => {
+    // Only check modal ONCE when component first mounts (app starts)
+    // This effect runs only once on initial app load
+    const checkAndShowModal = () => {
+      console.log('Initial modal check on app load')
       const shouldShow = noticeModalService.shouldShowModal()
       console.log('Should show modal:', shouldShow)
       console.log('Modal settings:', noticeModalService.getSettings())
@@ -123,18 +125,22 @@ function AppContent() {
         setShowNoticeModal(true)
         noticeModalService.markAsShownInSession()
       }
-      setModalChecked(true)
+      setHasCheckedModal(true)
     }
 
-    // Only run this once when component first mounts
-    if (!modalChecked) {
-      checkModal()
+    // Only run once on initial app mount
+    if (!hasCheckedModal) {
+      checkAndShowModal()
     }
+  }, [hasCheckedModal])
 
-    // Listen for manual trigger from header/admin
+  useEffect(() => {
+    // Listen for manual trigger from header/admin (clicking a button to show modal)
     const handleShowNoticeModal = () => {
-      // Reset session flag when manually triggered
-      setShowNoticeModal(true)
+      console.log('Manual notice modal trigger')
+      if (noticeModalService.forceShowModal()) {
+        setShowNoticeModal(true)
+      }
     }
 
     window.addEventListener('showNoticeModal', handleShowNoticeModal)
@@ -142,9 +148,10 @@ function AppContent() {
     return () => {
       window.removeEventListener('showNoticeModal', handleShowNoticeModal)
     }
-  }, [modalChecked])
+  }, [])
 
   const handleCloseNoticeModal = () => {
+    console.log('Closing notice modal')
     setShowNoticeModal(false)
     noticeModalService.markAsClosed()
   }

@@ -10,6 +10,7 @@ export interface NoticeModalSettings {
 class NoticeModalService {
   private readonly STORAGE_KEY = 'noticeModalSettings';
   private readonly SESSION_KEY = 'noticeModalShownInSession';
+  private shownInCurrentSession = false;
 
   getSettings(): NoticeModalSettings {
     if (typeof window === 'undefined') {
@@ -66,12 +67,12 @@ class NoticeModalService {
     if (typeof window === 'undefined') return;
 
     try {
-      const settings = this.getSettings();
       const lastClosed = new Date().toISOString();
       this.saveSettings({ lastClosed });
       
-      // Also clear session flag so it can be shown again if needed
-      sessionStorage.removeItem(this.SESSION_KEY);
+      // Mark as shown in current session
+      this.shownInCurrentSession = true;
+      sessionStorage.setItem(this.SESSION_KEY, 'true');
     } catch (error) {
       console.error('Error marking modal as closed:', error);
     }
@@ -81,6 +82,7 @@ class NoticeModalService {
     if (typeof window === 'undefined') return;
 
     try {
+      this.shownInCurrentSession = true;
       sessionStorage.setItem(this.SESSION_KEY, 'true');
     } catch (error) {
       console.error('Error marking modal as shown in session:', error);
@@ -99,14 +101,21 @@ class NoticeModalService {
         return false;
       }
 
-      // Check if already shown in current session
-      const shownInSession = sessionStorage.getItem(this.SESSION_KEY);
-      if (shownInSession === 'true') {
+      // Check if already shown in current session (MOST IMPORTANT - prevents re-showing on navigation)
+      if (this.shownInCurrentSession === true) {
         console.log('Modal not shown: already shown in this session');
         return false;
       }
 
-      // Check show interval
+      // Also check sessionStorage in case of page reload
+      const shownInSession = sessionStorage.getItem(this.SESSION_KEY);
+      if (shownInSession === 'true') {
+        console.log('Modal not shown: already shown in this session (from storage)');
+        this.shownInCurrentSession = true;
+        return false;
+      }
+
+      // Check show interval (for showing again after X days)
       if (settings.lastClosed && settings.showInterval > 0) {
         const lastClosed = new Date(settings.lastClosed);
         const now = new Date();
@@ -136,7 +145,8 @@ class NoticeModalService {
         return false;
       }
 
-      // Clear session flag to force show
+      // Clear session flags to force show
+      this.shownInCurrentSession = false;
       sessionStorage.removeItem(this.SESSION_KEY);
       this.resetLastClosed();
       return true;
@@ -144,6 +154,12 @@ class NoticeModalService {
       console.error('Error forcing modal show:', error);
       return false;
     }
+  }
+
+  // Reset for testing (remove in production)
+  resetSessionFlag() {
+    this.shownInCurrentSession = false;
+    sessionStorage.removeItem(this.SESSION_KEY);
   }
 }
 
