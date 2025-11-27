@@ -41,36 +41,77 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
   const [error, setError] = useState<string | null>(null)
   const businessesPerPage = 15
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
+
+  // Validate environment variable
+  useEffect(() => {
+    if (!import.meta.env.VITE_API_URL) {
+      console.warn("VITE_API_URL environment variable is not set. Using default: http://localhost:5000")
+    }
+  }, [])
+
   // Fetch businesses from API
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/business-details/directory`)
+        setError(null)
+        
+        const apiUrl = `${API_BASE_URL}/api/business-details/directory`
+        console.log("Fetching businesses from:", apiUrl)
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
+        // First check if response is ok
         if (!response.ok) {
-          throw new Error("Failed to fetch businesses")
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        // Check content type
+        const contentType = response.headers.get('content-type')
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text()
+          console.error("Received non-JSON response. First 200 chars:", text.substring(0, 200))
+          throw new Error("Server returned non-JSON response. Please check if the backend server is running correctly.")
         }
 
         const data = await response.json()
+        
         if (data.success) {
-          console.log("[v0] Businesses data received:", data.data)
+          console.log("Businesses data received:", data.data)
           const activeBusinesses = data.data.filter((business: Business) => business.status === "active")
-          console.log("[v0] Active businesses filtered:", activeBusinesses)
+          console.log("Active businesses filtered:", activeBusinesses)
           setBusinesses(activeBusinesses)
         } else {
           throw new Error(data.message || "Failed to fetch businesses")
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred")
         console.error("Error fetching businesses:", err)
+        const errorMessage = err instanceof Error ? err.message : "An error occurred while fetching businesses"
+        setError(errorMessage)
+        
+        // Fallback to initial businesses if available
+        if (initialBusinesses && initialBusinesses.length > 0) {
+          console.log("Using initial businesses as fallback")
+          setBusinesses(initialBusinesses)
+          setError(null)
+        }
       } finally {
         setLoading(false)
       }
     }
 
-    if (!initialBusinesses) {
+    if (!initialBusinesses || initialBusinesses.length === 0) {
       fetchBusinesses()
+    } else {
+      console.log("Using provided initial businesses")
+      setBusinesses(initialBusinesses)
+      setLoading(false)
     }
   }, [initialBusinesses])
 
@@ -122,18 +163,23 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
     )
   }
 
-  if (error) {
+  if (error && businesses.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">Error</div>
-          <p className="text-gray-600">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            Try Again
-          </button>
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="text-red-500 text-xl mb-4">Error Loading Businesses</div>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <div className="space-y-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              Try Again
+            </button>
+            <p className="text-sm text-gray-500">
+              Make sure your backend server is running on http://localhost:5000
+            </p>
+          </div>
         </div>
       </div>
     )
@@ -182,6 +228,26 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
             </div>
           </div>
         </div>
+
+        {/* Error Banner - Only show if there's an error but we have businesses to display */}
+        {error && businesses.length > 0 && (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-yellow-700">
+                    {error} Showing cached businesses.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Register Your Business Section */}
         <div className="bg-white border-b-2 border-green-100">
@@ -271,6 +337,9 @@ const BusinessDirectory: React.FC<BusinessDirectoryProps> = ({ businesses: initi
                         src={business.image || "/placeholder.svg"}
                         alt={business.name}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.currentTarget.src = "/placeholder.svg"
+                        }}
                       />
                       {business.isVerified && (
                         <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
