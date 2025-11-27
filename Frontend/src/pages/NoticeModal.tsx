@@ -16,12 +16,15 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const [notice, setNotice] = useState<Notice | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     console.log('NoticeModal useEffect - isEnabled:', isEnabled)
     if (isEnabled) {
+      setIsVisible(true)
       fetchSelectedNotice()
     } else {
+      setIsVisible(false)
       setNotice(null)
       setLoading(false)
     }
@@ -38,6 +41,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
       if (!selectedNoticeId) {
         console.log("No notice selected for modal")
         setNotice(null)
+        setLoading(false)
         return
       }
 
@@ -61,6 +65,14 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
     }
   }
 
+  const handleClose = () => {
+    setIsVisible(false)
+    // Small delay to allow animation to complete
+    setTimeout(() => {
+      onClose()
+    }, 300)
+  }
+
   const getTypeColor = (type: string) => {
     switch (type) {
       case "announcement":
@@ -75,17 +87,21 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    } catch {
+      return dateString
+    }
   }
 
-  // Don't render anything if not enabled or no notice
-  if (!isEnabled) {
-    console.log('NoticeModal not enabled, returning null')
+  // Don't render anything if not enabled or not visible
+  if (!isEnabled || !isVisible) {
+    console.log('NoticeModal not enabled or not visible, returning null')
     return null
   }
 
@@ -114,6 +130,12 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
             >
               Try Again
             </button>
+            <button
+              onClick={handleClose}
+              className="ml-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -128,8 +150,8 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   console.log('Rendering notice modal with notice:', notice.title)
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-scaleIn">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-green-600 to-green-800 text-white">
           <div className="flex items-center space-x-3">
@@ -142,8 +164,8 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="text-white hover:text-green-200 p-2 transition-colors"
+            onClick={handleClose}
+            className="text-white hover:text-green-200 p-2 transition-colors rounded-full hover:bg-green-700"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -219,7 +241,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
             By {notice.author} • {formatDate(notice.createdAt)}
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
             Close
