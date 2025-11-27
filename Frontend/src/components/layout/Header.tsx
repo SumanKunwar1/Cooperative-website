@@ -12,7 +12,7 @@ const Header = () => {
   const socialMedia = [
     {
       name: "Facebook",
-      url: "https://facebook.com",
+      url: "https://www.facebook.com/constellationcooperative1",
       icon: "https://img.freepik.com/premium-vector/round-facebook-logo-isolated-white-background_469489-897.jpg?semt=ais_hybrid&w=740&q=80",
     },
     {
