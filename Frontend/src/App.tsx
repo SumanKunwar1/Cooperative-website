@@ -23,6 +23,7 @@ import Notice from "./pages/Notice"
 import ReportsBulletin from "./pages/ReportsBulletin"
 import Downloads from "./pages/Downloads"
 import Projects from "./pages/Projects"
+import Contact from "./pages/Contact"
 
 //footer
 import Team from "./pages/footer/Team"
@@ -324,7 +325,7 @@ function AppContent() {
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/shareholders" element={<Shareholders />} />
                   <Route path="/notice" element={<Notice />} />
-
+                  <Route path="/contact" element={<Contact />} />
                   <Route path="/dashboard/:name" element={<CustomerDashboard />} />
                   <Route path="/business-dashboard/:name" element={<BusinessDashboard />} />
                   <Route path="/teams" element={<Team />} />
