@@ -21,11 +21,12 @@ import {
   Award,
   Target,
   Clock,
-  Heart,
   Briefcase,
   GraduationCap,
   Home,
   Zap,
+  Download,
+  SmartphoneNfc,
 } from "lucide-react"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
@@ -208,6 +209,13 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       features: [t("account-management"), t("fund-transfers"), t("bill-payments"), t("transaction-history")],
     },
     {
+      title: t("Mobile App"),
+      description: t("mobile-app-desc"),
+      icon: SmartphoneNfc,
+      features: [t("Mobile Banking"), t("Easy Transactions"), t("Secure Login"), t("Real Time Updates")],
+      playStoreLink: "https://play.google.com/store/apps/details?id=com.mbnepal.smartbanking_constellation",
+    },
+    {
       title: t("insurance-services"),
       description: t("insurance-services-desc"),
       icon: Shield,
@@ -219,12 +227,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
       icon: Calculator,
       features: [t("financial-workshops"), t("investment-guidance"), t("savings-planning"), t("business-training")],
     },
-    {
-      title: t("community-programs"),
-      description: t("community-programs-desc"),
-      icon: Heart,
-      features: [t("festival-celebrations"), t("sports-events"), t("group-tours"), t("cultural-programs")],
-    },
+  
     {
       title: t("business-directory"),
       description: t("business-directory-desc"),
@@ -260,6 +263,10 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
     }
   }
 
+  const handlePlayStoreRedirect = () => {
+    window.open("https://play.google.com/store/apps/details?id=com.mbnepal.smartbanking_constellation", "_blank")
+  }
+
   return (
     <div className="min-h-screen">
       <SEO
@@ -284,6 +291,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
               <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-loans")}</div>
               <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-atm")}</div>
               <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-insurance")}</div>
+              <div className="bg-white/20 rounded-full px-4 py-2">{t("services-hero-mobile-app")}</div>
             </div>
           </motion.div>
         </div>
@@ -634,10 +642,78 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
                             </li>
                           ))}
                         </ul>
+                        
+                        {/* Special button for Mobile App */}
+                        {facility.playStoreLink && (
+                          <div className="mt-6">
+                            <Button
+                              fullWidth
+                              icon={Download}
+                              iconPosition="left"
+                              onClick={handlePlayStoreRedirect}
+                              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg"
+                            >
+                              Download App
+                            </Button>
+                            <p className="text-xs text-gray-500 mt-2">Available on Google Play Store</p>
+                          </div>
+                        )}
                       </Card>
                     </motion.div>
                   ))}
                 </div>
+
+                {/* Mobile App Highlight Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-16"
+                >
+                  <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                    <div className="flex flex-col md:flex-row items-center">
+                      <div className="md:w-2/3 p-6">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-4">Constellation Mobile Banking App</h3>
+                        <p className="text-gray-700 mb-4">
+                          Manage your finances on the go with our feature-rich mobile banking application. 
+                          Access your accounts, transfer funds, pay bills, and much more from the convenience of your smartphone.
+                        </p>
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="flex items-center">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                            <span className="text-sm">Secure Login</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                            <span className="text-sm">Real-time Updates</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                            <span className="text-sm">Easy Transactions</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                            <span className="text-sm">24/7 Access</span>
+                          </div>
+                        </div>
+                        <Button
+                          size="lg"
+                          icon={Download}
+                          iconPosition="left"
+                          onClick={handlePlayStoreRedirect}
+                          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg"
+                        >
+                          Get App on Play Store
+                        </Button>
+                      </div>
+                      <div className="md:w-1/3 p-6 flex justify-center">
+                        <div className="bg-white rounded-2xl p-4 shadow-lg border border-blue-200">
+                          <SmartphoneNfc className="w-32 h-32 text-blue-500" />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -709,7 +785,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
               <Link to="/register">
                 <Button
                   size="lg"
-                  className="bg-white text-green-700 hover:bg-green-600 hover:text-white font-semibold shadow-lg transition-all duration-300"
+                  className="bg-gold-600 text-green-700 hover:bg-green-600 hover:text-white font-semibold shadow-lg transition-all duration-300"
                 >
                   {t("become-member")}
                 </Button>
@@ -717,7 +793,7 @@ const Services: React.FC<ServicesProps> = ({ onOpenAccount, onApplyLoan }) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-green-700 bg-transparent font-semibold transition-all duration-300"
+                className="border-2 border-white text-white hover:bg-gold-600 hover:text-green-700 bg-transparent font-semibold transition-all duration-300"
               >
                 {t("contact-us")}
               </Button>
