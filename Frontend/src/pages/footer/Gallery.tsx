@@ -183,7 +183,7 @@ const Gallery: React.FC = () => {
         )}
 
         {/* Media Detail Modal */}
-        {selectedMedia && (
+        {selectedMedia && selectedEvent && (
           <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
             <div className="relative max-w-5xl max-h-full">
               <button
@@ -192,6 +192,37 @@ const Gallery: React.FC = () => {
               >
                 <XMarkIcon className="h-8 w-8" />
               </button>
+              
+              {/* Previous Button */}
+              {selectedEvent.media.findIndex(m => m._id === selectedMedia._id) > 0 && (
+                <button
+                  onClick={() => {
+                    const currentIndex = selectedEvent.media.findIndex(m => m._id === selectedMedia._id)
+                    setSelectedMedia(selectedEvent.media[currentIndex - 1])
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full transition-all z-10"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+              
+              {/* Next Button */}
+              {selectedEvent.media.findIndex(m => m._id === selectedMedia._id) < selectedEvent.media.length - 1 && (
+                <button
+                  onClick={() => {
+                    const currentIndex = selectedEvent.media.findIndex(m => m._id === selectedMedia._id)
+                    setSelectedMedia(selectedEvent.media[currentIndex + 1])
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full transition-all z-10"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
+              
               <div className="bg-black rounded-lg overflow-hidden">
                 {selectedMedia.type === "image" ? (
                   <img
@@ -212,6 +243,9 @@ const Gallery: React.FC = () => {
               <div className="mt-2 text-white text-center">
                 <p className="font-medium">{selectedMedia.name}</p>
                 <p className="text-sm text-gray-300">{selectedMedia.size}</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  {selectedEvent.media.findIndex(m => m._id === selectedMedia._id) + 1} / {selectedEvent.media.length}
+                </p>
               </div>
             </div>
           </div>
