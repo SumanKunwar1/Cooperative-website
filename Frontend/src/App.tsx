@@ -115,8 +115,12 @@ function AppContent() {
   useEffect(() => {
     // Only check modal ONCE when component first mounts (app starts)
     // This effect runs only once on initial app load
-    const checkAndShowModal = () => {
+    const checkAndShowModal = async () => {
       console.log('Initial modal check on app load')
+      
+      // Add small delay to ensure DOM is ready
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
       const shouldShow = noticeModalService.shouldShowModal()
       console.log('Should show modal:', shouldShow)
       console.log('Modal settings:', noticeModalService.getSettings())
