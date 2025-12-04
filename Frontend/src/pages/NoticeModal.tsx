@@ -17,7 +17,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [, setIsMobile] = useState(false)
 
   useEffect(() => {
     // Check if device is mobile
