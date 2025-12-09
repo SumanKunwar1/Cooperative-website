@@ -57,121 +57,60 @@ const Header = () => {
 
   return (
     <>
-      {/* Top Section - Logo, Social Icons, Language Selector, Auth (NOT STICKY) */}
+      {/* Top Section - Optimized for Mobile */}
       <div className="bg-white border-b-2 border-[#07730E]">
-        <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4">
-          <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 lg:gap-6">
-            {/* Logo - Far Left */}
+        {/* Mobile/Tablet View - Stacked Layout */}
+        <div className="md:hidden w-full px-2 py-2">
+          {/* First Row: Logo + Menu Button */}
+          <div className="flex items-center justify-between gap-2 mb-2">
             <div className="flex-shrink-0">
               <img
                 src="https://res.cloudinary.com/dihev9qxc/image/upload/v1763985739/WhatsApp_Image_2025-11-24_at_10.47.58_37464530_pqsbzb.jpg"
                 alt="Constellation Logo"
-                className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto object-contain"
+                className="h-12 w-auto object-contain"
               />
             </div>
 
-            {/* Social Media Icons - 2x3 Grid - Hidden on mobile and tablet */}
-            <div className="hidden lg:flex flex-col gap-0.5 md:gap-1 flex-shrink-0">
-              <div className="flex gap-1 md:gap-2">
-                {socialMedia.slice(0, 3).map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
-                    title={social.name}
-                  >
-                    <img
-                      src={social.icon || "/placeholder.svg"}
-                      alt={social.name}
-                      className="h-5 md:h-7 lg:h-8 w-auto object-contain"
-                    />
-                  </a>
-                ))}
-              </div>
-              <div className="flex gap-1 md:gap-2">
-                {socialMedia.slice(3, 6).map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
-                    title={social.name}
-                  >
-                    <img
-                      src={social.icon || "/placeholder.svg"}
-                      alt={social.name}
-                      className="h-5 md:h-7 lg:h-8 w-auto object-contain"
-                    />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Language Selector - Now visible on all screens */}
-            <div className="flex flex-shrink-0">
-              <LanguageSelector />
-            </div>
-
-            {/* Auth Buttons - Visible on md and up */}
-            <div className="hidden md:flex gap-1 lg:gap-2 flex-shrink-0">
-              <a
-                href="/login"
-                className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap flex items-center gap-1"
-              >
-                <svg className="w-3 h-3 lg:w-3.5 lg:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Login
-              </a>
-
-              <a
-                href="/register"
-                className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap"
-              >
-                Register
-              </a>
-            </div>
-
-            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-1.5 text-gray-700 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+              className="p-1.5 text-gray-700 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
-        </div>
-      </div>
 
-      {/* Navigation Menu - Professional Green Strip (STICKY) */}
-      <nav className="sticky top-0 z-50 bg-[#07730E] shadow-md">
-        <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8">
-          {/* Desktop Navigation - Equally Distributed */}
-          <ul className="hidden md:flex items-center justify-between gap-0 py-2 md:py-2.5 lg:py-3">
-            {navItems.map((item) => (
-              <li key={item.key} className="flex-1 text-center">
+          {/* Second Row: Social Media Icons + Language Selector - Horizontal Scroll */}
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-1 pb-1 min-w-max items-center">
+              {socialMedia.map((social) => (
                 <a
-                  href={item.href}
-                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs lg:text-sm px-0.5 md:px-1 lg:px-2 py-1 lg:py-1.5 rounded block whitespace-nowrap overflow-hidden text-ellipsis"
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200 flex-shrink-0"
+                  title={social.name}
                 >
-                  {item.label}
+                  <img
+                    src={social.icon || "/placeholder.svg"}
+                    alt={social.name}
+                    className="h-6 w-6 object-contain"
+                  />
                 </a>
-              </li>
-            ))}
-          </ul>
+              ))}
+              
+              {/* Language Selector in same row */}
+              <div className="flex-shrink-0 ml-1 pl-1 border-l border-gray-300">
+                <LanguageSelector className="gap-1" />
+              </div>
+            </div>
+          </div>
 
-          {/* Mobile Auth Buttons - Only visible on mobile */}
-          <div className="md:hidden flex gap-1 flex-shrink-0 ml-auto py-2">
+          {/* Third Row: Mobile Auth Buttons */}
+          <div className="flex gap-1 mt-2">
             <a
               href="/login"
-              className="px-2 py-0.5 text-white hover:opacity-80 font-medium transition-opacity text-xs whitespace-nowrap flex items-center gap-0.5"
+              className="flex-1 px-2 py-1.5 text-gray-700 hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap flex items-center justify-center gap-1 border border-gray-300 rounded"
             >
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -185,20 +124,122 @@ const Header = () => {
 
             <a
               href="/register"
-              className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap"
+              className="flex-1 px-2 py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs whitespace-nowrap"
             >
               Register
             </a>
           </div>
+        </div>
 
-          {/* Mobile Navigation */}
+        {/* Desktop View - Original Layout */}
+        <div className="hidden md:block w-full px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between gap-4 lg:gap-6">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <img
+                src="https://res.cloudinary.com/dihev9qxc/image/upload/v1763985739/WhatsApp_Image_2025-11-24_at_10.47.58_37464530_pqsbzb.jpg"
+                alt="Constellation Logo"
+                className="h-20 lg:h-24 w-auto object-contain"
+              />
+            </div>
+
+            {/* Social Media Icons - Grid (Desktop) */}
+            <div className="flex flex-col gap-1 flex-shrink-0">
+              <div className="flex gap-2">
+                {socialMedia.slice(0, 3).map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                    title={social.name}
+                  >
+                    <img
+                      src={social.icon || "/placeholder.svg"}
+                      alt={social.name}
+                      className="h-7 lg:h-8 w-auto object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                {socialMedia.slice(3, 6).map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                    title={social.name}
+                  >
+                    <img
+                      src={social.icon || "/placeholder.svg"}
+                      alt={social.name}
+                      className="h-7 lg:h-8 w-auto object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Language Selector */}
+            <div className="flex flex-shrink-0">
+              <LanguageSelector />
+            </div>
+
+            {/* Auth Buttons - Desktop */}
+            <div className="flex gap-2 flex-shrink-0">
+              <a
+                href="/login"
+                className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium transition-colors text-sm whitespace-nowrap flex items-center gap-1"
+              >
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Login
+              </a>
+
+              <a
+                href="/register"
+                className="px-3 py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-sm whitespace-nowrap"
+              >
+                Register
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Menu - Professional Green Strip (STICKY) */}
+      <nav className="sticky top-0 z-50 bg-[#07730E] shadow-md">
+        <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8">
+          {/* Desktop Navigation */}
+          <ul className="hidden md:flex items-center justify-between gap-0 py-2 md:py-2.5 lg:py-3">
+            {navItems.map((item) => (
+              <li key={item.key} className="flex-1 text-center">
+                <a
+                  href={item.href}
+                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs lg:text-sm px-1 lg:px-2 py-1 lg:py-1.5 rounded block whitespace-nowrap overflow-hidden text-ellipsis"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Navigation - Dropdown Menu */}
           {isMenuOpen && (
-            <div className="md:hidden py-2 space-y-1 border-t border-[#0f4620]">
+            <div className="md:hidden py-2 space-y-1 border-t border-[#0f4620] max-h-96 overflow-y-auto">
               {navItems.map((item) => (
                 <a
                   key={item.key}
                   href={item.href}
-                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs sm:text-sm px-2.5 py-1.5 rounded block"
+                  className="text-white hover:bg-[#0a5a0d] transition-colors duration-200 font-medium text-xs px-2.5 py-1.5 rounded block"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
@@ -208,6 +249,17 @@ const Header = () => {
           )}
         </div>
       </nav>
+
+      {/* Hide scrollbar for horizontal scroll on mobile */}
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </>
   )
 }
