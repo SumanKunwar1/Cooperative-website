@@ -6,7 +6,6 @@ import {
   updateApplicationStatus,
   deleteAccountApplication
 } from '../controllers/accountApplication.controller';
-import { protect } from '../middleware/auth';
 import {upload} from '../middleware/upload';
 
 const router = express.Router();
@@ -23,10 +22,10 @@ router.post('/', upload.fields([
   { name: 'nomineePhoto', maxCount: 1 }
 ]), createAccountApplication);
 
-// Admin routes
-router.get('/', protect, getAccountApplications);
-router.get('/:id', protect, getAccountApplication);
-router.patch('/:id/status', protect, updateApplicationStatus);
-router.delete('/:id', protect, deleteAccountApplication);
+// Admin routes (no authentication for college project)
+router.get('/', getAccountApplications);
+router.get('/:id', getAccountApplication);
+router.patch('/:id/status', updateApplicationStatus);
+router.delete('/:id', deleteAccountApplication);
 
 export default router;

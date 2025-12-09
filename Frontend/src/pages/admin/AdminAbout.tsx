@@ -5,10 +5,8 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   PencilIcon,
-  TrashIcon,
   PlusIcon,
   CheckIcon,
-  XMarkIcon,
   BuildingOfficeIcon,
   CalendarIcon,
   MapPinIcon,

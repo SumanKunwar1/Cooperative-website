@@ -10,6 +10,7 @@ import {
   ClockIcon,
   MagnifyingGlassIcon,
   DocumentArrowDownIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline"
 import { loanApplicationService, type LoanApplication } from "../../services/loanApplicationService"
 import AdminDashboard from "./AdminDashboard"
@@ -22,6 +23,8 @@ const AdminLoanApplications: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [loading, setLoading] = useState(true)
   const [showTextView, setShowTextView] = useState(false)
+  const [exportLoading, setExportLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchApplications()
@@ -29,11 +32,13 @@ const AdminLoanApplications: React.FC = () => {
 
   const fetchApplications = async () => {
     setLoading(true)
+    setError(null)
     try {
       const applications = await loanApplicationService.getApplications()
       setLoanApplications(applications)
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching applications:", error)
+      setError(`Error fetching applications: ${error.message || "Please check your connection"}`)
     } finally {
       setLoading(false)
     }
@@ -62,12 +67,17 @@ const AdminLoanApplications: React.FC = () => {
   }
 
   const handleStatusUpdate = async (id: string, status: LoanApplication["status"]) => {
-    const success = await loanApplicationService.updateApplicationStatus(id, status)
-    if (success) {
-      await fetchApplications()
-      if (selectedApplication && selectedApplication._id === id) {
-        setSelectedApplication({ ...selectedApplication, status })
+    try {
+      const response = await loanApplicationService.updateApplicationStatus(id, status)
+      if (response) {
+        await fetchApplications()
+        if (selectedApplication && selectedApplication._id === id) {
+          setSelectedApplication({ ...selectedApplication, status })
+        }
       }
+    } catch (error) {
+      console.error("Error updating application status:", error)
+      alert("Error updating application status")
     }
   }
 
@@ -127,6 +137,7 @@ Generated on: ${new Date().toLocaleString()}
   }
 
   const exportApplicationAsZip = async (application: LoanApplication) => {
+    setExportLoading(true)
     try {
       const zip = new JSZip()
 
@@ -170,6 +181,8 @@ Generated on: ${new Date().toLocaleString()}
     } catch (error) {
       console.error("Error creating zip file:", error)
       alert("Error creating download file. Please try again.")
+    } finally {
+      setExportLoading(false)
     }
   }
 
@@ -190,6 +203,18 @@ Generated on: ${new Date().toLocaleString()}
           <h2 className="text-2xl font-bold text-gray-900">Loan Applications</h2>
           <div className="text-sm text-gray-500">Total: {loanApplications.length} applications</div>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <p>{error}</p>
+            <button
+              onClick={fetchApplications}
+              className="mt-2 text-sm text-red-800 underline hover:text-red-900"
+            >
+              Try again
+            </button>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4">
@@ -294,7 +319,8 @@ Generated on: ${new Date().toLocaleString()}
                         </button>
                         <button
                           onClick={() => exportApplicationAsZip(application)}
-                          className="text-green-600 hover:text-green-900"
+                          disabled={exportLoading}
+                          className="text-green-600 hover:text-green-900 disabled:opacity-50"
                           title="Download as ZIP"
                         >
                           <DocumentArrowDownIcon className="h-5 w-5" />
@@ -342,10 +368,11 @@ Generated on: ${new Date().toLocaleString()}
                     </button>
                     <button
                       onClick={() => exportApplicationAsZip(selectedApplication)}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center"
+                      disabled={exportLoading}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center disabled:opacity-50"
                     >
                       <DocumentArrowDownIcon className="h-4 w-4 mr-2" />
-                      Export ZIP
+                      {exportLoading ? "Exporting..." : "Export ZIP"}
                     </button>
                     <button onClick={() => setSelectedApplication(null)} className="text-gray-400 hover:text-gray-600">
                       <XCircleIcon className="h-6 w-6" />

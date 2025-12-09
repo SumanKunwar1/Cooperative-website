@@ -6,7 +6,6 @@ import {
   updateLoanApplicationStatus,
   deleteLoanApplication
 } from '../controllers/loanApplication.controller';
-import { protect } from '../middleware/auth';
 import {upload} from '../middleware/upload';
 
 const router = express.Router();
@@ -19,10 +18,10 @@ router.post('/', upload.fields([
   { name: 'incomeProof', maxCount: 1 }
 ]), createLoanApplication);
 
-// Admin routes
-router.get('/', protect, getLoanApplications);
-router.get('/:id', protect, getLoanApplication);
-router.patch('/:id/status', protect, updateLoanApplicationStatus);
-router.delete('/:id', protect, deleteLoanApplication);
+// Admin routes (no authentication for college project)
+router.get('/', getLoanApplications);
+router.get('/:id', getLoanApplication);
+router.patch('/:id/status', updateLoanApplicationStatus);
+router.delete('/:id', deleteLoanApplication);
 
 export default router;

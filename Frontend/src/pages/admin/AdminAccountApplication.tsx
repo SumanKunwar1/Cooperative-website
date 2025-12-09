@@ -24,6 +24,7 @@ const AdminAccountApplications: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [showTextView, setShowTextView] = useState(false)
   const [exportLoading, setExportLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchApplications()
@@ -32,14 +33,15 @@ const AdminAccountApplications: React.FC = () => {
   const fetchApplications = async () => {
     try {
       setLoading(true)
+      setError(null)
       const applications = await accountApplicationService.getApplications(
         statusFilter === "all" ? undefined : statusFilter,
         searchTerm || undefined,
       )
       setAccountApplications(applications)
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching applications:", error)
-      alert("Error fetching applications")
+      setError(`Error fetching applications: ${error.message || "Please check your connection"}`)
     } finally {
       setLoading(false)
     }
@@ -238,6 +240,18 @@ Nominee Photo: ${application.nomineePhoto ? "Available" : "Not Uploaded"}
           <h2 className="text-2xl font-bold text-gray-900">Account Applications</h2>
           <div className="text-sm text-gray-500">Total: {accountApplications.length} applications</div>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <p>{error}</p>
+            <button
+              onClick={fetchApplications}
+              className="mt-2 text-sm text-red-800 underline hover:text-red-900"
+            >
+              Try again
+            </button>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4">

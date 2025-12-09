@@ -100,13 +100,10 @@ export interface AccountApplication
 
 class AccountApplicationService {
   private async makeRequest(url: string, options: RequestInit = {}) {
-    const token = localStorage.getItem("token")
-
     const response = await fetch(`${API_URL}${url}`, {
       ...options,
       headers: {
         ...options.headers,
-        ...(token && { Authorization: `Bearer ${token}` }),
       },
     })
 
