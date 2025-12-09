@@ -3,11 +3,9 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import LanguageSelector from "./LanguageSelector"
-import { useTranslation } from "react-i18next"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { t } = useTranslation()
 
   const socialMedia = [
     {
@@ -43,23 +41,23 @@ const Header = () => {
   ]
 
   const navItems = [
-    { label: t("home"), href: "/", key: "home" },
-    { label: t("about"), href: "/about", key: "about" },
-    { label: t("services"), href: "/services", key: "services" },
-    { label: t("shop"), href: "/shop", key: "shop" },
-    { label: t("businesses"), href: "/business-directory", key: "businesses" },
-    { label: t("notices"), href: "/notice", key: "notices" },
-    { label: t("report"), href: "/reports-bulletin", key: "report" },
-    { label: t("download"), href: "/downloads", key: "download" },
-    { label: t("ourTeam"), href: "/teams", key: "ourTeam" },
-    { label: t("project"), href: "/projects", key: "project" },
-    { label: t("footer-gallery"), href: "/gallery", key: "footer-gallery" },
-    { label: t("footer-contact-info"), href: "/contact", key: "footer-contact-info" },
+    { label: "Home", href: "/", key: "home" },
+    { label: "About", href: "/about", key: "about" },
+    { label: "Services", href: "/services", key: "services" },
+    { label: "Shop", href: "/shop", key: "shop" },
+    { label: "Business Directory", href: "/business-directory", key: "businesses" },
+    { label: "Notices", href: "/notice", key: "notices" },
+    { label: "Report & Bulletin", href: "/reports-bulletin", key: "report" },
+    { label: "Downloads", href: "/downloads", key: "download" },
+    { label: "Our Team", href: "/teams", key: "ourTeam" },
+    { label: "Projects", href: "/projects", key: "project" },
+    { label: "Gallery", href: "/gallery", key: "footer-gallery" },
+    { label: "Contact", href: "/contact", key: "footer-contact-info" },
   ]
 
   return (
     <>
-      {/* Top Section - Logo, Social Icons, Flags, Auth (NOT STICKY) */}
+      {/* Top Section - Logo, Social Icons, Language Selector, Auth (NOT STICKY) */}
       <div className="bg-white border-b-2 border-[#07730E]">
         <div className="w-full px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4">
           <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 lg:gap-6">
@@ -112,8 +110,8 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Language Selector - Hidden on mobile and tablet */}
-            <div className="hidden lg:flex flex-shrink-0">
+            {/* Language Selector - Now visible on all screens */}
+            <div className="flex flex-shrink-0">
               <LanguageSelector />
             </div>
 
@@ -130,14 +128,14 @@ const Header = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                {t("login")}
+                Login
               </a>
 
               <a
                 href="/register"
                 className="px-2 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-1.5 bg-[#07730E] text-white rounded hover:bg-[#16572f] font-medium transition-colors text-xs md:text-xs lg:text-sm whitespace-nowrap"
               >
-                {t("register")}
+                Register
               </a>
             </div>
 
@@ -182,14 +180,14 @@ const Header = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              {t("login")}
+              Login
             </a>
 
             <a
               href="/register"
               className="px-2 py-0.5 bg-white text-[#07730E] rounded hover:bg-gray-100 font-medium transition-colors text-xs whitespace-nowrap"
             >
-              {t("register")}
+              Register
             </a>
           </div>
 

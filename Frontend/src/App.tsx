@@ -4,6 +4,7 @@ import { CartProvider } from "./contexts/CartContext"
 import { AuthProvider } from "./contexts/AuthContext"
 import { AdminProvider } from "./contexts/AdminContext"
 import { ApplicationProvider } from "./contexts/ApplicationContext"
+import RootWrapper from "./components/layout/RootWrapper"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
 import CustomerDashboard from "./pages/CustomerDashboard"
@@ -56,10 +57,6 @@ import { useState, useEffect } from "react"
 import NoticeModal from "./pages/NoticeModal"
 import { noticeModalService } from "./services/NoticeModalService"
 
-// i18n import
-import { useTranslation } from "react-i18next"
-import "./pages/i18n"
-
 function AccountOpeningWrapper() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -98,12 +95,10 @@ function ServicesWrapper() {
   return <Services onOpenAccount={handleOpenAccount} onApplyLoan={handleApplyLoan} />
 }
 
-function PlaceholderPage({ titleKey }: { titleKey: string }) {
-  const { t } = useTranslation()
-  
+function PlaceholderPage({ title }: { title: string }) {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-2xl">{t(titleKey)}</h1>
+      <h1 className="text-2xl">{title}</h1>
     </div>
   )
 }
@@ -114,7 +109,6 @@ function AppContent() {
 
   useEffect(() => {
     // Only check modal ONCE when component first mounts (app starts)
-    // This effect runs only once on initial app load
     const checkAndShowModal = async () => {
       console.log('Initial modal check on app load')
       
@@ -123,7 +117,6 @@ function AppContent() {
       
       const shouldShow = noticeModalService.shouldShowModal()
       console.log('Should show modal:', shouldShow)
-      console.log('Modal settings:', noticeModalService.getSettings())
       
       if (shouldShow) {
         setShowNoticeModal(true)
@@ -132,14 +125,13 @@ function AppContent() {
       setHasCheckedModal(true)
     }
 
-    // Only run once on initial app mount
     if (!hasCheckedModal) {
       checkAndShowModal()
     }
   }, [hasCheckedModal])
 
   useEffect(() => {
-    // Listen for manual trigger from header/admin (clicking a button to show modal)
+    // Listen for manual trigger from header/admin
     const handleShowNoticeModal = () => {
       console.log('Manual notice modal trigger')
       if (noticeModalService.forceShowModal()) {
@@ -328,7 +320,6 @@ function AppContent() {
                   <Route path="/customer-dashboard" element={<CustomerDashboard />} />
                   <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
-                  {/* Business Directory Routes */}
                   <Route path="/business-directory" element={<BusinessDirectory />} />
                   <Route path="/business-directory/:businessName" element={<BusinessDetails />} />
                   <Route path="/reports-bulletin" element={<ReportsBulletin />} />
@@ -342,19 +333,16 @@ function AppContent() {
                   <Route path="/teams" element={<Team />} />
                   <Route path="/gallery" element={<Gallery />} />
 
-                  {/* Placeholder routes with translations */}
-                  <Route path="/membership" element={<PlaceholderPage titleKey="membershipPage" />} />
-                  <Route path="/events" element={<PlaceholderPage titleKey="events" />} />
-                  <Route path="/contact" element={<PlaceholderPage titleKey="contact" />} />
-                  <Route path="/business-registration" element={<PlaceholderPage titleKey="businessRegistration" />} />
-                  <Route path="/forgot-password" element={<PlaceholderPage titleKey="forgotPassword" />} />
-                  <Route path="/terms" element={<PlaceholderPage titleKey="termsOfService" />} />
-                  <Route path="/privacy" element={<PlaceholderPage titleKey="privacyPolicy" />} />
+                  <Route path="/membership" element={<PlaceholderPage title="Membership Page" />} />
+                  <Route path="/events" element={<PlaceholderPage title="Events" />} />
+                  <Route path="/business-registration" element={<PlaceholderPage title="Business Registration" />} />
+                  <Route path="/forgot-password" element={<PlaceholderPage title="Forgot Password" />} />
+                  <Route path="/terms" element={<PlaceholderPage title="Terms of Service" />} />
+                  <Route path="/privacy" element={<PlaceholderPage title="Privacy Policy" />} />
                 </Routes>
               </main>
               <Footer />
               
-              {/* Notice Modal - Show only once per session */}
               <NoticeModal 
                 isEnabled={showNoticeModal}
                 onClose={handleCloseNoticeModal}
@@ -370,17 +358,19 @@ function AppContent() {
 function App() {
   return (
     <HelmetProvider>
-      <AuthProvider>
-        <AdminProvider>
-          <ApplicationProvider>
-            <CartProvider>
-              <Router>
-                <AppContent />
-              </Router>
-            </CartProvider>
-          </ApplicationProvider>
-        </AdminProvider>
-      </AuthProvider>
+      <RootWrapper>
+        <AuthProvider>
+          <AdminProvider>
+            <ApplicationProvider>
+              <CartProvider>
+                <Router>
+                  <AppContent />
+                </Router>
+              </CartProvider>
+            </ApplicationProvider>
+          </AdminProvider>
+        </AuthProvider>
+      </RootWrapper>
     </HelmetProvider>
   )
 }
