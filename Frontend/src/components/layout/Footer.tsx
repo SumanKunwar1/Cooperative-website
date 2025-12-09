@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
                 className="h-10 w-10 rounded-full object-cover"
               />
               <div>
-                <h3 className="text-lg font-bold text-white">Constellation</h3>
+                <p className="text-lg font-bold text-white">Constellation</p>
                 <p className="text-sm text-gray-400">Saving & Credit Cooperative</p>
               </div>
             </div>

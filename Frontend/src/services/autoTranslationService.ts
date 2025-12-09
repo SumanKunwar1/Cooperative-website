@@ -201,7 +201,12 @@ class AutoTranslationService {
     'faq': 'बारम्बार सोधिने प्रश्नहरु',
     'terms': 'सर्तहरु',
     'privacy': 'गोपनीयता',
-    'policy': 'नीति'
+    'policy': 'नीति',
+    'Constellation': 'कन्स्टलेसन',
+    'Saving & Credit Cooperative': 'सेभिङ एण्ड क्रेडिट कोअपरेटिभ',
+    'nepal': 'नेपाल',
+    'terms and conditions': 'नियमहरु र सर्तहरु',
+    'privacy policy': 'गोपनीयता नीति',
   }
   
   private excludedSelectors = [
