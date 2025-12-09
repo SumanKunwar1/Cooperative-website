@@ -1,122 +1,194 @@
-// About.tsx
+
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Target, Eye, Award, Users, TrendingUp, Building, Calendar, Globe, MapPin, Star } from "lucide-react"
+import { Target, Eye, Users, Calendar, Globe, MapPin, Star } from "lucide-react"
 import SEO from "../components/common/SEO"
 import Card from "../components/ui/Card"
-import { useTranslation } from "react-i18next"
+import { aboutApi, AboutData } from "../services/aboutApi"
 
 const About: React.FC = () => {
-  const [] = useState<string | null>(null)
+  const [aboutData, setAboutData] = useState<AboutData | null>(null)
+  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("mission")
-  const { t } = useTranslation()
 
-  const values = [
-    {
-      icon: Target,
-      title: t("value-title-mutual-trust"),
-      description: t("value-desc-mutual-trust"),
-    },
-    {
-      icon: Users,
-      title: t("value-title-community-support"),
-      description: t("value-desc-community-support"),
-    },
-    {
-      icon: TrendingUp,
-      title: t("value-title-financial-empowerment"),
-      description: t("value-desc-financial-empowerment"),
-    },
-    {
-      icon: Award,
-      title: t("value-title-strong-relationships"),
-      description: t("value-desc-strong-relationships"),
-    },
-  ]
+  useEffect(() => {
+    fetchAboutData()
+  }, [])
 
-  const milestones = [
-    {
-      year: "2010",
-      event: t("milestone-2010-0"),
-      icon: Building,
-    },
-    { 
-      year: "2010", 
-      event: t("milestone-2010-1"), 
-      icon: Users 
-    },
-    {
-      year: "2015",
-      event: t("milestone-2015-2"),
-      icon: TrendingUp,
-    },
-    { 
-      year: "2020", 
-      event: t("milestone-2020-3"), 
-      icon: Globe 
-    },
-    {
-      year: "2024",
-      event: t("milestone-2024-4"),
-      icon: Calendar,
-    },
-    { 
-      year: "2025", 
-      event: t("milestone-2025-5"), 
-      icon: Award 
-    },
-  ]
+  const fetchAboutData = async () => {
+    try {
+      setLoading(true)
+      const result = await aboutApi.getAbout()
+      console.log("About API result:", result)
+      
+      if (result.success && result.data) {
+        console.log("About data loaded from API:", result.data)
+        setAboutData(result.data)
+      } else {
+        console.log("Using fallback data")
+        setAboutData(getFallbackData())
+      }
+    } catch (error) {
+      console.error("Error fetching about data:", error)
+      setAboutData(getFallbackData())
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const stats = [
-    { label: t("stat-years-of-service"), value: "15+", description: t("stat-desc-years-of-service") },
-    { label: t("stat-registration-no."), value: "3163/066/067", description: t("stat-desc-registration-no.") },
-    { label: t("stat-experience"), value: "20+", description: t("stat-desc-experience") },
-    { label: t("stat-committee-term"), value: "2081-2086", description: t("stat-desc-committee-term") },
-  ]
+  // Simple fallback data with safe defaults
+  const getFallbackData = (): AboutData => {
+    return {
+      heroTitle: "About Constellation Cooperative",
+      heroSubtitle: "Empowering communities through cooperative banking since 2010",
+      companyInfo: {
+        establishedDate: "12th May 2010",
+        location: "Kathmandu, Nepal",
+        registrationNumber: "3163/066/067",
+        officeLocationLabel: "Head Office Location",
+        officeAddress: "6th Floor, Civil Trade Centre (CTC Mall), Sundhara, Kathmandu",
+        mission: "To create a vibrant business community where together, everyone can achieve more through cooperative principles and mutual support.",
+        vision: "To be the leading cooperative institution fostering economic growth and social development in Nepal.",
+      },
+      stats: [
+        { label: "Years of Service", value: "15+", description: "Serving since 2010" },
+        { label: "Registration No.", value: "3163/066/067", description: "Registered under Department of Cooperatives" },
+        { label: "Experience", value: "20+", description: "Years of combined experience" },
+        { label: "Committee Term", value: "2081-2086", description: "Current committee term" }
+      ],
+      story: {
+        title: "Our Story Since 2010",
+        paragraphs: [
+          "Founded in 2010, Constellation Saving and Credit Cooperative Limited began with a vision to create a vibrant business community where members could grow together through mutual support and cooperative principles.",
+          "Over the years, we've grown from a small group of visionary individuals to a trusted financial institution serving thousands of members across the community.",
+          "Our journey is marked by continuous innovation, member-centric services, and a commitment to financial inclusion and empowerment."
+        ],
+        contactInfo: {
+          title: "Contact Information",
+          address1: "6th Floor, Civil Trade Centre (CTC Mall)",
+          address2: "Sundhara, Kathmandu Metropolitan City Ward No. 22",
+          registration: "Registration No: 3163/066/067",
+          ministryName: "Ministry of Land Management, Cooperatives and Poverty Alleviation"
+        },
+        images: []
+      },
+      mission: "To create a vibrant business community where together, everyone can achieve more through cooperative principles and mutual support.",
+      vision: "To be the leading cooperative institution fostering economic growth and social development in Nepal.",
+      purposes: [
+        "To promote savings habits among members",
+        "To provide credit facilities to members",
+        "To promote cooperative principles and values",
+        "To enhance financial literacy in the community",
+        "To support entrepreneurship and business development",
+        "To foster economic empowerment",
+        "To build strong community relationships",
+        "To ensure sustainable growth and development"
+      ],
+      values: [
+        {
+          title: "Integrity",
+          description: "We conduct our business with honesty, transparency, and ethical practices.",
+          icon: "🤝",
+          images: []
+        },
+        {
+          title: "Community Focus",
+          description: "We prioritize the needs and development of our community members.",
+          icon: "🏘️",
+          images: []
+        },
+        {
+          title: "Innovation",
+          description: "We embrace new technologies and methods to better serve our members.",
+          icon: "💡",
+          images: []
+        },
+        {
+          title: "Excellence",
+          description: "We strive for excellence in all our services and operations.",
+          icon: "⭐",
+          images: []
+        }
+      ],
+      milestones: [
+        { year: "2010", event: "Cooperative established with 50 founding members", icon: "building", images: [] },
+        { year: "2010", event: "First general assembly and committee formation", icon: "users", images: [] },
+        { year: "2015", event: "Expanded services and reached 1000+ members", icon: "trending-up", images: [] },
+        { year: "2020", event: "Launched digital banking services", icon: "globe", images: [] },
+        { year: "2024", event: "Celebrated 14 years of service", icon: "calendar", images: [] },
+        { year: "2025", event: "Awarded for excellence in cooperative banking", icon: "award", images: [] }
+      ],
+      communityImpacts: [
+        {
+          title: "Financial Literacy",
+          description: "Conducted workshops reaching 500+ community members on financial management",
+          metrics: "500+ participants trained",
+          images: []
+        },
+        {
+          title: "Business Development",
+          description: "Supported 200+ small businesses through microfinance and training",
+          metrics: "200+ businesses supported",
+          images: []
+        },
+        {
+          title: "Cultural Programs",
+          description: "Organized community cultural events and festivals",
+          metrics: "10+ annual events",
+          images: []
+        }
+      ],
+      seoTitle: "About Us - Constellation Saving and Credit Cooperative Limited",
+      seoDescription: "Learn about our journey since 2010, serving the community through cooperative banking services. Discover our mission of shared growth and financial empowerment."
+    }
+  }
 
-  const purposes = [
-    t("purpose-1"),
-    t("purpose-2"),
-    t("purpose-3"),
-    t("purpose-4"),
-    t("purpose-5"),
-    t("purpose-6"),
-    t("purpose-7"),
-    t("purpose-8"),
-  ]
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      </div>
+    )
+  }
+
+  const data = aboutData || getFallbackData()
+
+  // Safe data access with defaults
+  const companyInfo = data.companyInfo || getFallbackData().companyInfo
+  const story = data.story || getFallbackData().story
+  const stats = data.stats || []
+  const values = data.values || []
+  const milestones = data.milestones || []
+  const communityImpacts = data.communityImpacts || []
+  const purposes = data.purposes || []
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="About Us - Constellation Saving and Credit Cooperative Limited"
-        description="Learn about our journey since 2010, serving the community through cooperative banking services. Discover our mission of shared growth and financial empowerment."
-      />
+      <SEO title={data.seoTitle} description={data.seoDescription} />
 
-      {/* Hero Section with Company Image */}
+      {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-green-600 to-green-700 text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("about-hero-title")}</h1>
-              <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-                {t("about-hero-subtitle")}
-              </p>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6">{data.heroTitle}</h1>
+              <p className="text-xl md:text-2xl mb-8 leading-relaxed">{data.heroSubtitle}</p>
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Calendar className="w-4 h-4 mr-2" />
-                  {t("established-date")}
+                  {companyInfo.establishedDate}
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <MapPin className="w-4 h-4 mr-2" />
-                  {t("location")}
+                  {companyInfo.location}
                 </div>
                 <div className="flex items-center bg-white/20 rounded-full px-4 py-2">
                   <Users className="w-4 h-4 mr-2" />
-                  {t("registration-number")}
+                  {companyInfo.registrationNumber}
                 </div>
               </div>
             </motion.div>
@@ -135,8 +207,8 @@ const About: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <p className="text-sm font-medium">{t("office-location-label")}</p>
-                  <p className="text-xs opacity-90">{t("office-address")}</p>
+                  <p className="text-sm font-medium">{companyInfo.officeLocationLabel}</p>
+                  <p className="text-xs opacity-90">{companyInfo.officeAddress}</p>
                 </div>
               </div>
             </motion.div>
@@ -144,66 +216,61 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Interactive Stats Section */}
-      <section className="py-16 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="text-center"
-              >
-                <Card className="h-full hover:shadow-lg transition-all duration-300">
-                  <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-2">{stat.value}</div>
-                  <div className="text-gray-900 font-semibold mb-1">{stat.label}</div>
-                  <div className="text-sm text-gray-600">{stat.description}</div>
-                </Card>
-              </motion.div>
-            ))}
+      {/* Stats Section */}
+      {stats.length > 0 && (
+        <section className="py-16 bg-white relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+              {stats.map((stat, index: number) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="text-center"
+                >
+                  <Card className="h-full hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-2">{stat.value}</div>
+                    <div className="text-gray-900 font-semibold mb-1">{stat.label}</div>
+                    <div className="text-sm text-gray-600">{stat.description}</div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Company Story with Images */}
+      {/* Story Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t("our-story-title")}</h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                {t("story-paragraph-1")}
-              </p>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                {t("story-paragraph-2")}
-              </p>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                {t("story-paragraph-3")}
-              </p>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{story.title}</h2>
+              {story.paragraphs.map((paragraph: string, index: number) => (
+                <p key={index} className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
 
-              {/* Contact Information */}
               <div className="bg-white rounded-lg p-6 shadow-md">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">{t("contact-info-title")}</h3>
+                <h3 className="text-xl font-semibold mb-4 text-gray-900">{story.contactInfo.title}</h3>
                 <div className="space-y-3">
                   <div className="flex items-start">
                     <MapPin className="w-5 h-5 text-green-600 mr-3 mt-0.5" />
                     <span className="text-gray-700">
-                      {t("contact-address-1")}
+                      {story.contactInfo.address1}
                       <br />
-                      {t("contact-address-2")}
+                      {story.contactInfo.address2}
                       <br />
-                      {t("contact-registration")}
+                      {story.contactInfo.registration}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Globe className="w-5 h-5 text-green-600 mr-3" />
-                    <span className="text-gray-700">
-                      {t("ministry-name")}
-                    </span>
+                    <span className="text-gray-700">{story.contactInfo.ministryName}</span>
                   </div>
                 </div>
               </div>
@@ -217,7 +284,7 @@ const About: React.FC = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-lg">
                 <img
-                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-photograph-of-a-cooperative-boardroom-_6wY51f7wRICLsJIvK_U8-w_idJgcaJhS7uKnL0TyKO3eQ_dfgl3u.jpg"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-cooperative-boardroom-_6wY51f7wRICLsJIvK_U8-w_idJgcaJhS7uKnL0TyKO3eQ_dfgl3u.jpg"
                   alt="Member Meeting"
                   className="w-full h-64 object-cover"
                 />
@@ -243,7 +310,7 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Interactive Mission, Vision, Values Tabs */}
+      {/* Mission, Vision, Purposes Tabs */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -252,11 +319,10 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t("foundation-title")}</h2>
-            <p className="text-xl text-gray-600">{t("foundation-subtitle")}</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Foundation</h2>
+            <p className="text-xl text-gray-600">Built on strong principles and clear vision</p>
           </motion.div>
 
-          {/* Tab Navigation */}
           <div className="flex justify-center mb-8">
             <div className="bg-gray-100 rounded-lg p-1 flex">
               {["mission", "vision", "purposes"].map((tab) => (
@@ -267,13 +333,12 @@ const About: React.FC = () => {
                     activeTab === tab ? "bg-green-600 text-white shadow-md" : "text-gray-600 hover:text-green-600"
                   }`}
                 >
-                  {t(`tab-${tab}`)}
+                  {tab === "mission" ? "Mission" : tab === "vision" ? "Vision" : "Purposes"}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Tab Content */}
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 20 }}
@@ -286,10 +351,8 @@ const About: React.FC = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Target className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("mission-title")}</h3>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {t("mission-content")}
-                </p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <p className="text-lg text-gray-600 leading-relaxed">{data.mission}</p>
               </Card>
             )}
 
@@ -298,10 +361,8 @@ const About: React.FC = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Eye className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("vision-title")}</h3>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {t("vision-content")}
-                </p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+                <p className="text-lg text-gray-600 leading-relaxed">{data.vision}</p>
               </Card>
             )}
 
@@ -311,10 +372,10 @@ const About: React.FC = () => {
                   <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Star className="w-8 h-8 text-orange-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{t("purposes-title")}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">Our Purposes</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {purposes.map((purpose, index) => (
+                  {purposes.map((purpose: string, index: number) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
@@ -334,183 +395,120 @@ const About: React.FC = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("values-title")}</h3>
-            <p className="text-xl text-gray-600">{t("values-subtitle")}</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <Card className="text-center h-full hover:shadow-xl transition-all duration-300">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <value.icon className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h4 className="text-xl font-semibold mb-4">{value.title}</h4>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive History Timeline */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("journey-title")}</h3>
-            <p className="text-xl text-gray-600">{t("journey-subtitle")}</p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-0.5 w-1 bg-green-200 h-full"></div>
-
-            {milestones.map((milestone, index) => (
-              <motion.div
-                key={milestone.year}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`relative flex items-center mb-12 ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-              >
-                <div className={`flex-1 ${index % 2 === 0 ? "pr-8 text-right" : "pl-8"}`}>
-                  <motion.div whileHover={{ scale: 1.02 }}>
-                    <Card className="hover:shadow-lg transition-all duration-300">
-                      <div className="flex items-center mb-3">
-                        <div
-                          className={`w-10 h-10 bg-green-100 rounded-full flex items-center justify-center ${
-                            index % 2 === 0 ? "ml-auto" : ""
-                          }`}
-                        >
-                          <milestone.icon className="w-5 h-5 text-green-600" />
-                        </div>
-                        {index % 2 === 0 && (
-                          <span className="text-2xl font-bold text-green-600 mr-4">{milestone.year}</span>
-                        )}
-                        {index % 2 !== 0 && (
-                          <span className="text-2xl font-bold text-green-600 ml-4">{milestone.year}</span>
-                        )}
-                      </div>
-                      <p className="text-gray-700">{milestone.event}</p>
-                    </Card>
-                  </motion.div>
-                </div>
-
-                {/* Timeline dot */}
-                <motion.div
-                  className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-lg"
-                  whileHover={{ scale: 1.2 }}
-                ></motion.div>
-                <div className="flex-1"></div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Community Impact Section with Images */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t("community-impact-title")}</h3>
-            <p className="text-xl text-gray-600">{t("community-impact-subtitle")}</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-green-900 mb-4">{t("financial-literacy-title")}</h4>
-                  <p className="text-green-800">
-                    {t("financial-literacy-desc")}
-                  </p>
-                </div>
-
-                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-green-900 mb-4">{t("business-development-title")}</h4>
-                  <p className="text-green-800">
-                    {t("business-development-desc")}
-                  </p>
-                </div>
-
-                <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
-                  <h4 className="text-xl font-semibold text-orange-900 mb-4">{t("cultural-programs-title")}</h4>
-                  <p className="text-orange-800">
-                    {t("cultural-programs-desc")}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
+      {values.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="grid grid-cols-2 gap-4"
+              className="text-center mb-12"
             >
-              <div className="space-y-4">
-                <div className="rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-photograph-of-a-financial-education-wo_KjyGH8n6QFS9lOTn8TUs8g_YgZtt-fBRL2Vjn34n-94aQ_aa8afm.jpg"
-                    alt="Financial Literacy Workshop"
-                    className="w-full h-32 object-cover"
-                  />
-                </div>
-                <div className="rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-lifestyle-advertisement-for-constellat_FI7enEI2QL2txykwtyrADg_ndM-eqhmSj61c2yOQhmxig_zhfjec.jpg"
-                    alt="Business Exhibition"
-                    className="w-full h-40 object-cover"
-                  />
-                </div>
-              </div>
-              <div className="space-y-4 mt-8">
-                <div className="rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952859/a-photograph-of-a-cooperative-boardroom-_Qc-W-egkSmW3LZCcZmSpNw_idJgcaJhS7uKnL0TyKO3eQ_zs9yas.jpg"
-                    alt="Cultural Festival"
-                    className="w-full h-40 object-cover"
-                  />
-                </div>
-                <div className="rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756953197/a-dynamic-lifestyle-advertisement-for-co_7BNCAb3FS2y9y3KkatZczQ_ynsFbyEfR0W00xmli7OuEQ_esrgwe.jpg"
-                    alt="Sports Event"
-                    className="w-full h-32 object-cover"
-                  />
-                </div>
-              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Core Values</h3>
+              <p className="text-xl text-gray-600">Guiding principles that define our cooperative spirit</p>
             </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {values.map((value, index: number) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center"
+                >
+                  <Card className="h-full hover:shadow-lg transition-all duration-300">
+                    <div className="text-4xl mb-4">{value.icon}</div>
+                    <h4 className="text-lg font-bold text-gray-900 mb-3">{value.title}</h4>
+                    <p className="text-gray-600 text-sm leading-relaxed">{value.description}</p>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Milestones Section */}
+      {milestones.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+              <p className="text-xl text-gray-600">Milestones that shaped our success</p>
+            </motion.div>
+
+            <div className="relative">
+              <div className="space-y-8">
+                {milestones.map((milestone, index: number) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`flex ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"} items-center gap-8`}
+                  >
+                    <div className="flex-1">
+                      <Card className="h-full">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-2xl font-bold text-green-600">{milestone.year}</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{milestone.event}</h3>
+                      </Card>
+                    </div>
+                    <div className="w-4 h-4 bg-green-600 rounded-full flex-shrink-0"></div>
+                    <div className="flex-1"></div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Community Impact Section */}
+      {communityImpacts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Community Impact</h2>
+              <p className="text-xl text-gray-600">Making a difference in the lives we touch</p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {communityImpacts.map((impact, index: number) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-green-50 to-white">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{impact.title}</h3>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{impact.description}</p>
+                    <div className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                      {impact.metrics}
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

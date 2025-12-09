@@ -17,6 +17,9 @@ import galleryRoutes from "./routes/gallery"
 import shareholderRoutes from "./routes/shareholders"
 import teamRoutes from "./routes/teams"
 import heroRoutes from "./routes/hero"
+import aboutRoutes from "./routes/about"
+
+
 
 
 // Middleware
@@ -78,6 +81,8 @@ app.use("/api/gallery", galleryRoutes)
 app.use("/api/shareholders", shareholderRoutes)
 app.use("/api/team", teamRoutes)
 app.use("/api/hero", heroRoutes)
+app.use("/api/about", aboutRoutes)
+
 
 // Health check
 app.get("/api/health", (req, res) => {

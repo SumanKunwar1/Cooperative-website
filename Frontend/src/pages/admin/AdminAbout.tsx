@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   PencilIcon,
@@ -20,398 +20,285 @@ import {
 import AdminDashboard from "./AdminDashboard"
 import Button from "../../components/ui/Button"
 import Card from "../../components/ui/Card"
-
-interface StorySection {
-  id: string
-  title: string
-  content: string
-  images: string[]
-}
-
-interface PrincipleItem {
-  id: string
-  type: "mission" | "vision" | "purpose"
-  title: string
-  content: string
-  images: string[]
-}
-
-interface ValueItem {
-  id: string
-  title: string
-  description: string
-  icon: string
-  images: string[]
-}
-
-interface JourneyMilestone {
-  id: string
-  year: string
-  title: string
-  description: string
-  images: string[]
-}
-
-interface CommunityImpact {
-  id: string
-  title: string
-  description: string
-  metrics: string
-  images: string[]
-}
-
-interface CompanyInfo {
-  id: string
-  establishedDate: string
-  registrationDetails: string
-  officeLocation: string
-  mission: string
-  vision: string
-}
-
-interface CommitteeMember {
-  id: string
-  name: string
-  position: string
-  term: string
-}
+import { aboutApi, AboutData } from "../../services/aboutApi"
 
 const AdminAbout: React.FC = () => {
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
-    id: "1",
-    establishedDate: "12th May 2010",
-    registrationDetails: "Registered under the Department of Cooperatives, Government of Nepal",
-    officeLocation: "6th Floor, Civil Trade Centre (CTC Mall), Sundhara, Kathmandu Metropolitan City Ward No. 22",
-    mission:
-      "To create a vibrant business community where together, everyone can achieve more through cooperative principles and mutual support.",
-    vision: "To be the leading cooperative institution fostering economic growth and social development in Nepal.",
-  })
-
-  const [] = useState<CommitteeMember[]>([
-    { id: "1", name: "Mr. Prakash Shrestha", position: "Chairman", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "2", name: "Mr. Rajesh Kumar Maharjan", position: "Vice Chairman", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "3", name: "Mrs. Sunita Devi Shrestha", position: "Secretary", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "4", name: "Mr. Ramesh Bahadur Thapa", position: "Treasurer", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "5", name: "Mrs. Kamala Devi Pradhan", position: "Member", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "6", name: "Mr. Bishnu Prasad Ghimire", position: "Member", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-    { id: "7", name: "Mr. Saroj Prasad Raya", position: "Member", term: "2081 Bhadra 30 to 2086 Bhadra 29" },
-  ])
-
-  const [storySection, setStorySection] = useState<StorySection>({
-    id: "1",
-    title: "Our Story Since 2010",
-    content:
-      "Constellation Saving and Credit Cooperative Limited was established on 12th May 2010 with a vision to create a vibrant business community. Over the years, we have grown from a small cooperative to a trusted financial institution serving our community with dedication and integrity.",
-    images: [],
-  })
-
-  const [principles, setPrinciples] = useState<PrincipleItem[]>([
-    {
-      id: "1",
-      type: "mission",
-      title: "Our Mission",
-      content:
-        "To create a vibrant business community where together, everyone can achieve more through cooperative principles and mutual support.",
-      images: [],
-    },
-    {
-      id: "2",
-      type: "vision",
-      title: "Our Vision",
-      content: "To be the leading cooperative institution fostering economic growth and social development in Nepal.",
-      images: [],
-    },
-    {
-      id: "3",
-      type: "purpose",
-      title: "Our Purpose",
-      content:
-        "To provide accessible financial services and promote economic empowerment through cooperative values of self-help, self-responsibility, democracy, equality, equity, and solidarity.",
-      images: [],
-    },
-  ])
-
-  const [values, setValues] = useState<ValueItem[]>([
-    {
-      id: "1",
-      title: "Integrity",
-      description: "We conduct our business with honesty, transparency, and ethical practices.",
-      icon: "🤝",
-      images: [],
-    },
-    {
-      id: "2",
-      title: "Community Focus",
-      description: "We prioritize the needs and development of our community members.",
-      icon: "🏘️",
-      images: [],
-    },
-    {
-      id: "3",
-      title: "Innovation",
-      description: "We embrace new technologies and methods to better serve our members.",
-      icon: "💡",
-      images: [],
-    },
-  ])
-
-  const [journeyMilestones, setJourneyMilestones] = useState<JourneyMilestone[]>([
-    {
-      id: "1",
-      year: "2010",
-      title: "Foundation",
-      description: "Constellation Saving and Credit Cooperative Limited was established.",
-      images: [],
-    },
-    {
-      id: "2",
-      year: "2015",
-      title: "Expansion",
-      description: "Expanded services and increased membership significantly.",
-      images: [],
-    },
-    {
-      id: "3",
-      year: "2020",
-      title: "Digital Transformation",
-      description: "Implemented digital banking services and online platforms.",
-      images: [],
-    },
-  ])
-
-  const [communityImpacts, setCommunityImpacts] = useState<CommunityImpact[]>([
-    {
-      id: "1",
-      title: "Financial Inclusion",
-      description: "Providing banking services to underserved communities.",
-      metrics: "5000+ members served",
-      images: [],
-    },
-    {
-      id: "2",
-      title: "Economic Development",
-      description: "Supporting local businesses through microfinance and loans.",
-      metrics: "NPR 50M+ in loans disbursed",
-      images: [],
-    },
-  ])
-
+  const [aboutData, setAboutData] = useState<AboutData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [editingCompany, setEditingCompany] = useState(false)
-  const [] = useState<string | null>(null)
-
   const [editingStory, setEditingStory] = useState(false)
-  const [editingPrinciple, setEditingPrinciple] = useState<string | null>(null)
   const [editingValue, setEditingValue] = useState<string | null>(null)
-  const [editingJourney, setEditingJourney] = useState<string | null>(null)
+  const [editingMilestone, setEditingMilestone] = useState<string | null>(null)
   const [editingImpact, setEditingImpact] = useState<string | null>(null)
-  const [showAddPrinciple, setShowAddPrinciple] = useState(false)
   const [showAddValue, setShowAddValue] = useState(false)
-  const [showAddJourney, setShowAddJourney] = useState(false)
+  const [showAddMilestone, setShowAddMilestone] = useState(false)
   const [showAddImpact, setShowAddImpact] = useState(false)
 
-  const [] = useState<Omit<CommitteeMember, "id">>({
-    name: "",
-    position: "",
-    term: "",
+  const [newValue, setNewValue] = useState({
+    title: "",
+    description: "",
+    icon: "🤝",
+    images: []
   })
 
-  const [newPrinciple, setNewPrinciple] = useState<Omit<PrincipleItem, "id">>({
-    type: "purpose",
-    title: "",
-    content: "",
-    images: [],
-  })
-  const [newValue, setNewValue] = useState<Omit<ValueItem, "id">>({
-    title: "",
-    description: "",
-    icon: "",
-    images: [],
-  })
-  const [newJourney, setNewJourney] = useState<Omit<JourneyMilestone, "id">>({
+  const [newMilestone, setNewMilestone] = useState({
     year: "",
-    title: "",
-    description: "",
-    images: [],
+    event: "",
+    icon: "calendar",
+    images: []
   })
-  const [newImpact, setNewImpact] = useState<Omit<CommunityImpact, "id">>({
+
+  const [newImpact, setNewImpact] = useState({
     title: "",
     description: "",
     metrics: "",
-    images: [],
+    images: []
   })
 
-  const [] = useState(false)
+  useEffect(() => {
+    loadAboutData()
+  }, [])
 
-  // Company Info CRUD Operations
-  const handleUpdateCompanyInfo = (field: keyof CompanyInfo, value: string) => {
-    setCompanyInfo((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const saveCompanyInfo = () => {
-    // Here you would typically save to backend
-    console.log("[v0] Saving company info:", companyInfo)
-    setEditingCompany(false)
-    // Show success message
-  }
-
-  // Committee Members CRUD Operations
-
-
-
-
-  const handleImageUpload = (file: File): Promise<string> => {
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        resolve(e.target?.result as string)
+  const loadAboutData = async () => {
+    try {
+      setLoading(true)
+      const result = await aboutApi.getAbout()
+      console.log("Admin About API result:", result)
+      
+      if (result.success && result.data) {
+        console.log("Admin About data loaded:", result.data)
+        setAboutData(result.data)
+      } else {
+        console.warn("Failed to load about data, using empty state")
+        setAboutData(null)
       }
-      reader.readAsDataURL(file)
-    })
-  }
-
-  const addImageToSection = async (sectionType: string, sectionId: string, file: File) => {
-    const imageUrl = await handleImageUpload(file)
-
-    switch (sectionType) {
-      case "story":
-        setStorySection((prev) => ({
-          ...prev,
-          images: [...prev.images, imageUrl],
-        }))
-        break
-      case "principle":
-        setPrinciples((prev) =>
-          prev.map((item) => (item.id === sectionId ? { ...item, images: [...item.images, imageUrl] } : item)),
-        )
-        break
-      case "value":
-        setValues((prev) =>
-          prev.map((item) => (item.id === sectionId ? { ...item, images: [...item.images, imageUrl] } : item)),
-        )
-        break
-      case "journey":
-        setJourneyMilestones((prev) =>
-          prev.map((item) => (item.id === sectionId ? { ...item, images: [...item.images, imageUrl] } : item)),
-        )
-        break
-      case "impact":
-        setCommunityImpacts((prev) =>
-          prev.map((item) => (item.id === sectionId ? { ...item, images: [...item.images, imageUrl] } : item)),
-        )
-        break
+    } catch (error) {
+      console.error("Failed to load about data:", error)
+      setAboutData(null)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const removeImage = (sectionType: string, sectionId: string, imageIndex: number) => {
-    switch (sectionType) {
-      case "story":
-        setStorySection((prev) => ({
-          ...prev,
-          images: prev.images.filter((_, index) => index !== imageIndex),
-        }))
-        break
-      case "principle":
-        setPrinciples((prev) =>
-          prev.map((item) =>
-            item.id === sectionId ? { ...item, images: item.images.filter((_, index) => index !== imageIndex) } : item,
-          ),
-        )
-        break
-      case "value":
-        setValues((prev) =>
-          prev.map((item) =>
-            item.id === sectionId ? { ...item, images: item.images.filter((_, index) => index !== imageIndex) } : item,
-          ),
-        )
-        break
-      case "journey":
-        setJourneyMilestones((prev) =>
-          prev.map((item) =>
-            item.id === sectionId ? { ...item, images: item.images.filter((_, index) => index !== imageIndex) } : item,
-          ),
-        )
-        break
-      case "impact":
-        setCommunityImpacts((prev) =>
-          prev.map((item) =>
-            item.id === sectionId ? { ...item, images: item.images.filter((_, index) => index !== imageIndex) } : item,
-          ),
-        )
-        break
-    }
-  }
-
-  const handleAddPrinciple = () => {
-    if (newPrinciple.title && newPrinciple.content) {
-      const principle: PrincipleItem = {
-        id: Date.now().toString(),
-        ...newPrinciple,
+  const saveCompanyInfo = async () => {
+    if (!aboutData) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.updateSection("companyInfo", aboutData.companyInfo)
+      if (result.success) {
+        console.log("Company info saved successfully")
+        setEditingCompany(false)
+        loadAboutData() // Reload to get fresh data
       }
-      setPrinciples((prev) => [...prev, principle])
-      setNewPrinciple({ type: "purpose", title: "", content: "", images: [] })
-      setShowAddPrinciple(false)
+    } catch (error) {
+      console.error("Error saving company info:", error)
+      alert("Failed to save company info")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleAddValue = () => {
-    if (newValue.title && newValue.description) {
-      const value: ValueItem = {
-        id: Date.now().toString(),
-        ...newValue,
+  const saveStory = async () => {
+    if (!aboutData) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.updateSection("story", aboutData.story)
+      if (result.success) {
+        console.log("Story saved successfully")
+        setEditingStory(false)
+        loadAboutData() // Reload to get fresh data
       }
-      setValues((prev) => [...prev, value])
-      setNewValue({ title: "", description: "", icon: "", images: [] })
-      setShowAddValue(false)
+    } catch (error) {
+      console.error("Error saving story:", error)
+      alert("Failed to save story")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleAddJourney = () => {
-    if (newJourney.year && newJourney.title && newJourney.description) {
-      const journey: JourneyMilestone = {
-        id: Date.now().toString(),
-        ...newJourney,
+  const handleAddValue = async () => {
+    try {
+      setSaving(true)
+      const result = await aboutApi.addValue(newValue)
+      if (result.success) {
+        console.log("Value added successfully")
+        setNewValue({ title: "", description: "", icon: "🤝", images: [] })
+        setShowAddValue(false)
+        loadAboutData() // Reload data
       }
-      setJourneyMilestones((prev) => [...prev, journey])
-      setNewJourney({ year: "", title: "", description: "", images: [] })
-      setShowAddJourney(false)
+    } catch (error) {
+      console.error("Error adding value:", error)
+      alert("Failed to add value")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleAddImpact = () => {
-    if (newImpact.title && newImpact.description) {
-      const impact: CommunityImpact = {
-        id: Date.now().toString(),
-        ...newImpact,
+  const handleUpdateValue = async (id: string, data: any) => {
+    try {
+      setSaving(true)
+      const result = await aboutApi.updateValue(id, data)
+      if (result.success) {
+        console.log("Value updated successfully")
+        setEditingValue(null)
+        loadAboutData() // Reload data
       }
-      setCommunityImpacts((prev) => [...prev, impact])
-      setNewImpact({ title: "", description: "", metrics: "", images: [] })
-      setShowAddImpact(false)
+    } catch (error) {
+      console.error("Error updating value:", error)
+      alert("Failed to update value")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleDeletePrinciple = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      setPrinciples((prev) => prev.filter((item) => item.id !== id))
+  const handleDeleteValue = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this value?")) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.deleteValue(id)
+      if (result.success) {
+        console.log("Value deleted successfully")
+        loadAboutData() // Reload data
+      }
+    } catch (error) {
+      console.error("Error deleting value:", error)
+      alert("Failed to delete value")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleDeleteValue = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this value?")) {
-      setValues((prev) => prev.filter((item) => item.id !== id))
+  const handleAddMilestone = async () => {
+    try {
+      setSaving(true)
+      const result = await aboutApi.addMilestone(newMilestone)
+      if (result.success) {
+        console.log("Milestone added successfully")
+        setNewMilestone({ year: "", event: "", icon: "calendar", images: [] })
+        setShowAddMilestone(false)
+        loadAboutData() // Reload data
+      }
+    } catch (error) {
+      console.error("Error adding milestone:", error)
+      alert("Failed to add milestone")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleDeleteJourney = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this milestone?")) {
-      setJourneyMilestones((prev) => prev.filter((item) => item.id !== id))
+  const handleAddImpact = async () => {
+    try {
+      setSaving(true)
+      const result = await aboutApi.addImpact(newImpact)
+      if (result.success) {
+        console.log("Impact added successfully")
+        setNewImpact({ title: "", description: "", metrics: "", images: [] })
+        setShowAddImpact(false)
+        loadAboutData() // Reload data
+      }
+    } catch (error) {
+      console.error("Error adding impact:", error)
+      alert("Failed to add impact")
+    } finally {
+      setSaving(false)
     }
   }
 
-  const handleDeleteImpact = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this impact?")) {
-      setCommunityImpacts((prev) => prev.filter((item) => item.id !== id))
+  const handleDeleteMilestone = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this milestone?")) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.deleteMilestone(id)
+      if (result.success) {
+        console.log("Milestone deleted successfully")
+        loadAboutData() // Reload data
+      }
+    } catch (error) {
+      console.error("Error deleting milestone:", error)
+      alert("Failed to delete milestone")
+    } finally {
+      setSaving(false)
     }
   }
+
+  const handleDeleteImpact = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this impact?")) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.deleteImpact(id)
+      if (result.success) {
+        console.log("Impact deleted successfully")
+        loadAboutData() // Reload data
+      }
+    } catch (error) {
+      console.error("Error deleting impact:", error)
+      alert("Failed to delete impact")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <AdminDashboard currentSection="about">
+        <div className="flex items-center justify-center h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        </div>
+      </AdminDashboard>
+    )
+  }
+
+  if (!aboutData) {
+    return (
+      <AdminDashboard currentSection="about">
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">No About Data Found</h2>
+          <p className="text-gray-600">Please check if the backend server is running.</p>
+          <button 
+            onClick={loadAboutData} 
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Retry
+          </button>
+        </div>
+      </AdminDashboard>
+    )
+  }
+
+  // Create a custom Button component that supports loading state
+  const LoadingButton = ({ children, onClick, variant = "primary", icon: Icon, loading = false, ...props }: any) => (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className={`
+        flex items-center px-4 py-2 rounded-lg transition-colors duration-200
+        ${variant === "primary" ? "bg-green-600 text-white hover:bg-green-700" : ""}
+        ${variant === "secondary" ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : ""}
+        ${variant === "ghost" ? "bg-transparent text-gray-600 hover:bg-gray-100" : ""}
+        ${loading ? "opacity-50 cursor-not-allowed" : ""}
+        ${props.className || ""}
+      `}
+      {...props}
+    >
+      {loading ? (
+        <>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+          Saving...
+        </>
+      ) : (
+        <>
+          {Icon && <Icon className="h-4 w-4 mr-2" />}
+          {children}
+        </>
+      )}
+    </button>
+  )
 
   return (
     <AdminDashboard currentSection="about">
@@ -429,19 +316,22 @@ const AdminAbout: React.FC = () => {
           </div>
         </div>
 
+        {/* Story Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <BookOpenIcon className="h-6 w-6 mr-2 text-green-600" />
               Our Story Since 2010
             </h2>
-            <Button
+            <button
               onClick={() => setEditingStory(!editingStory)}
-              variant={editingStory ? "secondary" : "primary"}
-              icon={PencilIcon}
+              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
+                editingStory ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-green-600 text-white hover:bg-green-700"
+              }`}
             >
+              <PencilIcon className="h-4 w-4 mr-2" />
               {editingStory ? "Cancel" : "Edit"}
-            </Button>
+            </button>
           </div>
 
           <div className="space-y-4">
@@ -450,12 +340,15 @@ const AdminAbout: React.FC = () => {
               {editingStory ? (
                 <input
                   type="text"
-                  value={storySection.title}
-                  onChange={(e) => setStorySection((prev) => ({ ...prev, title: e.target.value }))}
+                  value={aboutData.story.title}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    story: { ...prev.story, title: e.target.value }
+                  } : prev)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{storySection.title}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.story.title}</p>
               )}
             </div>
 
@@ -463,66 +356,43 @@ const AdminAbout: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
               {editingStory ? (
                 <textarea
-                  value={storySection.content}
-                  onChange={(e) => setStorySection((prev) => ({ ...prev, content: e.target.value }))}
+                  value={aboutData.story.paragraphs.join('\n\n')}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    story: { ...prev.story, paragraphs: e.target.value.split('\n\n') }
+                  } : prev)}
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{storySection.content}</p>
-              )}
-            </div>
-
-            {/* Image Management */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                {storySection.images.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={image || "/placeholder.svg"}
-                      alt={`Story ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
-                    />
-                    {editingStory && (
-                      <button
-                        onClick={() => removeImage("story", storySection.id, index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <XMarkIcon className="h-3 w-3" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {editingStory && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) addImageToSection("story", storySection.id, file)
-                  }}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-                />
+                <div className="space-y-3">
+                  {aboutData.story.paragraphs.map((paragraph, index) => (
+                    <p key={index} className="text-gray-900 bg-gray-50 p-3 rounded-lg">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               )}
             </div>
 
             {editingStory && (
               <div className="flex justify-end space-x-3">
-                <Button onClick={() => setEditingStory(false)} variant="secondary">
+                <button
+                  onClick={() => setEditingStory(false)}
+                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                >
                   Cancel
-                </Button>
-                <Button onClick={() => setEditingStory(false)} variant="primary" icon={CheckIcon}>
+                </button>
+                <LoadingButton onClick={saveStory} variant="primary" icon={CheckIcon} loading={saving}>
                   Save Changes
-                </Button>
+                </LoadingButton>
               </div>
             )}
           </div>
         </Card>
 
-        {/* Company Information Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Company Information */}
+        <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <BuildingOfficeIcon className="h-6 w-6 mr-2 text-purple-600" />
@@ -530,7 +400,9 @@ const AdminAbout: React.FC = () => {
             </h2>
             <button
               onClick={() => setEditingCompany(!editingCompany)}
-              className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200"
+              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
+                editingCompany ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-purple-600 text-white hover:bg-purple-700"
+              }`}
             >
               <PencilIcon className="h-4 w-4 mr-2" />
               {editingCompany ? "Cancel" : "Edit"}
@@ -538,7 +410,6 @@ const AdminAbout: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Established Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <CalendarIcon className="h-4 w-4 inline mr-1" />
@@ -547,16 +418,18 @@ const AdminAbout: React.FC = () => {
               {editingCompany ? (
                 <input
                   type="text"
-                  value={companyInfo.establishedDate}
-                  onChange={(e) => handleUpdateCompanyInfo("establishedDate", e.target.value)}
+                  value={aboutData.companyInfo.establishedDate}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    companyInfo: { ...prev.companyInfo, establishedDate: e.target.value }
+                  } : prev)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{companyInfo.establishedDate}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.establishedDate}</p>
               )}
             </div>
 
-            {/* Office Location */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <MapPinIcon className="h-4 w-4 inline mr-1" />
@@ -564,58 +437,67 @@ const AdminAbout: React.FC = () => {
               </label>
               {editingCompany ? (
                 <textarea
-                  value={companyInfo.officeLocation}
-                  onChange={(e) => handleUpdateCompanyInfo("officeLocation", e.target.value)}
+                  value={aboutData.companyInfo.officeAddress}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    companyInfo: { ...prev.companyInfo, officeAddress: e.target.value }
+                  } : prev)}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{companyInfo.officeLocation}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.officeAddress}</p>
               )}
             </div>
 
-            {/* Registration Details */}
             <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Registration Details</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
               {editingCompany ? (
-                <textarea
-                  value={companyInfo.registrationDetails}
-                  onChange={(e) => handleUpdateCompanyInfo("registrationDetails", e.target.value)}
-                  rows={2}
+                <input
+                  type="text"
+                  value={aboutData.companyInfo.registrationNumber}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    companyInfo: { ...prev.companyInfo, registrationNumber: e.target.value }
+                  } : prev)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{companyInfo.registrationDetails}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.registrationNumber}</p>
               )}
             </div>
 
-            {/* Mission */}
             <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">Mission</label>
               {editingCompany ? (
                 <textarea
-                  value={companyInfo.mission}
-                  onChange={(e) => handleUpdateCompanyInfo("mission", e.target.value)}
+                  value={aboutData.companyInfo.mission}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    companyInfo: { ...prev.companyInfo, mission: e.target.value }
+                  } : prev)}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{companyInfo.mission}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.mission}</p>
               )}
             </div>
 
-            {/* Vision */}
             <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">Vision</label>
               {editingCompany ? (
                 <textarea
-                  value={companyInfo.vision}
-                  onChange={(e) => handleUpdateCompanyInfo("vision", e.target.value)}
+                  value={aboutData.companyInfo.vision}
+                  onChange={(e) => setAboutData(prev => prev ? {
+                    ...prev,
+                    companyInfo: { ...prev.companyInfo, vision: e.target.value }
+                  } : prev)}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{companyInfo.vision}</p>
+                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.vision}</p>
               )}
             </div>
           </div>
@@ -628,212 +510,27 @@ const AdminAbout: React.FC = () => {
               >
                 Cancel
               </button>
-              <button
-                onClick={saveCompanyInfo}
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
-              >
-                <CheckIcon className="h-4 w-4 mr-2" />
+              <LoadingButton onClick={saveCompanyInfo} variant="primary" icon={CheckIcon} loading={saving}>
                 Save Changes
-              </button>
+              </LoadingButton>
             </div>
           )}
-        </div>
-
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-              <GlobeAltIcon className="h-6 w-6 mr-2 text-green-600" />
-              Mission, Vision & Purpose
-            </h2>
-            <Button onClick={() => setShowAddPrinciple(!showAddPrinciple)} variant="primary" icon={PlusIcon}>
-              Add Item
-            </Button>
-          </div>
-
-          {/* Add New Principle Form */}
-          {showAddPrinciple && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              className="bg-green-50 p-4 rounded-lg mb-6"
-            >
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Item</h3>
-              <div className="space-y-4">
-                <select
-                  value={newPrinciple.type}
-                  onChange={(e) =>
-                    setNewPrinciple((prev) => ({ ...prev, type: e.target.value as "mission" | "vision" | "purpose" }))
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  <option value="purpose">Purpose</option>
-                  <option value="mission">Mission</option>
-                  <option value="vision">Vision</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={newPrinciple.title}
-                  onChange={(e) => setNewPrinciple((prev) => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-                <textarea
-                  placeholder="Content"
-                  value={newPrinciple.content}
-                  onChange={(e) => setNewPrinciple((prev) => ({ ...prev, content: e.target.value }))}
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div className="flex justify-end mt-4 space-x-3">
-                <Button onClick={() => setShowAddPrinciple(false)} variant="secondary">
-                  Cancel
-                </Button>
-                <Button onClick={handleAddPrinciple} variant="primary" icon={CheckIcon}>
-                  Add Item
-                </Button>
-              </div>
-            </motion.div>
-          )}
-
-          <div className="space-y-4">
-            {principles.map((principle) => (
-              <Card key={principle.id} className="p-4" background="gray">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center mb-2">
-                      <span
-                        className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          principle.type === "mission"
-                            ? "bg-green-100 text-green-800"
-                            : principle.type === "vision"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-green-100 text-green-800"
-                        }`}
-                      >
-                        {principle.type.toUpperCase()}
-                      </span>
-                    </div>
-                    {editingPrinciple === principle.id ? (
-                      <div className="space-y-3">
-                        <input
-                          type="text"
-                          value={principle.title}
-                          onChange={(e) =>
-                            setPrinciples((prev) =>
-                              prev.map((item) =>
-                                item.id === principle.id ? { ...item, title: e.target.value } : item,
-                              ),
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        />
-                        <textarea
-                          value={principle.content}
-                          onChange={(e) =>
-                            setPrinciples((prev) =>
-                              prev.map((item) =>
-                                item.id === principle.id ? { ...item, content: e.target.value } : item,
-                              ),
-                            )
-                          }
-                          rows={4}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{principle.title}</h3>
-                        <p className="text-gray-700">{principle.content}</p>
-                      </div>
-                    )}
-
-                    {/* Images for this principle */}
-                    {principle.images.length > 0 && (
-                      <div className="grid grid-cols-3 gap-2 mt-4">
-                        {principle.images.map((image, index) => (
-                          <div key={index} className="relative group">
-                            <img
-                              src={image || "/placeholder.svg"}
-                              alt={`${principle.title} ${index + 1}`}
-                              className="w-full h-16 object-cover rounded"
-                            />
-                            {editingPrinciple === principle.id && (
-                              <button
-                                onClick={() => removeImage("principle", principle.id, index)}
-                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <XMarkIcon className="h-3 w-3" />
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {editingPrinciple === principle.id && (
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) addImageToSection("principle", principle.id, file)
-                        }}
-                        className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-                      />
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-2 ml-4">
-                    {editingPrinciple === principle.id ? (
-                      <>
-                        <Button onClick={() => setEditingPrinciple(null)} variant="primary" size="sm" icon={CheckIcon}>
-                          Save
-                        </Button>
-                        <Button
-                          onClick={() => setEditingPrinciple(null)}
-                          variant="secondary"
-                          size="sm"
-                          icon={XMarkIcon}
-                        >
-                          Cancel
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          onClick={() => setEditingPrinciple(principle.id)}
-                          variant="ghost"
-                          size="sm"
-                          icon={PencilIcon}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => handleDeletePrinciple(principle.id)}
-                          variant="ghost"
-                          size="sm"
-                          icon={TrashIcon}
-                        >
-                          Delete
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
         </Card>
 
+        {/* Values Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <HeartIcon className="h-6 w-6 mr-2 text-red-600" />
               Our Values
             </h2>
-            <Button onClick={() => setShowAddValue(!showAddValue)} variant="primary" icon={PlusIcon}>
+            <button
+              onClick={() => setShowAddValue(!showAddValue)}
+              className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+            >
+              <PlusIcon className="h-4 w-4 mr-2" />
               Add Value
-            </Button>
+            </button>
           </div>
 
           {/* Add New Value Form */}
@@ -849,71 +546,63 @@ const AdminAbout: React.FC = () => {
                   type="text"
                   placeholder="Value Title"
                   value={newValue.title}
-                  onChange={(e) => setNewValue((prev) => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setNewValue(prev => ({ ...prev, title: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <input
                   type="text"
-                  placeholder="Icon (emoji or text)"
+                  placeholder="Icon (emoji)"
                   value={newValue.icon}
-                  onChange={(e) => setNewValue((prev) => ({ ...prev, icon: e.target.value }))}
+                  onChange={(e) => setNewValue(prev => ({ ...prev, icon: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <textarea
                   placeholder="Description"
                   value={newValue.description}
-                  onChange={(e) => setNewValue((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) => setNewValue(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <div className="flex justify-end mt-4 space-x-3">
-                <Button onClick={() => setShowAddValue(false)} variant="secondary">
+                <button
+                  onClick={() => setShowAddValue(false)}
+                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                >
                   Cancel
-                </Button>
-                <Button onClick={handleAddValue} variant="primary" icon={CheckIcon}>
+                </button>
+                <LoadingButton onClick={handleAddValue} variant="primary" icon={CheckIcon} loading={saving}>
                   Add Value
-                </Button>
+                </LoadingButton>
               </div>
             </motion.div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {values.map((value) => (
-              <Card key={value.id} className="p-4" hover={false}>
+            {aboutData.values.map((value) => (
+              <Card key={value._id} className="p-4" hover={false}>
                 <div className="text-center">
-                  {editingValue === value.id ? (
+                  {editingValue === value._id ? (
                     <div className="space-y-3">
                       <input
                         type="text"
-                        value={value.icon}
-                        onChange={(e) =>
-                          setValues((prev) =>
-                            prev.map((item) => (item.id === value.id ? { ...item, icon: e.target.value } : item)),
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-center"
-                        placeholder="Icon"
-                      />
-                      <input
-                        type="text"
                         value={value.title}
-                        onChange={(e) =>
-                          setValues((prev) =>
-                            prev.map((item) => (item.id === value.id ? { ...item, title: e.target.value } : item)),
+                        onChange={(e) => {
+                          const updatedValues = aboutData.values.map(v => 
+                            v._id === value._id ? { ...v, title: e.target.value } : v
                           )
-                        }
+                          setAboutData(prev => prev ? { ...prev, values: updatedValues } : prev)
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       />
                       <textarea
                         value={value.description}
-                        onChange={(e) =>
-                          setValues((prev) =>
-                            prev.map((item) =>
-                              item.id === value.id ? { ...item, description: e.target.value } : item,
-                            ),
+                        onChange={(e) => {
+                          const updatedValues = aboutData.values.map(v => 
+                            v._id === value._id ? { ...v, description: e.target.value } : v
                           )
-                        }
+                          setAboutData(prev => prev ? { ...prev, values: updatedValues } : prev)
+                        }}
                         rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       />
@@ -926,59 +615,41 @@ const AdminAbout: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Images for this value */}
-                  {value.images.length > 0 && (
-                    <div className="grid grid-cols-2 gap-2 mt-4">
-                      {value.images.map((image, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={image || "/placeholder.svg"}
-                            alt={`${value.title} ${index + 1}`}
-                            className="w-full h-16 object-cover rounded"
-                          />
-                          {editingValue === value.id && (
-                            <button
-                              onClick={() => removeImage("value", value.id, index)}
-                              className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <XMarkIcon className="h-3 w-3" />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {editingValue === value.id && (
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) addImageToSection("value", value.id, file)
-                      }}
-                      className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
-                    />
-                  )}
-
                   <div className="flex justify-center space-x-2 mt-4">
-                    {editingValue === value.id ? (
+                    {editingValue === value._id ? (
                       <>
-                        <Button onClick={() => setEditingValue(null)} variant="primary" size="sm" icon={CheckIcon}>
+                        <LoadingButton 
+                          onClick={() => value._id && handleUpdateValue(value._id, {
+                            title: value.title,
+                            description: value.description
+                          })} 
+                          variant="primary" 
+                          size="sm"
+                          loading={saving}
+                        >
                           Save
-                        </Button>
-                        <Button onClick={() => setEditingValue(null)} variant="secondary" size="sm" icon={XMarkIcon}>
+                        </LoadingButton>
+                        <button
+                          onClick={() => setEditingValue(null)}
+                          className="px-3 py-1 text-gray-600 bg-gray-100 rounded hover:bg-gray-200 text-sm"
+                        >
                           Cancel
-                        </Button>
+                        </button>
                       </>
                     ) : (
                       <>
-                        <Button onClick={() => setEditingValue(value.id)} variant="ghost" size="sm" icon={PencilIcon}>
+                        <button
+                          onClick={() => setEditingValue(value._id || null)}
+                          className="px-3 py-1 text-gray-600 bg-gray-100 rounded hover:bg-gray-200 text-sm"
+                        >
                           Edit
-                        </Button>
-                        <Button onClick={() => handleDeleteValue(value.id)} variant="ghost" size="sm" icon={TrashIcon}>
+                        </button>
+                        <button
+                          onClick={() => value._id && handleDeleteValue(value._id)}
+                          className="px-3 py-1 text-red-600 bg-red-100 rounded hover:bg-red-200 text-sm"
+                        >
                           Delete
-                        </Button>
+                        </button>
                       </>
                     )}
                   </div>
@@ -988,19 +659,24 @@ const AdminAbout: React.FC = () => {
           </div>
         </Card>
 
+        {/* Milestones Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <ClockIcon className="h-6 w-6 mr-2 text-indigo-600" />
               Our Journey
             </h2>
-            <Button onClick={() => setShowAddJourney(!showAddJourney)} variant="primary" icon={PlusIcon}>
+            <button
+              onClick={() => setShowAddMilestone(!showAddMilestone)}
+              className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+            >
+              <PlusIcon className="h-4 w-4 mr-2" />
               Add Milestone
-            </Button>
+            </button>
           </div>
 
-          {/* Add New Journey Form */}
-          {showAddJourney && (
+          {/* Add New Milestone Form */}
+          {showAddMilestone && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -1011,164 +687,61 @@ const AdminAbout: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Year"
-                  value={newJourney.year}
-                  onChange={(e) => setNewJourney((prev) => ({ ...prev, year: e.target.value }))}
+                  value={newMilestone.year}
+                  onChange={(e) => setNewMilestone(prev => ({ ...prev, year: e.target.value }))}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
                 <input
                   type="text"
-                  placeholder="Title"
-                  value={newJourney.title}
-                  onChange={(e) => setNewJourney((prev) => ({ ...prev, title: e.target.value }))}
+                  placeholder="Event"
+                  value={newMilestone.event}
+                  onChange={(e) => setNewMilestone(prev => ({ ...prev, event: e.target.value }))}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
-                <textarea
-                  placeholder="Description"
-                  value={newJourney.description}
-                  onChange={(e) => setNewJourney((prev) => ({ ...prev, description: e.target.value }))}
-                  rows={1}
+                <input
+                  type="text"
+                  placeholder="Icon"
+                  value={newMilestone.icon}
+                  onChange={(e) => setNewMilestone(prev => ({ ...prev, icon: e.target.value }))}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
               <div className="flex justify-end mt-4 space-x-3">
-                <Button onClick={() => setShowAddJourney(false)} variant="secondary">
+                <button
+                  onClick={() => setShowAddMilestone(false)}
+                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                >
                   Cancel
-                </Button>
-                <Button onClick={handleAddJourney} variant="primary" icon={CheckIcon}>
+                </button>
+                <LoadingButton onClick={handleAddMilestone} variant="primary" icon={CheckIcon} loading={saving}>
                   Add Milestone
-                </Button>
+                </LoadingButton>
               </div>
             </motion.div>
           )}
 
           <div className="space-y-6">
-            {journeyMilestones.map((milestone, index) => (
-              <div key={milestone.id} className="flex">
+            {aboutData.milestones.map((milestone, index) => (
+              <div key={milestone._id} className="flex">
                 <div className="flex flex-col items-center mr-6">
                   <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
                     {milestone.year}
                   </div>
-                  {index < journeyMilestones.length - 1 && <div className="w-0.5 h-16 bg-indigo-200 mt-4"></div>}
+                  {index < aboutData.milestones.length - 1 && <div className="w-0.5 h-16 bg-indigo-200 mt-4"></div>}
                 </div>
                 <Card className="flex-1 p-4" background="gray">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      {editingJourney === milestone.id ? (
-                        <div className="space-y-3">
-                          <input
-                            type="text"
-                            value={milestone.year}
-                            onChange={(e) =>
-                              setJourneyMilestones((prev) =>
-                                prev.map((item) =>
-                                  item.id === milestone.id ? { ...item, year: e.target.value } : item,
-                                ),
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                          />
-                          <input
-                            type="text"
-                            value={milestone.title}
-                            onChange={(e) =>
-                              setJourneyMilestones((prev) =>
-                                prev.map((item) =>
-                                  item.id === milestone.id ? { ...item, title: e.target.value } : item,
-                                ),
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                          />
-                          <textarea
-                            value={milestone.description}
-                            onChange={(e) =>
-                              setJourneyMilestones((prev) =>
-                                prev.map((item) =>
-                                  item.id === milestone.id ? { ...item, description: e.target.value } : item,
-                                ),
-                              )
-                            }
-                            rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                          />
-                        </div>
-                      ) : (
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">{milestone.title}</h3>
-                          <p className="text-gray-700">{milestone.description}</p>
-                        </div>
-                      )}
-
-                      {/* Images for this milestone */}
-                      {milestone.images.length > 0 && (
-                        <div className="grid grid-cols-3 gap-2 mt-4">
-                          {milestone.images.map((image, imgIndex) => (
-                            <div key={imgIndex} className="relative group">
-                              <img
-                                src={image || "/placeholder.svg"}
-                                alt={`${milestone.title} ${imgIndex + 1}`}
-                                className="w-full h-16 object-cover rounded"
-                              />
-                              {editingJourney === milestone.id && (
-                                <button
-                                  onClick={() => removeImage("journey", milestone.id, imgIndex)}
-                                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <XMarkIcon className="h-3 w-3" />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {editingJourney === milestone.id && (
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0]
-                            if (file) addImageToSection("journey", milestone.id, file)
-                          }}
-                          className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                        />
-                      )}
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{milestone.event}</h3>
                     </div>
                     <div className="flex items-center space-x-2 ml-4">
-                      {editingJourney === milestone.id ? (
-                        <>
-                          <Button onClick={() => setEditingJourney(null)} variant="primary" size="sm" icon={CheckIcon}>
-                            Save
-                          </Button>
-                          <Button
-                            onClick={() => setEditingJourney(null)}
-                            variant="secondary"
-                            size="sm"
-                            icon={XMarkIcon}
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            onClick={() => setEditingJourney(milestone.id)}
-                            variant="ghost"
-                            size="sm"
-                            icon={PencilIcon}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            onClick={() => handleDeleteJourney(milestone.id)}
-                            variant="ghost"
-                            size="sm"
-                            icon={TrashIcon}
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      )}
+                      <button
+                        onClick={() => milestone._id && handleDeleteMilestone(milestone._id)}
+                        className="px-3 py-1 text-red-600 bg-red-100 rounded hover:bg-red-200 text-sm"
+                        disabled={saving}
+                      >
+                        {saving ? "Deleting..." : "Delete"}
+                      </button>
                     </div>
                   </div>
                 </Card>
@@ -1177,15 +750,20 @@ const AdminAbout: React.FC = () => {
           </div>
         </Card>
 
+        {/* Community Impact Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <GlobeAltIcon className="h-6 w-6 mr-2 text-teal-600" />
               Community Impact
             </h2>
-            <Button onClick={() => setShowAddImpact(!showAddImpact)} variant="primary" icon={PlusIcon}>
+            <button
+              onClick={() => setShowAddImpact(!showAddImpact)}
+              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+            >
+              <PlusIcon className="h-4 w-4 mr-2" />
               Add Impact
-            </Button>
+            </button>
           </div>
 
           {/* Add New Impact Form */}
@@ -1201,145 +779,57 @@ const AdminAbout: React.FC = () => {
                   type="text"
                   placeholder="Impact Title"
                   value={newImpact.title}
-                  onChange={(e) => setNewImpact((prev) => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setNewImpact(prev => ({ ...prev, title: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 />
                 <textarea
                   placeholder="Description"
                   value={newImpact.description}
-                  onChange={(e) => setNewImpact((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) => setNewImpact(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 />
                 <input
                   type="text"
-                  placeholder="Metrics (e.g., 5000+ members served)"
+                  placeholder="Metrics"
                   value={newImpact.metrics}
-                  onChange={(e) => setNewImpact((prev) => ({ ...prev, metrics: e.target.value }))}
+                  onChange={(e) => setNewImpact(prev => ({ ...prev, metrics: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 />
               </div>
               <div className="flex justify-end mt-4 space-x-3">
-                <Button onClick={() => setShowAddImpact(false)} variant="secondary">
+                <button
+                  onClick={() => setShowAddImpact(false)}
+                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                >
                   Cancel
-                </Button>
-                <Button onClick={handleAddImpact} variant="primary" icon={CheckIcon}>
+                </button>
+                <LoadingButton onClick={handleAddImpact} variant="primary" icon={CheckIcon} loading={saving}>
                   Add Impact
-                </Button>
+                </LoadingButton>
               </div>
             </motion.div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {communityImpacts.map((impact) => (
-              <Card key={impact.id} className="p-4" background="gradient">
+            {aboutData.communityImpacts.map((impact) => (
+              <Card key={impact._id} className="p-4" background="gradient">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    {editingImpact === impact.id ? (
-                      <div className="space-y-3">
-                        <input
-                          type="text"
-                          value={impact.title}
-                          onChange={(e) =>
-                            setCommunityImpacts((prev) =>
-                              prev.map((item) => (item.id === impact.id ? { ...item, title: e.target.value } : item)),
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                        />
-                        <textarea
-                          value={impact.description}
-                          onChange={(e) =>
-                            setCommunityImpacts((prev) =>
-                              prev.map((item) =>
-                                item.id === impact.id ? { ...item, description: e.target.value } : item,
-                              ),
-                            )
-                          }
-                          rows={3}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                        />
-                        <input
-                          type="text"
-                          value={impact.metrics}
-                          onChange={(e) =>
-                            setCommunityImpacts((prev) =>
-                              prev.map((item) => (item.id === impact.id ? { ...item, metrics: e.target.value } : item)),
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{impact.title}</h3>
-                        <p className="text-gray-700 mb-3">{impact.description}</p>
-                        <div className="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm font-medium inline-block">
-                          {impact.metrics}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Images for this impact */}
-                    {impact.images.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2 mt-4">
-                        {impact.images.map((image, index) => (
-                          <div key={index} className="relative group">
-                            <img
-                              src={image || "/placeholder.svg"}
-                              alt={`${impact.title} ${index + 1}`}
-                              className="w-full h-16 object-cover rounded"
-                            />
-                            {editingImpact === impact.id && (
-                              <button
-                                onClick={() => removeImage("impact", impact.id, index)}
-                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <XMarkIcon className="h-3 w-3" />
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {editingImpact === impact.id && (
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) addImageToSection("impact", impact.id, file)
-                        }}
-                        className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
-                      />
-                    )}
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{impact.title}</h3>
+                    <p className="text-gray-700 mb-3">{impact.description}</p>
+                    <div className="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm font-medium inline-block">
+                      {impact.metrics}
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 ml-4">
-                    {editingImpact === impact.id ? (
-                      <>
-                        <Button onClick={() => setEditingImpact(null)} variant="primary" size="sm" icon={CheckIcon}>
-                          Save
-                        </Button>
-                        <Button onClick={() => setEditingImpact(null)} variant="secondary" size="sm" icon={XMarkIcon}>
-                          Cancel
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button onClick={() => setEditingImpact(impact.id)} variant="ghost" size="sm" icon={PencilIcon}>
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => handleDeleteImpact(impact.id)}
-                          variant="ghost"
-                          size="sm"
-                          icon={TrashIcon}
-                        >
-                          Delete
-                        </Button>
-                      </>
-                    )}
+                    <button
+                      onClick={() => impact._id && handleDeleteImpact(impact._id)}
+                      className="px-3 py-1 text-red-600 bg-red-100 rounded hover:bg-red-200 text-sm"
+                      disabled={saving}
+                    >
+                      {saving ? "Deleting..." : "Delete"}
+                    </button>
                   </div>
                 </div>
               </Card>
