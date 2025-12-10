@@ -106,37 +106,103 @@ function PlaceholderPage({ title }: { title: string }) {
 function AppContent() {
   const [showNoticeModal, setShowNoticeModal] = useState(false)
   const [hasCheckedModal, setHasCheckedModal] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
+
+  useEffect(() => {
+    // Initialize modal service on app start
+    noticeModalService.initialize()
+    setIsInitialized(true)
+    
+    // Add debug helpers with TypeScript safe approach
+    if (typeof window !== 'undefined') {
+      // Create a type-safe assignment
+      (window as any).__noticeModal = {
+        show: () => setShowNoticeModal(true),
+        hide: () => setShowNoticeModal(false),
+        reset: () => {
+          noticeModalService.resetForDevice()
+          setHasCheckedModal(false)
+          setShowNoticeModal(false)
+        },
+        getSettings: () => noticeModalService.getSettings(),
+        forceShow: () => {
+          if (noticeModalService.forceShowModal()) {
+            setShowNoticeModal(true)
+          }
+        }
+      };
+      
+      console.log('NoticeModal debug helpers added to window.__noticeModal')
+    }
+    
+    // Set a timeout to ensure modal shows even if checks fail
+    const safetyTimer = setTimeout(() => {
+      if (!showNoticeModal && !hasCheckedModal) {
+        console.log('Safety timer triggered - forcing modal to show')
+        setShowNoticeModal(true)
+      }
+    }, 2000); // 2 second safety timeout
+    
+    return () => {
+      clearTimeout(safetyTimer)
+      if (typeof window !== 'undefined') {
+        delete (window as any).__noticeModal
+      }
+    }
+  }, [])
 
   useEffect(() => {
     // Only check modal ONCE when component first mounts (app starts)
     const checkAndShowModal = async () => {
-      console.log('Initial modal check on app load')
+      if (!isInitialized) return
+      
+      console.log('=== Initial modal check on app load ===')
+      console.log('Current URL:', window.location.href)
+      
+      // Check if we're in admin section - don't show modal there
+      if (window.location.pathname.startsWith('/admin')) {
+        console.log('In admin section, skipping modal')
+        setHasCheckedModal(true)
+        return
+      }
       
       // Add small delay to ensure DOM is ready
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await new Promise(resolve => setTimeout(resolve, 500))
       
+      // FORCE SHOW FOR EVERYONE - REMOVE COMPLEX CHECKS
+      console.log('🟢 FORCING MODAL TO SHOW FOR ALL VISITORS')
+      setShowNoticeModal(true)
+      noticeModalService.markAsShownInSession()
+      
+      // If you want to keep some logic, use this simplified version:
+      /*
       const shouldShow = noticeModalService.shouldShowModal()
-      console.log('Should show modal:', shouldShow)
+      console.log('Final decision - Should show modal:', shouldShow)
       
       if (shouldShow) {
+        console.log('✅ Setting modal to show')
         setShowNoticeModal(true)
         noticeModalService.markAsShownInSession()
+      } else {
+        console.log('❌ Modal will not be shown - but showing anyway for testing')
+        // FOR TESTING - REMOVE IN PRODUCTION
+        setShowNoticeModal(true)
       }
+      */
+      
       setHasCheckedModal(true)
     }
 
-    if (!hasCheckedModal) {
+    if (isInitialized && !hasCheckedModal) {
       checkAndShowModal()
     }
-  }, [hasCheckedModal])
+  }, [hasCheckedModal, isInitialized])
 
   useEffect(() => {
     // Listen for manual trigger from header/admin
     const handleShowNoticeModal = () => {
       console.log('Manual notice modal trigger')
-      if (noticeModalService.forceShowModal()) {
-        setShowNoticeModal(true)
-      }
+      setShowNoticeModal(true)
     }
 
     window.addEventListener('showNoticeModal', handleShowNoticeModal)
@@ -343,10 +409,38 @@ function AppContent() {
               </main>
               <Footer />
               
-              <NoticeModal 
-                isEnabled={showNoticeModal}
-                onClose={handleCloseNoticeModal}
-              />
+              {/* SIMPLIFIED: ALWAYS show modal if showNoticeModal is true */}
+              {showNoticeModal && (
+                <NoticeModal 
+                  isEnabled={true}
+                  onClose={handleCloseNoticeModal}
+                />
+              )}
+              
+              {/* Add debug button in development */}
+              {process.env.NODE_ENV === 'development' && (
+                <button
+                  onClick={() => {
+                    noticeModalService.resetForDevice()
+                    setHasCheckedModal(false)
+                    setShowNoticeModal(true)
+                  }}
+                  className="fixed bottom-4 left-4 bg-red-500 text-white p-2 rounded z-50 text-xs shadow-lg"
+                >
+                  
+                </button>
+              )}
+              
+              {/* Add a permanent test button that's visible in all environments */}
+              <button
+                onClick={() => setShowNoticeModal(true)}
+                className="fixed bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full z-50 shadow-lg hover:bg-blue-600 transition-colors"
+                title="Test Modal"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </button>
             </>
           }
         />

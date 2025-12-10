@@ -2,16 +2,12 @@
 export interface NoticeModalSettings {
   enabled: boolean
   autoShow: boolean
-  showInterval: number // days
   selectedNoticeId: string | null
-  lastClosed: string | null
 }
 
 class NoticeModalService {
-  private readonly STORAGE_KEY = 'noticeModalSettings'
-  private readonly SESSION_KEY = 'noticeModalShownInSession'
-  private shownInCurrentSession = false
-
+  private readonly STORAGE_KEY = 'noticeModalSettings_simple'
+  
   getSettings(): NoticeModalSettings {
     if (typeof window === 'undefined') {
       return this.getDefaultSettings()
@@ -33,9 +29,7 @@ class NoticeModalService {
     return {
       enabled: true,
       autoShow: true,
-      showInterval: 0, // Show every time by default
       selectedNoticeId: null,
-      lastClosed: null,
     }
   }
 
@@ -46,6 +40,7 @@ class NoticeModalService {
       const current = this.getSettings()
       const updated = { ...current, ...settings }
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated))
+      console.log('Modal settings saved:', updated)
     } catch (error) {
       console.error('Error saving notice modal settings:', error)
     }
@@ -59,127 +54,80 @@ class NoticeModalService {
     return this.getSettings().selectedNoticeId
   }
 
-  resetLastClosed() {
-    this.saveSettings({ lastClosed: null })
+  // SIMPLIFIED: Always return true to show modal for everyone
+  shouldShowModal(): boolean {
+    console.log('=== SIMPLIFIED MODAL CHECK ===')
+    
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    // Don't show in admin section
+    if (window.location.pathname.startsWith('/admin')) {
+      console.log('Not showing modal in admin section')
+      return false
+    }
+
+    const settings = this.getSettings()
+    
+    // Basic checks
+    if (!settings.enabled) {
+      console.log('Modal disabled in settings')
+      return false
+    }
+
+    if (!settings.autoShow) {
+      console.log('AutoShow disabled')
+      return false
+    }
+
+    if (!settings.selectedNoticeId) {
+      console.log('No notice selected - but showing anyway for visibility')
+      // Even if no notice, we'll show a default one
+      return true
+    }
+
+    console.log('✅ Modal should be shown')
+    return true
   }
 
   markAsClosed() {
-    if (typeof window === 'undefined') return
-
-    try {
-      const lastClosed = new Date().toISOString()
-      this.saveSettings({ lastClosed })
-      
-      // Mark as shown in current session
-      this.shownInCurrentSession = true
-      try {
-        sessionStorage.setItem(this.SESSION_KEY, 'true')
-      } catch (e) {
-        console.warn('sessionStorage not available, using in-memory flag')
-      }
-    } catch (error) {
-      console.error('Error marking modal as closed:', error)
-    }
+    // Simplified - just log
+    console.log('Modal closed by user')
   }
 
   markAsShownInSession() {
-    if (typeof window === 'undefined') return
-
-    try {
-      this.shownInCurrentSession = true
-      try {
-        sessionStorage.setItem(this.SESSION_KEY, 'true')
-      } catch (e) {
-        console.warn('sessionStorage not available, using in-memory flag')
-      }
-    } catch (error) {
-      console.error('Error marking modal as shown in session:', error)
-    }
+    // Simplified - just log
+    console.log('Modal shown in session')
   }
 
-  shouldShowModal(): boolean {
-    if (typeof window === 'undefined') return false
-
-    try {
-      const settings = this.getSettings()
-      
-      // Check if modal is enabled and has a selected notice
-      if (!settings.enabled || !settings.autoShow || !settings.selectedNoticeId) {
-        console.log('Modal not shown: disabled, no auto-show, or no notice selected')
-        return false
-      }
-
-      // Check if already shown in current session (MOST IMPORTANT - prevents re-showing on navigation)
-      if (this.shownInCurrentSession === true) {
-        console.log('Modal not shown: already shown in this session')
-        return false
-      }
-
-      // Also check sessionStorage in case of page reload
-      try {
-        const shownInSession = sessionStorage.getItem(this.SESSION_KEY)
-        if (shownInSession === 'true') {
-          console.log('Modal not shown: already shown in this session (from storage)')
-          this.shownInCurrentSession = true
-          return false
-        }
-      } catch (e) {
-        console.warn('sessionStorage not available, checking in-memory flag only')
-      }
-
-      // Check show interval (for showing again after X days)
-      if (settings.lastClosed && settings.showInterval > 0) {
-        const lastClosed = new Date(settings.lastClosed)
-        const now = new Date()
-        const daysSinceLastClose = (now.getTime() - lastClosed.getTime()) / (1000 * 60 * 60 * 24)
-        
-        if (daysSinceLastClose < settings.showInterval) {
-          console.log(`Modal not shown: show interval not met (${daysSinceLastClose.toFixed(1)} days since last close)`)
-          return false
-        }
-      }
-
-      console.log('Modal should be shown')
-      return true
-    } catch (error) {
-      console.error('Error checking if modal should be shown:', error)
-      return false
-    }
-  }
-
-  // Force show modal (for manual triggers)
   forceShowModal(): boolean {
-    if (typeof window === 'undefined') return false
+    console.log('Force showing modal')
+    return true
+  }
 
+  resetForDevice() {
+    console.log('Reset modal for device')
     try {
-      const settings = this.getSettings()
-      if (!settings.enabled || !settings.selectedNoticeId) {
-        return false
-      }
-
-      // Clear session flags to force show
-      this.shownInCurrentSession = false
-      try {
-        sessionStorage.removeItem(this.SESSION_KEY)
-      } catch (e) {
-        console.warn('sessionStorage not available')
-      }
-      this.resetLastClosed()
-      return true
+      localStorage.removeItem(this.STORAGE_KEY)
     } catch (error) {
-      console.error('Error forcing modal show:', error)
-      return false
+      console.error('Error resetting modal:', error)
     }
   }
 
-  // Reset for testing (remove in production)
-  resetSessionFlag() {
-    this.shownInCurrentSession = false
-    try {
-      sessionStorage.removeItem(this.SESSION_KEY)
-    } catch (e) {
-      console.warn('sessionStorage not available')
+  initialize() {
+    if (typeof window === 'undefined') return
+    
+    console.log('Initializing NoticeModalService...')
+    
+    // Ensure default settings are saved
+    const settings = this.getSettings()
+    if (!localStorage.getItem(this.STORAGE_KEY)) {
+      this.saveSettings(settings)
     }
+    
+    // Log for debugging
+    console.log('Current modal settings:', settings)
   }
 }
 
