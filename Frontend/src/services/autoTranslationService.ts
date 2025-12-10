@@ -207,6 +207,24 @@ class AutoTranslationService {
     'nepal': 'नेपाल',
     'terms and conditions': 'नियमहरु र सर्तहरु',
     'privacy policy': 'गोपनीयता नीति',
+    'our services': 'हाम्रा सेवाहरु',
+    'membership': 'सदस्यता',
+    'photo gallery': 'फोटो ग्यालेरी',
+    'terms and policies': 'नियमहरु र नीतिहरु',
+    'terms & conditions': 'नियमहरु र सर्तहरु',
+    'Empowering communities through cooperative banking solutions. Building financial stability and prosperity together.': 'सहकारी बैंकिङ समाधान मार्फत समुदायहरुलाई सशक्त बनाउँदै। वित्तीय स्थिरता र समृद्धि सँगै निर्माण गर्दै।',
+    'chairperson': 'अध्यक्ष',
+    'vice chairperson': 'उपाध्यक्ष',
+    'secretary': 'सचिव',
+    'treasurer': 'कोषाध्यक्ष',
+    'board member': 'बोर्ड सदस्य',
+    'president': 'अध्यक्ष',
+    'vice president': 'उपाध्यक्ष',
+    'managerial staff': 'प्रबन्धकीय कर्मचारी',
+    'technical staff': 'प्राविधिक कर्मचारी',
+    'support staff': 'समर्थन कर्मचारी',
+    'Word from President': 'अध्यक्षबाट शब्द',
+    'Word from General Manager': 'प्रबन्धकबाट शब्द'
   }
   
   private excludedSelectors = [
