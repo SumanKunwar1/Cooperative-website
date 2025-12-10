@@ -16,14 +16,16 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const [notice, setNotice] = useState<Notice | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasShown, setHasShown] = useState(false)
 
   useEffect(() => {
     console.log('NoticeModal mounted with isEnabled:', isEnabled)
     
-    if (isEnabled) {
+    if (isEnabled && !hasShown) {
       fetchSelectedNotice()
+      setHasShown(true)
     }
-  }, [isEnabled])
+  }, [isEnabled, hasShown])
 
   const fetchSelectedNotice = async () => {
     try {
@@ -60,8 +62,8 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const createDefaultNotice = () => {
     const defaultNotice: Notice = {
       id: 'default-notice-' + Date.now(),
-      title: 'Welcome to Our Cooperative',
-      content: 'Thank you for visiting Constellation Saving & Credit Cooperative. We are committed to providing excellent financial services to our members. Please check our notice board regularly for important updates, announcements, and circulars.',
+      title: 'Welcome to Constellation Cooperative',
+      content: 'Thank you for visiting Constellation Saving & Credit Cooperative. This important notice appears only when you first open our website. You can check our Notice Board page for all announcements and updates.',
       type: 'announcement',
       important: true,
       status: 'published',
@@ -124,25 +126,24 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
     return null
   }
 
-  // Always render modal if isEnabled is true
   return (
     <div className="fixed inset-0 z-[9999]">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-70"
+        className="fixed inset-0 bg-black bg-opacity-70 animate-in fade-in duration-300"
         onClick={handleClose}
       />
       
       {/* Modal Container */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden animate-in fade-in duration-300 flex flex-col">
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden animate-in slide-in-from-bottom-8 duration-300 flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-600 to-green-800 text-white">
             <div className="flex items-center space-x-4">
               <BellIcon className="h-8 w-8" />
               <div>
-                <h3 className="text-xl font-bold">Important Notice</h3>
-                <p className="text-green-100 text-sm">Constellation Cooperative</p>
+                <h3 className="text-xl font-bold">Welcome to Constellation Cooperative</h3>
+                <p className="text-green-100 text-sm">Important Notice (Shown only on first visit)</p>
               </div>
             </div>
             <button
@@ -159,7 +160,7 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading notice...</p>
+                <p className="text-gray-600">Loading important notice...</p>
               </div>
             ) : error ? (
               <div className="text-center py-8">
@@ -195,10 +196,11 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
                   {notice.content}
                 </div>
 
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-6">
                   <p className="text-green-800 text-sm">
-                    <strong>Note:</strong> This notice appears when you first visit our website. 
-                    You can close it to continue browsing.
+                    <strong>Note:</strong> This notice appears only once when you first visit our website. 
+                    You won't see it again when navigating to other pages. 
+                    Check our "Notice Board" page for all announcements.
                   </p>
                 </div>
               </>
@@ -208,14 +210,22 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
           {/* Footer */}
           <div className="flex items-center justify-between p-6 border-t bg-gray-50">
             <div className="text-sm text-gray-600">
-              Constellation Saving & Credit Cooperative
+              Shown on initial website visit
             </div>
-            <button
-              onClick={handleClose}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-            >
-              Close & Continue
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => window.open('/notice', '_blank')}
+                className="px-4 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 font-medium"
+              >
+                View All Notices
+              </button>
+              <button
+                onClick={handleClose}
+                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+              >
+                Close & Continue
+              </button>
+            </div>
           </div>
         </div>
       </div>
