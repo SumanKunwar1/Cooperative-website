@@ -201,7 +201,7 @@ const About: React.FC = () => {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-lifestyle-advertisement-for-constellat_FI7enEI2QL2txykwtyrADg_ndM-eqhmSj61c2yOQhmxig_zhfjec.jpg"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1765037533/constellation/businesses/szjea2titgfhlbzn4hp5.jpg"
                   alt="Constellation Cooperative Building"
                   className="w-full h-80 object-cover"
                 />
