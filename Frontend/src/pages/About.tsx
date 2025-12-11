@@ -284,7 +284,7 @@ const About: React.FC = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-lg">
                 <img
-                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1756952860/a-cooperative-boardroom-_6wY51f7wRICLsJIvK_U8-w_idJgcaJhS7uKnL0TyKO3eQ_dfgl3u.jpg"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1765005778/constellation/businesses/k3hlmodzutorz8vd8l3q.jpg"
                   alt="Member Meeting"
                   className="w-full h-64 object-cover"
                 />
