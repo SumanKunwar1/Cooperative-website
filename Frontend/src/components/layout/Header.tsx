@@ -20,7 +20,7 @@ const Header = () => {
     },
     {
       name: "WhatsApp",
-      url: "https://wa.me",
+      url: "https://wa.me/9768772461",
       icon: "https://img.freepik.com/premium-photo/round-whatsapp-logo-isolated-white-background_469489-1039.jpg?semt=ais_incoming&w=740&q=80",
     },
     {
@@ -42,7 +42,7 @@ const Header = () => {
 
   const navItems = [
     { label: "Home", href: "/", key: "home" },
-    { label: "About", href: "/about", key: "about" },
+    { label: "About Us", href: "/about", key: "about" },
     { label: "Services", href: "/services", key: "services" },
     { label: "Shop", href: "/shop", key: "shop" },
     { label: "Business Directory", href: "/business-directory", key: "businesses" },
