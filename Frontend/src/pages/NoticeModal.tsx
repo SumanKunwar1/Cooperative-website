@@ -3,7 +3,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { XMarkIcon, BellIcon } from "@heroicons/react/24/outline"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 import { noticeService, type Notice } from "../services/noticeService"
 import { noticeModalService } from "../services/NoticeModalService"
 
@@ -41,40 +41,22 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
         const fetchedNotice = await noticeService.getNoticeById(selectedNoticeId)
         console.log('Fetched notice:', fetchedNotice)
         
-        if (fetchedNotice && fetchedNotice.status === 'published') {
+        if (fetchedNotice && fetchedNotice.status === 'published' && fetchedNotice.documentUrl) {
           setNotice(fetchedNotice)
           return
         }
       }
       
-      // If no notice or failed, show default
-      createDefaultNotice()
+      // If no notice with document found, close modal
+      console.log('No valid notice with document found')
+      setError(null)
       
     } catch (err) {
       console.error("Error fetching notice:", err)
-      setError("Could not load notice. Showing default message.")
-      createDefaultNotice()
+      setError("Could not load document. Please try again.")
     } finally {
       setLoading(false)
     }
-  }
-
-  const createDefaultNotice = () => {
-    const defaultNotice: Notice = {
-      id: 'default-notice-' + Date.now(),
-      title: 'Welcome to Constellation Cooperative',
-      content: 'Thank you for visiting Constellation Saving & Credit Cooperative. This important notice appears only when you first open our website. You can check our Notice Board page for all announcements and updates.',
-      type: 'announcement',
-      important: true,
-      status: 'published',
-      author: 'Constellation Cooperative',
-      date: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-    
-    console.log('Showing default notice')
-    setNotice(defaultNotice)
   }
 
   const handleClose = () => {
@@ -95,36 +77,19 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape)
   }, [])
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case "announcement":
-        return "bg-green-100 text-green-800"
-      case "news":
-        return "bg-blue-100 text-blue-800"
-      case "circular":
-        return "bg-orange-100 text-orange-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
-  }
-
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-      return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    } catch {
-      return new Date().toLocaleDateString()
-    }
-  }
-
   // Don't render anything if not enabled
   if (!isEnabled) {
     return null
   }
+
+  // Don't render if no notice or error
+  if (!notice || error) {
+    return null
+  }
+
+  // Determine if document is PDF or Image
+  const isPdf = notice.documentType === 'pdf'
+  const isImage = ['jpg', 'jpeg', 'png'].includes(notice.documentType?.toLowerCase() || '')
 
   return (
     <div className="fixed inset-0 z-[9999]">
@@ -136,97 +101,59 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
       
       {/* Modal Container */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden animate-in slide-in-from-bottom-8 duration-300 flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-600 to-green-800 text-white">
-            <div className="flex items-center space-x-4">
-              <BellIcon className="h-8 w-8" />
-              <div>
-                <h3 className="text-xl font-bold">Welcome to Constellation Cooperative</h3>
-                <p className="text-green-100 text-sm">Important Notice (Shown only on first visit)</p>
-              </div>
-            </div>
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom-8 duration-300 flex flex-col">
+          {/* Close Button */}
+          <div className="flex justify-end p-4 border-b bg-white">
             <button
               onClick={handleClose}
-              className="text-white hover:text-green-200 p-2 rounded-full hover:bg-green-700 transition-colors"
+              className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Close"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
 
-          {/* Content */}
-          <div className="p-6 overflow-y-auto flex-1">
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading important notice...</p>
+          {/* Document Content */}
+          {loading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading document...</p>
               </div>
-            ) : error ? (
-              <div className="text-center py-8">
-                <p className="text-red-600 mb-4">{error}</p>
-                <button
-                  onClick={fetchSelectedNotice}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : notice ? (
-              <>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className={`px-3 py-1 text-sm font-semibold rounded-full ${getTypeColor(notice.type)}`}>
-                    {notice.type.charAt(0).toUpperCase() + notice.type.slice(1)}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {formatDate(notice.date)}
-                  </span>
-                  {notice.important && (
-                    <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
-                      Important
-                    </span>
-                  )}
-                </div>
-
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  {notice.title}
-                </h2>
-
-                <div className="text-gray-700 whitespace-pre-wrap leading-relaxed mb-6">
-                  {notice.content}
-                </div>
-
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-6">
-                  <p className="text-green-800 text-sm">
-                    <strong>Note:</strong> This notice appears only once when you first visit our website. 
-                    You won't see it again when navigating to other pages. 
-                    Check our "Notice Board" page for all announcements.
-                  </p>
-                </div>
-              </>
-            ) : null}
-          </div>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t bg-gray-50">
-            <div className="text-sm text-gray-600">
-              Shown on initial website visit
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => window.open('/notice', '_blank')}
-                className="px-4 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 font-medium"
-              >
-                View All Notices
-              </button>
-              <button
-                onClick={handleClose}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-              >
-                Close & Continue
-              </button>
+          ) : (
+            <div className="flex-1 overflow-auto">
+              {isPdf ? (
+                // PDF Embed
+                <iframe
+                  src={`${notice.documentUrl}#toolbar=0`}
+                  className="w-full h-full"
+                  style={{ minHeight: '500px' }}
+                  title="Notice Document"
+                />
+              ) : isImage ? (
+                // Image Display
+                <div className="flex items-center justify-center bg-gray-100 p-4" style={{ minHeight: '500px' }}>
+                  <img
+                    src={notice.documentUrl}
+                    alt="Notice Document"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+              ) : (
+                // Unsupported document type - show download link
+                <div className="flex flex-col items-center justify-center p-8" style={{ minHeight: '500px' }}>
+                  <p className="text-gray-600 mb-4">Document cannot be displayed inline.</p>
+                  <button
+                    onClick={() => window.open(notice.documentUrl, '_blank')}
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    Download Document
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
