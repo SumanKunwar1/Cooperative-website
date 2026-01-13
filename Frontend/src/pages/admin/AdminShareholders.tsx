@@ -190,7 +190,7 @@ const AdminShareholders: React.FC = () => {
               <User className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Board Members</p>
+              <p className="text-sm text-gray-600">Shareholder</p>
               <p className="text-2xl font-bold text-gray-900">{statistics.boardMembers}</p>
             </div>
           </div>
@@ -421,8 +421,10 @@ const ShareholderForm: React.FC<{
             <option value="Chairman">Chairman</option>
             <option value="Vice Chairman">Vice Chairman</option>
             <option value="Secretary">Secretary</option>
-            <option value="Treasurer">Treasurer</option>
-            <option value="Board Member">Board Member</option>
+            <option value="Treasurer">General Member</option>
+            <option value="Board Member">shareholder</option>
+            
+
           </select>
         </div>
       </div>
