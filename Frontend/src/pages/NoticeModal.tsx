@@ -92,70 +92,68 @@ const NoticeModal: React.FC<NoticeModalProps> = ({ isEnabled, onClose }) => {
   const isImage = ['jpg', 'jpeg', 'png'].includes(notice.documentType?.toLowerCase() || '')
 
   return (
-    <div className="fixed inset-0 z-[9999]">
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-70 animate-in fade-in duration-300"
+    <div className="fixed inset-0 z-[9999] bg-black bg-opacity-70 flex items-center justify-center p-4">
+      {/* Close Button */}
+      <button
         onClick={handleClose}
-      />
-      
-      {/* Modal Container */}
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom-8 duration-300 flex flex-col">
-          {/* Close Button */}
-          <div className="flex justify-end p-4 border-b bg-white">
-            <button
-              onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Close"
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
-          </div>
+        className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors"
+        aria-label="Close"
+      >
+        <XMarkIcon className="h-8 w-8" />
+      </button>
 
-          {/* Document Content */}
-          {loading ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading document...</p>
-              </div>
-            </div>
+      {/* Document Content */}
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+            <p className="text-white">Loading document...</p>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center w-full h-full">
+          {isPdf ? (
+            // PDF Embed - Shrink to fit entire viewport
+            <iframe
+              src={`${notice.documentUrl}#toolbar=0&view=fitpage`}
+              className="bg-white rounded-lg shadow-2xl"
+              style={{
+                width: '100%',
+                height: '100%',
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                border: 'none',
+              }}
+              title="Notice Document"
+            />
+          ) : isImage ? (
+            // Image Display - Shrink to fit entire viewport
+            <img
+              src={notice.documentUrl}
+              alt="Notice Document"
+              className="rounded-lg shadow-2xl"
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                width: 'auto',
+                height: 'auto',
+                objectFit: 'contain',
+              }}
+            />
           ) : (
-            <div className="flex-1 overflow-auto">
-              {isPdf ? (
-                // PDF Embed
-                <iframe
-                  src={`${notice.documentUrl}#toolbar=0`}
-                  className="w-full h-full"
-                  style={{ minHeight: '500px' }}
-                  title="Notice Document"
-                />
-              ) : isImage ? (
-                // Image Display
-                <div className="flex items-center justify-center bg-gray-100 p-4" style={{ minHeight: '500px' }}>
-                  <img
-                    src={notice.documentUrl}
-                    alt="Notice Document"
-                    className="max-w-full max-h-full object-contain"
-                  />
-                </div>
-              ) : (
-                // Unsupported document type - show download link
-                <div className="flex flex-col items-center justify-center p-8" style={{ minHeight: '500px' }}>
-                  <p className="text-gray-600 mb-4">Document cannot be displayed inline.</p>
-                  <button
-                    onClick={() => window.open(notice.documentUrl, '_blank')}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                  >
-                    Download Document
-                  </button>
-                </div>
-              )}
+            // Unsupported document type - show download link
+            <div className="flex flex-col items-center justify-center bg-white p-8 rounded-lg shadow-2xl">
+              <p className="text-gray-600 mb-4">Document cannot be displayed inline.</p>
+              <button
+                onClick={() => window.open(notice.documentUrl, '_blank')}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                Download Document
+              </button>
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   )
 }
