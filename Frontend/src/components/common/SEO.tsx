@@ -15,7 +15,7 @@ const SEO: React.FC<SEOProps> = ({
   description = 'Professional financial cooperative services in Kathmandu, Nepal. Offering savings accounts, loans, digital banking, and business directory services.',
   keywords = 'cooperative bank, savings account, loans, Nepal, Kathmandu, financial services, credit cooperative',
   image = '/logo.png',
-  url = 'https://constellation.coop',
+  url = 'https://constellation.com',
   type = 'website'
 }) => {
   return (

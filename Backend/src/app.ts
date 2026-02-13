@@ -18,9 +18,7 @@ import shareholderRoutes from "./routes/shareholders"
 import teamRoutes from "./routes/teams"
 import heroRoutes from "./routes/hero"
 import aboutRoutes from "./routes/about"
-
-
-
+import servicesRoutes from "./routes/service"
 
 // Middleware
 import errorHandler from "./middleware/errorHandler"
@@ -82,7 +80,7 @@ app.use("/api/shareholders", shareholderRoutes)
 app.use("/api/team", teamRoutes)
 app.use("/api/hero", heroRoutes)
 app.use("/api/about", aboutRoutes)
-
+app.use("/api/services", servicesRoutes)
 
 // Health check
 app.get("/api/health", (req, res) => {
@@ -97,4 +95,3 @@ app.get("/api/health", (req, res) => {
 app.use(errorHandler)
 
 export default app
-
