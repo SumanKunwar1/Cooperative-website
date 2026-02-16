@@ -10,9 +10,14 @@ cloudinary.config({
 
 export const uploadToCloudinary = (file: Express.Multer.File): Promise<any> => {
   return new Promise((resolve, reject) => {
+    // Detect if file is a video
+    const isVideo = file.mimetype.startsWith('video/');
+    
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: 'constellation/businesses',
+        resource_type: isVideo ? 'video' : 'image', // Handle both images and videos
+        chunk_size: isVideo ? 6000000 : undefined, // Use chunked upload for videos
       },
       (error, result) => {
         if (result) {
@@ -28,9 +33,9 @@ export const uploadToCloudinary = (file: Express.Multer.File): Promise<any> => {
 };
 
 // Add the missing deleteFromCloudinary function
-export const deleteFromCloudinary = (publicId: string): Promise<any> => {
+export const deleteFromCloudinary = (publicId: string, resourceType: 'image' | 'video' = 'image'): Promise<any> => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
+    cloudinary.uploader.destroy(publicId, { resource_type: resourceType }, (error, result) => {
       if (result) {
         resolve(result);
       } else {

@@ -89,13 +89,22 @@ const Gallery: React.FC = () => {
                   onClick={() => setSelectedEvent(event)}
                 >
                   {/* Event Thumbnail */}
-                  <div className="h-48 overflow-hidden">
+                  <div className="h-48 overflow-hidden relative">
                     {event.media.length > 0 ? (
-                      <img
-                        src={event.media[0].url || "/placeholder.svg"}
-                        alt={event.name}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                      />
+                      <>
+                        <img
+                          src={event.media[0].url || "/placeholder.svg"}
+                          alt={event.name}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                        {event.media[0].type === "video" && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                            <div className="bg-white bg-opacity-90 rounded-full p-3">
+                              <VideoCameraIcon className="h-8 w-8 text-purple-600" />
+                            </div>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                         <span className="text-gray-500">No media</span>
@@ -161,13 +170,18 @@ const Gallery: React.FC = () => {
                             className="w-full h-full object-cover"
                           />
                           {media.type === "video" && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                              <VideoCameraIcon className="h-8 w-8 text-white" />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                              <div className="bg-white bg-opacity-90 rounded-full p-2">
+                                <VideoCameraIcon className="h-6 w-6 text-purple-600" />
+                              </div>
                             </div>
                           )}
                         </div>
                         <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <p className="text-xs truncate">{media.name}</p>
+                          {media.type === "video" && (
+                            <p className="text-xs text-purple-300">Click to play</p>
+                          )}
                         </div>
                       </motion.div>
                     ))}
@@ -231,13 +245,17 @@ const Gallery: React.FC = () => {
                     className="max-w-full max-h-[80vh] object-contain"
                   />
                 ) : (
-                  <div className="w-full h-96 md:h-[80vh] flex items-center justify-center">
-                    <div className="text-white text-center">
-                      <VideoCameraIcon className="h-16 w-16 mx-auto mb-4" />
-                      <p>Video playback would be implemented here</p>
-                      <p className="text-sm text-gray-400 mt-2">{selectedMedia.name}</p>
-                    </div>
-                  </div>
+                  <video
+                    src={selectedMedia.url}
+                    controls
+                    className="max-w-full max-h-[80vh] object-contain"
+                    autoPlay
+                  >
+                    <source src={selectedMedia.url} type="video/mp4" />
+                    <source src={selectedMedia.url} type="video/webm" />
+                    <source src={selectedMedia.url} type="video/ogg" />
+                    Your browser does not support the video tag.
+                  </video>
                 )}
               </div>
               <div className="mt-2 text-white text-center">

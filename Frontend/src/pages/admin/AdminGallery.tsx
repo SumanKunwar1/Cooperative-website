@@ -264,8 +264,10 @@ const AdminGallery: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                         {media.type === "video" && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                            <VideoCameraIcon className="h-6 w-6 text-white" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                            <div className="bg-white bg-opacity-90 rounded-full p-2">
+                              <VideoCameraIcon className="h-5 w-5 text-purple-600" />
+                            </div>
                           </div>
                         )}
                       </div>
@@ -377,14 +379,19 @@ const AdminGallery: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                         {media.type === "video" && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                            <VideoCameraIcon className="h-8 w-8 text-white" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                            <div className="bg-white bg-opacity-90 rounded-full p-3">
+                              <VideoCameraIcon className="h-7 w-7 text-purple-600" />
+                            </div>
                           </div>
                         )}
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <p className="text-xs truncate">{media.name}</p>
                         <p className="text-xs text-gray-300">{media.size}</p>
+                        {media.type === "video" && (
+                          <p className="text-xs text-purple-300 mt-1">Video</p>
+                        )}
                       </div>
                     </div>
                   ))}

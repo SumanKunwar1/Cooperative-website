@@ -60,9 +60,10 @@ const limiter = rateLimit({
 })
 app.use(limiter)
 
-// Body parsing middleware
-app.use(express.json({ limit: "10mb" }))
-app.use(express.urlencoded({ extended: true }))
+// Body parsing middleware - INCREASED LIMITS FOR VIDEO UPLOADS
+// Changed from 10mb to 50mb to support video files up to 50MB
+app.use(express.json({ limit: "50mb" }))
+app.use(express.urlencoded({ extended: true, limit: "50mb" }))
 
 // Logging
 app.use(morgan("combined"))
