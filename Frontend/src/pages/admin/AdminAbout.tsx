@@ -25,6 +25,7 @@ const AdminAbout: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [editingCompany, setEditingCompany] = useState(false)
+  const [editingMissionVision, setEditingMissionVision] = useState(false)
   const [editingStory, setEditingStory] = useState(false)
   const [editingValue, setEditingValue] = useState<string | null>(null)
   const [editingMilestone, setEditingMilestone] = useState<string | null>(null)
@@ -93,6 +94,29 @@ const AdminAbout: React.FC = () => {
     } catch (error) {
       console.error("Error saving company info:", error)
       alert("Failed to save company info")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // NEW: Separate function to save mission and vision
+  const saveMissionVision = async () => {
+    if (!aboutData) return
+    
+    try {
+      setSaving(true)
+      const result = await aboutApi.updateSection("missionVision", {
+        mission: aboutData.mission,
+        vision: aboutData.vision
+      })
+      if (result.success) {
+        console.log("Mission and vision saved successfully")
+        setEditingMissionVision(false)
+        loadAboutData() // Reload to get fresh data
+      }
+    } catch (error) {
+      console.error("Error saving mission and vision:", error)
+      alert("Failed to save mission and vision")
     } finally {
       setSaving(false)
     }
@@ -242,10 +266,36 @@ const AdminAbout: React.FC = () => {
     }
   }
 
+  // Loading button component
+  const LoadingButton: React.FC<{
+    onClick: () => void
+    variant: 'primary' | 'secondary'
+    icon: any
+    loading: boolean
+    children: React.ReactNode
+  }> = ({ onClick, variant, icon: Icon, loading, children }) => (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
+        variant === 'primary'
+          ? 'bg-green-600 text-white hover:bg-green-700'
+          : 'bg-gray-600 text-white hover:bg-gray-700'
+      } disabled:opacity-50 disabled:cursor-not-allowed`}
+    >
+      {loading ? (
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+      ) : (
+        <Icon className="h-4 w-4 mr-2" />
+      )}
+      {children}
+    </button>
+  )
+
   if (loading) {
     return (
-      <AdminDashboard currentSection="about">
-        <div className="flex items-center justify-center h-96">
+      <AdminDashboard>
+        <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
         </div>
       </AdminDashboard>
@@ -254,13 +304,12 @@ const AdminAbout: React.FC = () => {
 
   if (!aboutData) {
     return (
-      <AdminDashboard currentSection="about">
+      <AdminDashboard>
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">No About Data Found</h2>
-          <p className="text-gray-600">Please check if the backend server is running.</p>
-          <button 
-            onClick={loadAboutData} 
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          <p className="text-gray-600">Failed to load about page data. Please try refreshing.</p>
+          <button
+            onClick={loadAboutData}
+            className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             Retry
           </button>
@@ -269,262 +318,252 @@ const AdminAbout: React.FC = () => {
     )
   }
 
-  // Create a custom Button component that supports loading state
-  const LoadingButton = ({ children, onClick, variant = "primary", icon: Icon, loading = false, ...props }: any) => (
-    <button
-      onClick={onClick}
-      disabled={loading}
-      className={`
-        flex items-center px-4 py-2 rounded-lg transition-colors duration-200
-        ${variant === "primary" ? "bg-green-600 text-white hover:bg-green-700" : ""}
-        ${variant === "secondary" ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : ""}
-        ${variant === "ghost" ? "bg-transparent text-gray-600 hover:bg-gray-100" : ""}
-        ${loading ? "opacity-50 cursor-not-allowed" : ""}
-        ${props.className || ""}
-      `}
-      {...props}
-    >
-      {loading ? (
-        <>
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
-          Saving...
-        </>
-      ) : (
-        <>
-          {Icon && <Icon className="h-4 w-4 mr-2" />}
-          {children}
-        </>
-      )}
-    </button>
-  )
-
   return (
-    <AdminDashboard currentSection="about">
+    <AdminDashboard>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="space-y-8"
+        className="space-y-6"
       >
-        {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">About Us Management</h1>
-            <p className="text-gray-600 mt-2">Manage all sections of the About Us page</p>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Manage About Page</h1>
         </div>
+
+        {/* Company Info Section */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+              <BuildingOfficeIcon className="h-6 w-6 mr-2 text-blue-600" />
+              Company Information
+            </h2>
+            {editingCompany ? (
+              <LoadingButton onClick={saveCompanyInfo} variant="primary" icon={CheckIcon} loading={saving}>
+                Save Changes
+              </LoadingButton>
+            ) : (
+              <button
+                onClick={() => setEditingCompany(true)}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              >
+                <PencilIcon className="h-4 w-4 mr-2" />
+                Edit
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Established Date</label>
+              <input
+                type="text"
+                value={aboutData.companyInfo.establishedDate}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    companyInfo: { ...aboutData.companyInfo, establishedDate: e.target.value },
+                  })
+                }
+                disabled={!editingCompany}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <input
+                type="text"
+                value={aboutData.companyInfo.location}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    companyInfo: { ...aboutData.companyInfo, location: e.target.value },
+                  })
+                }
+                disabled={!editingCompany}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
+              <input
+                type="text"
+                value={aboutData.companyInfo.registrationNumber}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    companyInfo: { ...aboutData.companyInfo, registrationNumber: e.target.value },
+                  })
+                }
+                disabled={!editingCompany}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Office Location Label</label>
+              <input
+                type="text"
+                value={aboutData.companyInfo.officeLocationLabel}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    companyInfo: { ...aboutData.companyInfo, officeLocationLabel: e.target.value },
+                  })
+                }
+                disabled={!editingCompany}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Office Address</label>
+              <textarea
+                value={aboutData.companyInfo.officeAddress}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    companyInfo: { ...aboutData.companyInfo, officeAddress: e.target.value },
+                  })
+                }
+                disabled={!editingCompany}
+                rows={2}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              />
+            </div>
+          </div>
+        </Card>
+
+        {/* Mission & Vision Section - FIXED */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+              <HeartIcon className="h-6 w-6 mr-2 text-green-600" />
+              Mission & Vision
+            </h2>
+            {editingMissionVision ? (
+              <LoadingButton onClick={saveMissionVision} variant="primary" icon={CheckIcon} loading={saving}>
+                Save Changes
+              </LoadingButton>
+            ) : (
+              <button
+                onClick={() => setEditingMissionVision(true)}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                <PencilIcon className="h-4 w-4 mr-2" />
+                Edit
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Mission</label>
+              <textarea
+                value={aboutData.mission}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    mission: e.target.value,
+                  })
+                }
+                disabled={!editingMissionVision}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100"
+                placeholder="Enter your mission statement here... (supports Nepali text)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Vision</label>
+              <textarea
+                value={aboutData.vision}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    vision: e.target.value,
+                  })
+                }
+                disabled={!editingMissionVision}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100"
+                placeholder="Enter your vision statement here... (supports Nepali text)"
+              />
+            </div>
+          </div>
+        </Card>
 
         {/* Story Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-              <BookOpenIcon className="h-6 w-6 mr-2 text-green-600" />
-              Our Story Since 2010
+              <BookOpenIcon className="h-6 w-6 mr-2 text-purple-600" />
+              Our Story
             </h2>
-            <button
-              onClick={() => setEditingStory(!editingStory)}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
-                editingStory ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-green-600 text-white hover:bg-green-700"
-              }`}
-            >
-              <PencilIcon className="h-4 w-4 mr-2" />
-              {editingStory ? "Cancel" : "Edit"}
-            </button>
+            {editingStory ? (
+              <LoadingButton onClick={saveStory} variant="primary" icon={CheckIcon} loading={saving}>
+                Save Changes
+              </LoadingButton>
+            ) : (
+              <button
+                onClick={() => setEditingStory(true)}
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200"
+              >
+                <PencilIcon className="h-4 w-4 mr-2" />
+                Edit
+              </button>
+            )}
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-              {editingStory ? (
-                <input
-                  type="text"
-                  value={aboutData.story.title}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    story: { ...prev.story, title: e.target.value }
-                  } : prev)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.story.title}</p>
-              )}
+              <label className="block text-sm font-medium text-gray-700 mb-2">Story Title</label>
+              <input
+                type="text"
+                value={aboutData.story.title}
+                onChange={(e) =>
+                  setAboutData({
+                    ...aboutData,
+                    story: { ...aboutData.story, title: e.target.value },
+                  })
+                }
+                disabled={!editingStory}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100"
+              />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
-              {editingStory ? (
+            {aboutData.story.paragraphs.map((paragraph, index) => (
+              <div key={index}>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Paragraph {index + 1}</label>
                 <textarea
-                  value={aboutData.story.paragraphs.join('\n\n')}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    story: { ...prev.story, paragraphs: e.target.value.split('\n\n') }
-                  } : prev)}
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  value={paragraph}
+                  onChange={(e) => {
+                    const newParagraphs = [...aboutData.story.paragraphs]
+                    newParagraphs[index] = e.target.value
+                    setAboutData({
+                      ...aboutData,
+                      story: { ...aboutData.story, paragraphs: newParagraphs },
+                    })
+                  }}
+                  disabled={!editingStory}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100"
                 />
-              ) : (
-                <div className="space-y-3">
-                  {aboutData.story.paragraphs.map((paragraph, index) => (
-                    <p key={index} className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {editingStory && (
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setEditingStory(false)}
-                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
-                >
-                  Cancel
-                </button>
-                <LoadingButton onClick={saveStory} variant="primary" icon={CheckIcon} loading={saving}>
-                  Save Changes
-                </LoadingButton>
               </div>
-            )}
+            ))}
           </div>
-        </Card>
-
-        {/* Company Information */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-              <BuildingOfficeIcon className="h-6 w-6 mr-2 text-purple-600" />
-              Company Information
-            </h2>
-            <button
-              onClick={() => setEditingCompany(!editingCompany)}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
-                editingCompany ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-purple-600 text-white hover:bg-purple-700"
-              }`}
-            >
-              <PencilIcon className="h-4 w-4 mr-2" />
-              {editingCompany ? "Cancel" : "Edit"}
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <CalendarIcon className="h-4 w-4 inline mr-1" />
-                Established Date
-              </label>
-              {editingCompany ? (
-                <input
-                  type="text"
-                  value={aboutData.companyInfo.establishedDate}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    companyInfo: { ...prev.companyInfo, establishedDate: e.target.value }
-                  } : prev)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.establishedDate}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MapPinIcon className="h-4 w-4 inline mr-1" />
-                Office Location
-              </label>
-              {editingCompany ? (
-                <textarea
-                  value={aboutData.companyInfo.officeAddress}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    companyInfo: { ...prev.companyInfo, officeAddress: e.target.value }
-                  } : prev)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.officeAddress}</p>
-              )}
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
-              {editingCompany ? (
-                <input
-                  type="text"
-                  value={aboutData.companyInfo.registrationNumber}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    companyInfo: { ...prev.companyInfo, registrationNumber: e.target.value }
-                  } : prev)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.registrationNumber}</p>
-              )}
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Mission</label>
-              {editingCompany ? (
-                <textarea
-                  value={aboutData.companyInfo.mission}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    companyInfo: { ...prev.companyInfo, mission: e.target.value }
-                  } : prev)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.mission}</p>
-              )}
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Vision</label>
-              {editingCompany ? (
-                <textarea
-                  value={aboutData.companyInfo.vision}
-                  onChange={(e) => setAboutData(prev => prev ? {
-                    ...prev,
-                    companyInfo: { ...prev.companyInfo, vision: e.target.value }
-                  } : prev)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{aboutData.companyInfo.vision}</p>
-              )}
-            </div>
-          </div>
-
-          {editingCompany && (
-            <div className="flex justify-end mt-6 space-x-3">
-              <button
-                onClick={() => setEditingCompany(false)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
-              >
-                Cancel
-              </button>
-              <LoadingButton onClick={saveCompanyInfo} variant="primary" icon={CheckIcon} loading={saving}>
-                Save Changes
-              </LoadingButton>
-            </div>
-          )}
         </Card>
 
         {/* Values Section */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-              <HeartIcon className="h-6 w-6 mr-2 text-red-600" />
-              Our Values
+              <HeartIcon className="h-6 w-6 mr-2 text-pink-600" />
+              Our Core Values
             </h2>
             <button
               onClick={() => setShowAddValue(!showAddValue)}
-              className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+              className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors duration-200"
             >
               <PlusIcon className="h-4 w-4 mr-2" />
               Add Value
@@ -536,7 +575,7 @@ const AdminAbout: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="bg-red-50 p-4 rounded-lg mb-6"
+              className="bg-pink-50 p-4 rounded-lg mb-6"
             >
               <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Value</h3>
               <div className="space-y-4">
@@ -545,21 +584,21 @@ const AdminAbout: React.FC = () => {
                   placeholder="Value Title"
                   value={newValue.title}
                   onChange={(e) => setNewValue(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                />
-                <input
-                  type="text"
-                  placeholder="Icon (emoji)"
-                  value={newValue.icon}
-                  onChange={(e) => setNewValue(prev => ({ ...prev, icon: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
                 <textarea
                   placeholder="Description"
                   value={newValue.description}
                   onChange={(e) => setNewValue(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                />
+                <input
+                  type="text"
+                  placeholder="Icon (emoji)"
+                  value={newValue.icon}
+                  onChange={(e) => setNewValue(prev => ({ ...prev, icon: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
               </div>
               <div className="flex justify-end mt-4 space-x-3">
@@ -576,59 +615,75 @@ const AdminAbout: React.FC = () => {
             </motion.div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {aboutData.values.map((value) => (
-              <Card key={value._id} className="p-4" hover={false}>
-                <div className="text-center">
-                  {editingValue === value._id ? (
-                    <div className="space-y-3">
-                      <input
-                        type="text"
-                        value={value.title}
-                        onChange={(e) => {
-                          const updatedValues = aboutData.values.map(v => 
-                            v._id === value._id ? { ...v, title: e.target.value } : v
-                          )
-                          setAboutData(prev => prev ? { ...prev, values: updatedValues } : prev)
-                        }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      />
-                      <textarea
-                        value={value.description}
-                        onChange={(e) => {
-                          const updatedValues = aboutData.values.map(v => 
-                            v._id === value._id ? { ...v, description: e.target.value } : v
-                          )
-                          setAboutData(prev => prev ? { ...prev, values: updatedValues } : prev)
-                        }}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="text-4xl mb-3">{value.icon}</div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
-                      <p className="text-gray-600 text-sm">{value.description}</p>
-                    </div>
-                  )}
-
-                  <div className="flex justify-center space-x-2 mt-4">
+              <Card key={value._id} className="p-4" background="gradient">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    {editingValue === value._id ? (
+                      <div className="space-y-3">
+                        <input
+                          type="text"
+                          value={value.title}
+                          onChange={(e) => {
+                            const updatedValues = aboutData.values.map((v) =>
+                              v._id === value._id ? { ...v, title: e.target.value } : v
+                            )
+                            setAboutData({ ...aboutData, values: updatedValues })
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                        <textarea
+                          value={value.description}
+                          onChange={(e) => {
+                            const updatedValues = aboutData.values.map((v) =>
+                              v._id === value._id ? { ...v, description: e.target.value } : v
+                            )
+                            setAboutData({ ...aboutData, values: updatedValues })
+                          }}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          value={value.icon}
+                          onChange={(e) => {
+                            const updatedValues = aboutData.values.map((v) =>
+                              v._id === value._id ? { ...v, icon: e.target.value } : v
+                            )
+                            setAboutData({ ...aboutData, values: updatedValues })
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-3xl mb-3">{value.icon}</div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
+                        <p className="text-gray-700">{value.description}</p>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex flex-col space-y-2 ml-4">
                     {editingValue === value._id ? (
                       <>
-                        <LoadingButton 
-                          onClick={() => value._id && handleUpdateValue(value._id, {
-                            title: value.title,
-                            description: value.description
-                          })} 
-                          variant="primary" 
-                          size="sm"
-                          loading={saving}
-                        >
-                          Save
-                        </LoadingButton>
                         <button
-                          onClick={() => setEditingValue(null)}
+                          onClick={() => {
+                            const updatedValue = aboutData.values.find((v) => v._id === value._id)
+                            if (updatedValue && value._id) {
+                              handleUpdateValue(value._id, updatedValue)
+                            }
+                          }}
+                          className="px-3 py-1 text-green-600 bg-green-100 rounded hover:bg-green-200 text-sm"
+                          disabled={saving}
+                        >
+                          {saving ? "Saving..." : "Save"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingValue(null)
+                            loadAboutData()
+                          }}
                           className="px-3 py-1 text-gray-600 bg-gray-100 rounded hover:bg-gray-200 text-sm"
                         >
                           Cancel

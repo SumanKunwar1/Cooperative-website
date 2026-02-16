@@ -1,4 +1,3 @@
-
 "use client"
 
 import type React from "react"
@@ -250,7 +249,7 @@ const About: React.FC = () => {
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{story.title}</h2>
               {story.paragraphs.map((paragraph: string, index: number) => (
-                <p key={index} className="text-lg text-gray-600 mb-6 leading-relaxed">
+                <p key={index} className="text-lg text-gray-600 mb-6 leading-relaxed text-justify">
                   {paragraph}
                 </p>
               ))}
@@ -284,7 +283,7 @@ const About: React.FC = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-lg">
                 <img
-                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1765005778/constellation/businesses/k3hlmodzutorz8vd8l3q.jpg"
+                  src="https://res.cloudinary.com/dcsgax3ld/image/upload/v1765037533/constellation/businesses/szjea2titgfhlbzn4hp5.jpg"
                   alt="Member Meeting"
                   className="w-full h-64 object-cover"
                 />
