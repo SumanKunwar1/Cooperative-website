@@ -5,20 +5,22 @@ import axios from "axios"
 // ============================================
 // API Configuration
 // ============================================
-// Using hardcoded URL that works with your backend
-// Backend is at: http://localhost:5000
-// All API routes are under: /api prefix
-// Full API base URL: http://localhost:5000/api
+// Base URL comes from VITE_API_URL (set per-environment at build time),
+// matching the convention used across the rest of src/.
+// All API routes are under the /api prefix.
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: `${API_BASE_URL}/api`,
   headers: {
     "Content-Type": "application/json",
   },
 })
 
-// Log for debugging
-console.log("API Client initialized with baseURL: http://localhost:5000/api")
+if (!import.meta.env.VITE_API_URL) {
+  console.warn("VITE_API_URL is not set. Falling back to http://localhost:5000")
+}
 
 // Services API
 export const servicesAPI = {

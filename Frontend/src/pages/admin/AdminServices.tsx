@@ -31,6 +31,7 @@ import {
 } from "lucide-react"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
+import AdminDashboard from "./AdminDashboard"
 import { servicesAPI } from "../../services/api"
 import { useAdmin } from "../../contexts/AdminContext"
 import { useNavigate } from "react-router-dom"
@@ -278,14 +279,16 @@ const AdminServices: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <Loader className="w-12 h-12 text-green-600 animate-spin" />
-      </div>
+      <AdminDashboard currentSection="services">
+        <div className="flex items-center justify-center h-96">
+          <Loader className="w-12 h-12 text-green-600 animate-spin" />
+        </div>
+      </AdminDashboard>
     )
   }
 
   return (
-    <div className="p-6">
+    <AdminDashboard currentSection="services">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Services Management</h1>
@@ -572,7 +575,7 @@ const AdminServices: React.FC = () => {
           />
         )}
       </AnimatePresence>
-    </div>
+    </AdminDashboard>
   )
 }
 
